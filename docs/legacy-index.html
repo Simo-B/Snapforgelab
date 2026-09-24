@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<!-- saved from url=(0025)https://snapforgelab.com/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snapforge Lab</title>
+<meta name="description" content="Snapforge Lab forges production-ready business software on Replit. Productized. Fixed price. Live in days.">
+<style>
+  :root{
+    --bg:#000; --fg:#f5f5f7; --dim:#86868b; --line:rgba(255,255,255,.12);
+    --accent:#2997ff; --panel:rgba(255,255,255,.03);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Inter",Segoe UI,Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  .narrow{max-width:720px}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;height:52px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.6);backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--line)}
+  nav .inner{max-width:980px;width:100%;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-weight:600;font-size:17px;letter-spacing:-.02em}
+  .logo span{color:var(--dim);font-weight:400}
+  .nav-links{display:flex;gap:30px;font-size:13px;color:var(--dim)}
+  .nav-links a:hover{color:var(--fg)}
+
+  /* HERO */
+  header{padding:200px 0 140px;text-align:center}
+  header .tag{font-size:13px;color:var(--dim);letter-spacing:.02em;margin-bottom:26px}
+  h1{font-size:clamp(46px,8vw,88px);line-height:1.02;font-weight:600;
+    letter-spacing:-.035em;margin:0 auto 28px;max-width:14ch}
+  .lede{font-size:clamp(19px,2.4vw,24px);color:var(--dim);line-height:1.45;
+    font-weight:400;max-width:30ch;margin:0 auto 40px}
+  .cta{display:flex;gap:28px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .btn{font-size:15px;font-weight:500;padding:12px 26px;border-radius:980px;transition:.2s}
+  .btn.p{background:var(--accent);color:#fff}
+  .btn.p:hover{opacity:.85}
+  .btn.t{color:var(--accent)}
+  .btn.t:hover{text-decoration:underline}
+
+  /* SECTION */
+  section{padding:120px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:13px;color:var(--accent);letter-spacing:.04em;text-transform:uppercase;margin-bottom:18px}
+  h2{font-size:clamp(32px,5vw,52px);line-height:1.08;font-weight:600;letter-spacing:-.03em;margin:0 0 22px}
+  .sub{font-size:19px;color:var(--dim);line-height:1.5;max-width:46ch;margin:0 0 60px}
+
+  /* PROOF ROW */
+  .figs{display:flex;justify-content:center;gap:0;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .fig{flex:1;min-width:180px;padding:44px 24px;text-align:center;border-right:1px solid var(--line)}
+  .fig:last-child{border-right:0}
+  .fig .v{font-size:clamp(34px,5vw,52px);font-weight:600;letter-spacing:-.03em}
+  .fig .l{font-size:13px;color:var(--dim);margin-top:8px;letter-spacing:.01em}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .step{padding:40px 32px 40px 0;border-right:1px solid var(--line)}
+  .step:last-child{border-right:0;padding-right:0}
+  .step .n{font-size:14px;color:var(--dim);margin-bottom:18px;font-variant-numeric:tabular-nums}
+  .step h3{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0 0 10px}
+  .step p{font-size:16px;color:var(--dim);line-height:1.5;margin:0}
+
+  /* OFFERS */
+  .offers{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .offer{padding:44px 32px 44px 0;border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .offer:last-child{border-right:0;padding-right:0}
+  .offer .name{font-size:14px;color:var(--dim);margin-bottom:6px}
+  .offer .price{font-size:clamp(38px,5vw,52px);font-weight:600;letter-spacing:-.03em;margin:0 0 4px}
+  .offer .per{font-size:14px;color:var(--dim);margin-bottom:28px}
+  .offer ul{list-style:none;padding:0;margin:0 0 32px;display:grid;gap:14px}
+  .offer li{font-size:15px;color:var(--fg);display:flex;gap:12px;line-height:1.4}
+  .offer li::before{content:"+";color:var(--accent);font-weight:600}
+  .offer .btn{margin-top:auto;text-align:center}
+
+  /* USE CASES */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .uc{padding:34px 28px 34px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .uc .ic{font-size:22px;margin-bottom:14px;opacity:.9}
+  .uc h3{font-size:18px;font-weight:600;letter-spacing:-.02em;margin:0 0 6px}
+  .uc p{font-size:14.5px;color:var(--dim);line-height:1.45;margin:0}
+  /* 3-col edge cleanup */
+  .uc:nth-child(3n){border-right:0;padding-right:0}
+  .uc:nth-last-child(-n+3){border-bottom:0}
+
+  /* QUOTE */
+  .quote{text-align:center;max-width:24ch;margin:0 auto}
+  .quote p{font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.03em;line-height:1.18;margin:0 0 28px}
+  .quote .by{font-size:14px;color:var(--dim)}
+
+  /* WHY / SPEC */
+  .spec{display:grid;gap:0}
+  .spec .r{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line);font-size:16px}
+  .spec .r:first-child{border-top:1px solid var(--line)}
+  .spec .r .k{color:var(--dim)}
+  .spec .r .v{font-weight:500}
+
+  /* FAQ */
+  .faq{max-width:680px;margin:0 auto}
+  details{border-bottom:1px solid var(--line)}
+  summary{padding:24px 0;cursor:pointer;font-size:18px;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--dim);font-weight:300;font-size:24px}
+  details[open] summary::after{content:"−"}
+  .faq .a{padding:0 0 24px;color:var(--dim);font-size:16px;line-height:1.55;max-width:60ch}
+
+  /* CONTACT */
+  .contact{text-align:center}
+  .contact h2{margin-bottom:18px}
+  .form{display:flex;gap:10px;max-width:440px;margin:36px auto 18px;flex-wrap:wrap;justify-content:center}
+  .form input{flex:1;min-width:220px;background:transparent;border:1px solid var(--line);border-radius:980px;
+    padding:14px 20px;color:var(--fg);font-size:15px;font-family:inherit}
+  .form input:focus{outline:none;border-color:var(--accent)}
+  .form .btn{border:0}
+  .contact .alt{font-size:14px;color:var(--dim)}
+  .contact .alt a{color:var(--accent)}
+
+  footer{padding:50px 0;border-top:1px solid var(--line);color:var(--dim);font-size:13px;text-align:center}
+  footer .logo{font-size:15px;color:var(--fg);margin-bottom:12px;display:block}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:760px){
+    .steps,.offers,.grid{grid-template-columns:1fr}
+    .step,.offer,.uc{border-right:0;padding-right:0;border-bottom:1px solid var(--line)}
+    .uc:nth-last-child(-n+3){border-bottom:1px solid var(--line)}
+    .uc:last-child{border-bottom:0}
+    .fig{flex-basis:50%;border-bottom:1px solid var(--line)}
+    .fig:nth-child(2n){border-right:0}
+    nav .nav-links{display:none}
+    header{padding:150px 0 90px}
+    section{padding:90px 0}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <div class="logo">Snapforge&nbsp;Lab</div>
+    <div class="nav-links">
+      <a href="https://snapforgelab.com/#how">Process</a>
+      <a href="https://snapforgelab.com/#offers">Pricing</a>
+      <a href="https://snapforgelab.com/#uses">Work</a>
+      <a href="https://snapforgelab.com/#faq">FAQ</a>
+      <a href="https://snapforgelab.com/#contact">Start</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="tag reveal in">Replit Solution Partner</div>
+    <h1 class="reveal in">Software, forged.</h1>
+    <p class="lede reveal in">Production-ready business apps, built on Replit. Fixed price. Live in days.</p>
+    <div class="cta reveal in">
+      <a href="https://snapforgelab.com/#contact" class="btn p">Start a build</a>
+      <a href="https://snapforgelab.com/#offers" class="btn t">See pricing</a>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <div class="kicker reveal">Process</div>
+    <h2 class="reveal">A product, not a project.</h2>
+    <p class="sub reveal">Agencies bill hours. We ship from a library of proven templates — every build makes the next one faster.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h3>Choose</h3><p>Start from a template — dashboard, CRM, automation, portal, or AI assistant.</p></div>
+      <div class="step reveal"><div class="n">02</div><h3>Deploy</h3><p>We wire it to your data, brand it, and ship it live on Replit.</p></div>
+      <div class="step reveal"><div class="n">03</div><h3>Run</h3><p>A managed retainer keeps it hosted, monitored, and evolving.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="offers">
+  <div class="wrap">
+    <div class="kicker reveal">Pricing</div>
+    <h2 class="reveal">Simple.</h2>
+    <p class="sub reveal">One fee to go live. One fee to stay live.</p>
+    <div class="offers">
+      <div class="offer reveal">
+        <div class="name">Starter</div>
+        <div class="price">$1,500</div>
+        <div class="per">one-time</div>
+        <ul>
+          <li>Replit setup + one app from template</li>
+          <li>Branded and wired to your data</li>
+          <li>Live in production</li>
+        </ul>
+        <a href="https://snapforgelab.com/#contact" class="btn p">Start</a>
+      </div>
+      <div class="offer reveal">
+        <div class="name">Scale</div>
+        <div class="price">$300</div>
+        <div class="per">per month</div>
+        <ul>
+          <li>Hosting and uptime monitoring</li>
+          <li>Two to three evolutions a year</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="https://snapforgelab.com/#contact" class="btn p">Start</a>
+      </div>
+      <div class="offer reveal">
+        <div class="name">Templates</div>
+        <div class="price">$99</div>
+        <div class="per">one-time</div>
+        <ul>
+          <li>Premium Replit templates</li>
+          <li>One-click deploy</li>
+          <li>Docs and examples</li>
+        </ul>
+        <a href="https://snapforgelab.com/#contact" class="btn t">Browse</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="uses">
+  <div class="wrap">
+    <div class="kicker reveal">Work</div>
+    <h2 class="reveal">What we deploy.</h2>
+    <div class="grid">
+      <div class="uc reveal"><div class="ic">◷</div><h3>Dashboard</h3><p>KPIs from Sheets, Airtable, or your API — one live view.</p></div>
+      <div class="uc reveal"><div class="ic">◑</div><h3>CRM</h3><p>Pipeline and customers, shaped to how you sell.</p></div>
+      <div class="uc reveal"><div class="ic">⚙</div><h3>Automation</h3><p>Repetitive work, wired to your stack.</p></div>
+      <div class="uc reveal"><div class="ic">▢</div><h3>Portal</h3><p>Booking, quotes, tracking — a front door for clients.</p></div>
+      <div class="uc reveal"><div class="ic">✦</div><h3>AI Assistant</h3><p>Grounded in your company's knowledge.</p></div>
+      <div class="uc reveal"><div class="ic">◈</div><h3>Custom</h3><p>The tool your team keeps asking for. We build it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="quote reveal">
+      <p>Anyone can prompt an app. We forge the one that ships.</p>
+      <div class="by">Snapforge Lab — AI-proof by design</div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="kicker reveal">Model</div>
+    <h2 class="reveal">Why it lasts.</h2>
+    <div class="spec reveal">
+      <div class="r"><span class="k">Setup</span><span class="v">one-time fee</span></div>
+      <div class="r"><span class="k">Run</span><span class="v">monthly retainer</span></div>
+      <div class="r"><span class="k">Scale</span><span class="v">reusable templates</span></div>
+      <div class="r"><span class="k">Acquire</span><span class="v">Replit marketplace</span></div>
+      <div class="r"><span class="k">Time to live</span><span class="v">days</span></div>
+      <div class="r"><span class="k">Engagement</span><span class="v">async, remote</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="kicker reveal" style="text-align:center">Questions</div>
+    <h2 class="reveal" style="text-align:center">Answered.</h2>
+    <div class="faq">
+      <details class="reveal"><summary>Do I need a Replit account?</summary><div class="a">Yes — your app lives on your Replit account, so you own it. We handle setup, deployment, and management.</div></details>
+      <details class="reveal"><summary>What if I leave?</summary><div class="a">Your app is standard Replit code on your account — fully exportable. Cancel the retainer; the app keeps running.</div></details>
+      <details class="reveal"><summary>Is the price fixed?</summary><div class="a">Starter is a flat $1,500 for a defined template app. Custom work gets a written fixed-price quote within 48 hours. Never open-ended billing.</div></details>
+      <details class="reveal"><summary>How fast?</summary><div class="a">Template apps usually ship in days. Custom work is scoped up front with a clear timeline.</div></details>
+      <details class="reveal"><summary>Can you build something else?</summary><div class="a">Often. Tell us the workflow — if it fits a template we adapt it; if not, we scope it fixed-price.</div></details>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap narrow">
+    <div class="kicker reveal">Start</div>
+    <h2 class="reveal">Forge your first app.</h2>
+    <p class="sub reveal" style="margin-left:auto;margin-right:auto">Tell us the workflow. We send a fixed-price plan in 48 hours. No call. No obligation.</p>
+    <form class="form reveal" id="lead" action="https://formspree.io/f/xjybzkza" method="POST">
+      <input type="hidden" name="_next" value="https://snapforgelab.com/#contact">
+      <input type="email" name="email" placeholder="you@company.com" required="">
+      <button type="submit" class="btn p">Get plan</button>
+    </form>
+    <p class="alt reveal">Or email <a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="logo">Snapforge Lab</span>
+    Replit Solution Partner — productized deployment for growing businesses.
+  </div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+
+</body></html>
