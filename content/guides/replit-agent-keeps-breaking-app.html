@@ -1,0 +1,68 @@
+<!--meta
+{
+ "order": 4,
+ "title": "Replit Agent Keeps Breaking Your App? How to Stop the Fix Loop | Snapforge Lab",
+ "h1": "Replit Agent keeps breaking your app? How to stop the fix loop",
+ "kicker": "Troubleshooting",
+ "description": "Why Replit Agent gets stuck fixing one bug and breaking another, how to roll back safely with checkpoints, and a prompting workflow that stops the loop and your credit bill from spiraling.",
+ "published": "2026-09-26",
+ "minutes": 8,
+ "tldr": [
+  "Stop prompting. Every extra 'it's still broken' message costs credits and usually adds more code on top of the problem.",
+  "Roll back to the last checkpoint where the app worked. Agent creates checkpoints as it goes, and rollback restores files and conversation context. Include the database only if you mean to.",
+  "Then fix with small, specific requests: one bug, the exact error, the file involved, and what must not change."
+ ],
+ "faq": [
+  ["How do I roll back Replit Agent changes?", "Use the rollback option on a checkpoint in the Agent tab, or the History and Git panes. Rollback restores project files and Agent context to that point. By default it does not change your database; you have to select the database in the additional rollback options if you want that."],
+  ["Why does Replit Agent keep making the same mistake?", "Usually because the conversation carries a wrong assumption forward, or the real cause is outside the file Agent keeps editing (a missing secret, a schema mismatch, a dependency). Starting a fresh conversation with a precise bug report often works better than repeating the request."],
+  ["How can I reduce Replit Agent costs while debugging?", "Make smaller, specific requests, read the error yourself first, roll back instead of stacking fixes, use planning mode to agree on the approach before code is written, and set spending notifications in your account."],
+  ["When should I hire a developer instead?", "When the same bug survives two or three rollback-and-retry cycles, when the issue touches authentication, payments or data, or when the app is about to be used by real customers."]
+ ],
+ "related": ["replit-agent-security-checklist", "is-replit-production-ready", "replit-production-database"]
+}
+-->
+<p>You ask Agent to fix a bug. It fixes it and breaks the login. You ask it to fix the login. The original bug comes back. Twenty messages later the app is worse than when you started, and the credit bill has quietly grown. This guide is how to get out of that loop.</p>
+
+<h2 id="why">Why the loop happens</h2>
+<ul>
+<li><strong>The real cause is somewhere else.</strong> A missing secret in production, a database column that doesn't exist, a package version conflict. Agent keeps editing the file where the error <em>appears</em>, not where it <em>starts</em>.</li>
+<li><strong>Fixes pile up.</strong> Each attempt adds code instead of replacing the broken code. After a few rounds there are two or three competing versions of the same logic, and some of it never runs.</li>
+<li><strong>Context drifts.</strong> A long conversation carries early wrong assumptions forward.</li>
+<li><strong>Vague prompts.</strong> "It's still broken" gives Agent nothing new to work with, so it guesses.</li>
+</ul>
+
+<h2 id="stop">Step 1: Stop and roll back</h2>
+<p>Stop sending messages. Find the last point where the app worked and roll back to it. Replit lets you roll back to a checkpoint from the Agent tab and the History view, which restores the project files and Agent's context to that moment. Agent also creates checkpoints before attempting fixes for critical issues, so a good one may already exist.</p>
+<p><strong>Careful with data:</strong> by default a rollback does not change your database. If Agent changed the schema or data during the loop, decide deliberately whether to include the database in the rollback. Your production database is separate and not touched by Agent.</p>
+
+<h2 id="diagnose">Step 2: Diagnose before you prompt</h2>
+<p>Spend five minutes finding facts Agent can use:</p>
+<ol>
+<li><strong>Get the exact error.</strong> Copy it from the console, the Shell, or the browser DevTools Console and Network tabs.</li>
+<li><strong>Find when it happens.</strong> Which page, which button, which user?</li>
+<li><strong>Check the usual suspects:</strong> is a secret missing? Did the database schema change? Does it work in the workspace but not in the published app?</li>
+</ol>
+
+<h2 id="prompt">Step 3: One bug, one precise request</h2>
+<p>Start a fresh conversation and use a structure like this:</p>
+<pre><code>Bug: Saving an invoice fails with "column due_date does not exist".
+Where: POST /api/invoices, file server/routes/invoices.ts
+Expected: the invoice saves and appears in the list.
+Already checked: the column exists in the dev database schema file.
+Constraints: don't change the login flow or the invoice list page.
+First, explain the cause. Don't write code until I confirm.</code></pre>
+<p>Asking for the diagnosis first (or using a planning mode where available) avoids paying for code built on a wrong guess.</p>
+
+<!--cta-->
+
+<h2 id="prevent">Step 4: Prevent the next loop</h2>
+<ul>
+<li><strong>Commit or checkpoint when it works.</strong> Name good states so you can find them later.</li>
+<li><strong>Change one thing at a time.</strong> Large "build me the whole billing system" prompts create large blast radiuses.</li>
+<li><strong>Protect critical flows.</strong> Keep a two-minute manual test for login, the main workflow and payments, and run it after each change.</li>
+<li><strong>Watch spend.</strong> Set spending notifications and review usage weekly.</li>
+</ul>
+
+<h2 id="when">When to call a developer</h2>
+<p>Bring in a human when the same bug survives two or three rollback cycles, when the issue touches <strong>authentication, payments or customer data</strong>, or when you're about to launch to real users. An experienced developer can usually find the root cause in the code faster than another twenty prompts, and for less than the credits they cost.</p>
+<p>Our <a href="/replit-app-to-production/">Ship-Ready Review</a> ($199, 48 hours) maps every issue in your app with a prioritized fix list, and the Ship-It Sprint fixes everything and puts it in production in 5 days. To check where you stand first, take the free <a href="/tools/replit-readiness-score/">Replit Readiness Score</a>.</p>

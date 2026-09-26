@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Dev vs Production Database: How Not to Lose Data | Snapforge Lab</title>
+<meta name="description" content="How Replit separates development and production databases, what Agent can and can&#x27;t touch, how schema changes reach production, and the backup and migration habits that keep customer data safe.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-production-database/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-production-database/">
+<meta property="og:title" content="Replit Dev vs Production Database: How Not to Lose Data">
+<meta property="og:description" content="How Replit separates development and production databases, what Agent can and can&#x27;t touch, how schema changes reach production, and the backup and migration habits that keep customer data safe.">
+<meta property="og:image" content="https://snapforgelab.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Dev vs Production Database: How Not to Lose Data">
+<meta name="twitter:description" content="How Replit separates development and production databases, what Agent can and can&#x27;t touch, how schema changes reach production, and the backup and migration habits that keep customer data safe.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png">
+<link rel="stylesheet" href="/assets/styles.css?v=3">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit development vs production database: how it works, and how not to lose data",
+   "description": "How Replit separates development and production databases, what Agent can and can't touch, how schema changes reach production, and the backup and migration habits that keep customer data safe.",
+   "url": "https://snapforgelab.com/guides/replit-production-database/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-production-database/",
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26",
+   "image": "https://snapforgelab.com/og.png",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "url": "https://snapforgelab.com/"
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit development vs production database: how it works, and how not to lose data",
+     "item": "https://snapforgelab.com/guides/replit-production-database/"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Does Replit Agent have access to my production database?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Replit separates development and production databases, and Agent can only change the development database. This separation was introduced so that production data stays safe while you build."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why is my production database empty after publishing?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "On the first publish, Replit creates the production database with your schema but not the data from development. Seed the reference data your app needs (plans, categories, an admin account) in production deliberately."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does rolling back a checkpoint restore my database?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Not by default. Rollbacks restore code and context; to include the development database you have to select it in the additional rollback options. Production data is never rolled back by a workspace checkpoint."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How do I avoid losing data during a schema change?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Back up before publishing schema changes, prefer additive changes (add a column, migrate data, then remove the old column in a later release), and never let a migration drop or rename columns holding customer data without a tested restore."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#what">What we build</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/" class="btn p sm">Get a $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Databases</nav>
+  <article class="article">
+    <div class="kicker">Databases</div>
+    <h1>Replit development vs production database: how it works, and how not to lose data</h1>
+    <p class="byline">By Snapforge Lab · Updated <time datetime="2026-09-26">Sep 26, 2026</time> · 8 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Published Replit apps get a production database that is separate from the development database you and Agent work with. Agent cannot modify the production database.</li><li>On first publish, production gets the schema but none of your test data. Later schema changes are applied when you republish, and Agent asks before applying detected changes.</li><li>The main risks left are yours: destructive migrations, no tested restore, and reference data that only exists in development.</li></ul></div>
+    <div class="prose">
+<p>In July 2025, a widely reported incident saw an AI agent delete a user's production database on Replit. Replit responded by shipping, among other changes, <a href="https://blog.replit.com/introducing-a-safer-way-to-vibe-code-with-replit-databases" rel="noopener">automatic separation of development and production databases</a>. That fixed the biggest risk. It did not remove every way to lose data. Here is how the setup works today and the habits that keep your customers' data safe.</p>
+
+<h2 id="how">How the two databases work</h2>
+<ul>
+<li><strong>Development database:</strong> the one you use while building. Agent can read and change it, including creating tables and test data.</li>
+<li><strong>Production database:</strong> created for your published app. It is separate, and <strong>Agent cannot modify it</strong>.</li>
+<li><strong>First publish:</strong> production gets a fresh copy of the schema, with <strong>no data</strong> from development.</li>
+<li><strong>Later publishes:</strong> if Agent detects schema changes in development, it asks during republishing whether to apply them to production.</li>
+</ul>
+<p>See Replit's documentation on <a href="https://docs.replit.com/cloud-services/storage-and-databases/production-databases" rel="noopener">development and production databases</a> for the current details.</p>
+
+<h2 id="risks">The risks that remain</h2>
+<h3>1. Destructive schema changes</h3>
+<p>Renaming a column looks harmless in development, where the data is fake. Applied to production, a rename can be executed as "drop the old column, create a new one", and the data in it is gone. Review every schema change before accepting it for production.</p>
+
+<h3>2. Missing reference data</h3>
+<p>Your app may depend on rows that only exist in development: pricing plans, categories, feature flags, the first admin user. Production starts empty, so the app breaks in confusing ways. Keep a seed script that creates required reference data and run it deliberately.</p>
+
+<h3>3. Code and data out of sync</h3>
+<p>Rolling back code to a checkpoint does not roll back production data. If a release adds a column and writes to it, rolling the code back leaves data the old code doesn't expect. Plan releases so old and new code can both run against the current schema.</p>
+
+<h3>4. No tested restore</h3>
+<p>Know where your backup and restore options are, what point in time you can go back to, and how long it takes. Test a restore once, before you need it.</p>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
+    <p class="cta-title">Want an expert to check your Replit app before real users do?</p>
+    <p class="cta-text">Security, auth, data, costs and deployment. Prioritized fix list and a video walkthrough in 48 hours. Fewer than 3 real issues found? Full refund.</p>
+  </div>
+  <a href="/replit-app-to-production/" class="btn p" data-buy="review">Get my review</a>
+</aside>
+
+<h2 id="habits">Five habits for safe production data</h2>
+<ol>
+<li><strong>Back up before every schema change</strong> you publish.</li>
+<li><strong>Make changes additive.</strong> Add the new column, copy the data, switch the code, and remove the old column in a later release.</li>
+<li><strong>Read the migration.</strong> Before accepting a production schema change, look for <code>DROP</code>, <code>RENAME</code> and <code>ALTER … TYPE</code>.</li>
+<li><strong>Seed on purpose.</strong> Keep a script for reference data, and never copy test users or fake orders to production.</li>
+<li><strong>Protect personal data.</strong> Store only what you need, restrict who can query production, and make deletion possible when a customer asks.</li>
+</ol>
+
+<h2 id="checklist">Pre-publish database checklist</h2>
+<ul>
+<li>Backup taken and restore location known</li>
+<li>Schema diff reviewed, with no drops or renames on tables holding customer data</li>
+<li>Reference data seeded in production</li>
+<li>Old and new code both work with the new schema</li>
+<li>Smoke test after publish: create, read, update, delete one real record</li>
+</ul>
+<p>More launch steps are in our <a href="/guides/deploy-replit-app-to-production/">production deployment guide</a>. Want a second pair of eyes on your schema and data setup? That's part of every <a href="/replit-app-to-production/">Ship-Ready Review</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Does Replit Agent have access to my production database?</h3>
+<p>No. Replit separates development and production databases, and Agent can only change the development database. This separation was introduced so that production data stays safe while you build.</p>
+<h3>Why is my production database empty after publishing?</h3>
+<p>On the first publish, Replit creates the production database with your schema but not the data from development. Seed the reference data your app needs (plans, categories, an admin account) in production deliberately.</p>
+<h3>Does rolling back a checkpoint restore my database?</h3>
+<p>Not by default. Rollbacks restore code and context; to include the development database you have to select it in the additional rollback options. Production data is never rolled back by a workspace checkpoint.</p>
+<h3>How do I avoid losing data during a schema change?</h3>
+<p>Back up before publishing schema changes, prefer additive changes (add a column, migrate data, then remove the old column in a later release), and never let a migration drop or rename columns holding customer data without a tested restore.</p>
+    </div>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
+    <p class="cta-title">Want an expert to check your Replit app before real users do?</p>
+    <p class="cta-text">Security, auth, data, costs and deployment. Prioritized fix list and a video walkthrough in 48 hours. Fewer than 3 real issues found? Full refund.</p>
+  </div>
+  <a href="/replit-app-to-production/" class="btn p" data-buy="review">Get my review</a>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/deploy-replit-app-to-production/"><span class="rel-k">Deployment</span><span class="rel-t">How to deploy a Replit app to production, step by step</span></a><a class="rel" href="/guides/replit-agent-security-checklist/"><span class="rel-k">Security</span><span class="rel-t">Replit Agent security checklist: 15 checks before you launch</span></a><a class="rel" href="/guides/replit-agent-keeps-breaking-app/"><span class="rel-k">Troubleshooting</span><span class="rel-t">Replit Agent keeps breaking your app? How to stop the fix loop</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/replit-app-to-production/" class="btn p lg">Get a $199 ship-ready review</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Replit Solution Partner. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><h4>Services</h4><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio.</p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=3" defer></script>
+</body>
+</html>

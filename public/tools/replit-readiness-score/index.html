@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Readiness Score: Is Your App Production-Ready? (Free)</title>
+<meta name="description" content="Free 2-minute test: answer 12 questions and get a production-readiness score for your Replit or Replit Agent app, with the exact gaps to fix before real users arrive.">
+<link rel="canonical" href="https://snapforgelab.com/tools/replit-readiness-score/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/tools/replit-readiness-score/">
+<meta property="og:title" content="Is your Replit app ready for real users? Get your score in 2 minutes">
+<meta property="og:description" content="12 questions. A production-readiness score and the exact gaps to fix. Free.">
+<meta property="og:image" content="https://snapforgelab.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Is your Replit app ready for real users? Get your score in 2 minutes">
+<meta name="twitter:description" content="12 questions. A production-readiness score and the exact gaps to fix. Free.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png">
+<link rel="stylesheet" href="/assets/styles.css?v=3">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebApplication",
+   "name": "Replit Readiness Score",
+   "url": "https://snapforgelab.com/tools/replit-readiness-score/",
+   "applicationCategory": "DeveloperApplication",
+   "operatingSystem": "Any (web browser)",
+   "description": "Free self-assessment that scores whether a Replit or Replit Agent app is ready for production across security, data, reliability, costs and deployment.",
+   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+   "publisher": {"@type": "Organization", "@id": "https://snapforgelab.com/#org", "name": "Snapforge Lab", "url": "https://snapforgelab.com/"}
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://snapforgelab.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Replit Readiness Score", "item": "https://snapforgelab.com/tools/replit-readiness-score/"}
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#what">What we build</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/" class="btn p sm">Get a $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Replit Readiness Score</nav>
+  <div class="article" style="padding-bottom:24px">
+    <div class="kicker">Free tool · 2 minutes</div>
+    <h1>Is your Replit app ready for real users?</h1>
+    <p class="lede">Answer 12 questions about your Replit or Replit Agent app. Get a readiness score and the exact gaps to fix before launch.</p>
+  </div>
+
+  <form id="quiz" class="quiz" novalidate>
+    <div id="questions"></div>
+    <button type="submit" class="btn p lg quiz-submit">See my score <span class="arrow" aria-hidden="true">→</span></button>
+    <p class="quiz-hint" id="quiz-hint" role="status" aria-live="polite"></p>
+  </form>
+
+  <section id="result" class="result" hidden aria-live="polite">
+    <div class="score-card">
+      <div class="gauge" id="gauge"><span id="score">0</span><small>/100</small></div>
+      <div>
+        <p class="grade" id="grade"></p>
+        <p class="verdict" id="verdict"></p>
+      </div>
+    </div>
+    <div class="area-bars" id="areas"></div>
+    <h2 class="gaps-title">What to fix, in order</h2>
+    <ol class="gaps" id="gaps"></ol>
+
+    <aside class="cta-box">
+      <div>
+        <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
+        <p class="cta-title">Want us to verify it in your actual code?</p>
+        <p class="cta-text">A self-assessment tells you where to look. Our review finds what's really there, with a prioritized fix list and a video walkthrough. Fewer than 3 real issues found? Full refund.</p>
+      </div>
+      <a href="/replit-app-to-production/" class="btn p" data-buy="review">Get my review</a>
+    </aside>
+
+    <div class="contact-box center" style="margin-top:24px">
+      <h2 style="font-size:clamp(22px,3vw,28px)">Email me my results and the full checklist</h2>
+      <form class="lead-form" data-lead action="https://formspree.io/f/xjybzkza" method="POST" style="margin-top:16px">
+        <label for="rs-email">Email
+          <input id="rs-email" type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+        </label>
+        <input type="hidden" name="workflow" id="rs-summary" value="">
+        <input type="hidden" name="_subject" value="Readiness Score lead — snapforgelab.com">
+        <input type="hidden" name="offer" value="readiness-score">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+        <button type="submit" class="btn p lg">Send my results</button>
+        <p class="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+    <p class="center" style="margin-top:20px"><button type="button" class="btn g" id="retake">Retake the test</button></p>
+  </section>
+
+  <div class="prose" style="margin-top:72px">
+    <h2>How the Replit Readiness Score works</h2>
+    <p>The score covers the five areas where AI-built apps most often fail in production: <strong>security</strong>, <strong>data</strong>, <strong>reliability</strong>, <strong>costs</strong> and <strong>deployment</strong>. Each question is weighted by how much damage the gap can cause. A missing authorization check that exposes customer data weighs far more than a missing uptime monitor.</p>
+    <p>"Not sure" counts as a partial risk, because an item nobody has checked is often an open one. Everything runs in your browser. Nothing is sent anywhere unless you choose to email yourself the results.</p>
+    <h2>What your score means</h2>
+    <ul>
+      <li><strong>85–100: Ready.</strong> Launch, and keep monitoring.</li>
+      <li><strong>60–84: Almost there.</strong> Fix the gaps this week before you invite customers.</li>
+      <li><strong>Below 60: Not ready.</strong> Fix the must-fix items before any real user signs up.</li>
+    </ul>
+    <p>Go deeper with our <a href="/guides/replit-agent-security-checklist/">15-point Replit Agent security checklist</a>, the <a href="/guides/deploy-replit-app-to-production/">production deployment guide</a>, or <a href="/guides/is-replit-production-ready/">is Replit production-ready?</a></p>
+  </div>
+</div>
+</main>
+
+<div class="m-cta"><a href="#quiz" class="btn p lg">Get my score, free</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Replit Solution Partner. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><h4>Services</h4><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // [id, area, weight, question, fix text, guide link]
+  const Q = [
+    ['secrets', 'Security', 12, 'Are all API keys and passwords stored in Replit Secrets (never in code or chat)?', 'Move every key to Secrets and rotate any key that was ever in the code.', '/guides/replit-agent-security-checklist/#secrets'],
+    ['browser', 'Security', 8, 'Are secret keys kept off the frontend (no third-party API calls with secret keys from the browser)?', 'Move third-party API calls with secret keys to a backend route.', '/guides/replit-agent-security-checklist/#secrets'],
+    ['owner', 'Security', 14, 'Have you tested that user B cannot see or edit user A\'s data by changing an ID?', 'Scope every query to the current user and test with two accounts.', '/guides/replit-agent-security-checklist/#auth'],
+    ['admin', 'Security', 8, 'Are admin features protected on the server, not just hidden in the UI?', 'Add a server-side role check to every admin route.', '/guides/replit-agent-security-checklist/#auth'],
+    ['validate', 'Security', 6, 'Does the server validate every input (forms, API bodies, uploads)?', 'Validate bodies, params and uploads on the server with a schema library.', '/guides/replit-agent-security-checklist/#input'],
+    ['proddb', 'Data', 8, 'Does the published app use its own production database, with the reference data it needs?', 'Seed production reference data on purpose and never copy test data.', '/guides/replit-production-database/'],
+    ['backup', 'Data', 10, 'Have you actually tested restoring a backup?', 'Find your restore option and test it once on a copy.', '/guides/replit-production-database/#habits'],
+    ['errors', 'Reliability', 6, 'Do you get alerted when the app errors or goes down?', 'Add an uptime monitor on a /health route and an error tracker.', '/guides/deploy-replit-app-to-production/#monitoring'],
+    ['rollback', 'Reliability', 5, 'Can you roll back a bad release in minutes?', 'Write down a release routine and keep the last good version identifiable.', '/guides/deploy-replit-app-to-production/#release'],
+    ['limits', 'Costs', 9, 'Do AI and paid-API endpoints have rate limits and a spending cap?', 'Add per-user rate limits and provider spending caps.', '/guides/replit-agent-security-checklist/#ops'],
+    ['deploytype', 'Deployment', 7, 'Does your deployment type fit the app (no background jobs or websockets on Autoscale)?', 'Move background work to Scheduled or a Reserved VM.', '/guides/replit-deployment-types/'],
+    ['domain', 'Deployment', 7, 'Is the app on a custom domain with HTTPS, using live production keys?', 'Link your domain and check production secrets use live keys.', '/guides/deploy-replit-app-to-production/#domain'],
+  ];
+  const OPTS = [['yes', 'Yes', 1], ['unsure', 'Not sure', 0.3], ['no', 'No', 0]];
+  const box = document.getElementById('questions');
+  box.innerHTML = Q.map(([id, area, , q], i) => `
+    <fieldset class="q">
+      <legend><span class="q-n">${i + 1}/${Q.length} · ${area}</span>${q}</legend>
+      <div class="q-opts">${OPTS.map(([v, label]) => `
+        <label class="opt"><input type="radio" name="${id}" value="${v}" id="${id}-${v}"><span>${label}</span></label>`).join('')}
+      </div>
+    </fieldset>`).join('');
+
+  const form = document.getElementById('quiz');
+  const result = document.getElementById('result');
+  const hint = document.getElementById('quiz-hint');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const missing = Q.filter(([id]) => !data.get(id));
+    if (missing.length) {
+      hint.textContent = `Answer all questions to see your score (${missing.length} left).`;
+      document.getElementsByName(missing[0][0])[0].focus();
+      return;
+    }
+    hint.textContent = '';
+    const total = Q.reduce((s, q) => s + q[2], 0);
+    const areas = {};
+    let got = 0;
+    const gaps = [];
+    Q.forEach(([id, area, w, q, fix, link]) => {
+      const v = data.get(id);
+      const k = OPTS.find((o) => o[0] === v)[2];
+      got += w * k;
+      areas[area] = areas[area] || [0, 0];
+      areas[area][0] += w * k; areas[area][1] += w;
+      if (k < 1) gaps.push({ w: w * (1 - k), v, fix, link, area });
+    });
+    const score = Math.round((got / total) * 100);
+    document.getElementById('score').textContent = score;
+    const gauge = document.getElementById('gauge');
+    gauge.style.setProperty('--p', score);
+    gauge.dataset.level = score >= 85 ? 'ok' : score >= 60 ? 'mid' : 'low';
+    document.getElementById('grade').textContent = score >= 85 ? 'Ready to launch' : score >= 60 ? 'Almost there' : 'Not ready for real users yet';
+    document.getElementById('verdict').textContent = score >= 85
+      ? 'Solid foundations. Launch, keep monitoring, and re-check after big Agent changes.'
+      : score >= 60
+        ? 'A few gaps could hurt you with real users. Fix them this week before you invite customers.'
+        : 'Important gaps in security or data. Fix the must-fix items below before anyone signs up.';
+    document.getElementById('areas').innerHTML = Object.entries(areas).map(([a, [g, t]]) => {
+      const p = Math.round((g / t) * 100);
+      return `<div class="bar"><span class="bar-l">${a}</span><span class="bar-t"><span class="bar-f" style="width:${p}%" data-level="${p >= 85 ? 'ok' : p >= 60 ? 'mid' : 'low'}"></span></span><span class="bar-v">${p}%</span></div>`;
+    }).join('');
+    gaps.sort((a, b) => b.w - a.w);
+    document.getElementById('gaps').innerHTML = gaps.length
+      ? gaps.map((g) => `<li><span class="sev ${g.w >= 8 ? 'must' : 'soon'}">${g.w >= 8 ? 'Must-fix' : 'Fix soon'}</span> ${g.fix} <a href="${g.link}">How →</a></li>`).join('')
+      : '<li><span class="sev ok">All clear</span> No self-reported gaps. A code review is the next level of confidence.</li>';
+    document.getElementById('rs-summary').value =
+      `Readiness score ${score}/100. Gaps: ${gaps.map((g) => `[${g.area}] ${g.fix}`).join(' | ') || 'none'}`;
+    form.hidden = true;
+    result.hidden = false;
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (window.plausible) window.plausible('ReadinessScore', { props: { score } });
+  });
+
+  document.getElementById('retake').addEventListener('click', () => {
+    form.reset(); result.hidden = true; form.hidden = false;
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+<script src="/assets/main.js?v=3" defer></script>
+</body>
+</html>

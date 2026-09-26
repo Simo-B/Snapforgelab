@@ -63,3 +63,10 @@ Mots-clés à faible concurrence, forte intention :
 4. `replit developer for hire` → déjà couvert par `/hire-replit-developer/`
 5. `replit vs bubble for business apps`
 Ajouter chaque nouvelle page à `public/sitemap.xml` et au footer.
+
+## 8. SEO « all-in » : contenu en place
+- 6 guides dans `content/guides/` → générés dans `public/guides/` par `python3 scripts/build.py`
+- Outil gratuit : `/tools/replit-readiness-score/` (aimant à liens + leads)
+- `llms.txt` pour les moteurs IA (ChatGPT, Perplexity, Claude)
+- ⚠️ Cloudflare → ton domaine → **Security → Bots / AI Crawl Control** : vérifier que les crawlers IA (GPTBot, PerplexityBot, ClaudeBot, Google-Extended) ne sont **pas bloqués** et que le « managed robots.txt » n'interdit pas l'accès, sinon les moteurs IA ne te citeront jamais
+- Voir `docs/seo-playbook.md` pour le plan des 90 jours

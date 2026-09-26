@@ -1,0 +1,98 @@
+<!--meta
+{
+ "order": 2,
+ "title": "How to Deploy a Replit App to Production: Step-by-Step (2026) | Snapforge Lab",
+ "h1": "How to deploy a Replit app to production, step by step",
+ "kicker": "Deployment",
+ "description": "A practical launch runbook for Replit apps: pick the right deployment type, set production secrets, prepare the database, connect a custom domain, add monitoring and plan rollbacks.",
+ "published": "2026-09-26",
+ "minutes": 10,
+ "tldr": [
+  "Publishing on Replit takes one click. Running in production takes a checklist: deployment type, production secrets, database, domain, monitoring and a rollback plan.",
+  "Your published app is a separate snapshot from your workspace. Editing in the workspace does not change what users see until you publish again.",
+  "Budget one to three hours for a first production launch if the app passes a security review."
+ ],
+ "faq": [
+  ["What is the difference between running and publishing on Replit?", "Clicking Run starts your app inside the workspace for development. Publishing creates a snapshot of the project that runs on Replit's cloud infrastructure with its own URL, and it stays unchanged until you publish again."],
+  ["Which Replit deployment type should I choose?", "Autoscale for most web apps and APIs with variable traffic, Reserved VM for apps that must always be on (bots, websockets, background workers), Static for sites without a backend, and Scheduled for recurring jobs. See our comparison guide for details."],
+  ["Can I use my own domain on Replit?", "Yes. Published apps get a replit.app subdomain by default, and you can link a custom domain from the publishing settings by adding the DNS records Replit gives you at your domain registrar."],
+  ["How do I roll back a bad deployment on Replit?", "Keep the last known good version identifiable, test changes in the workspace before publishing, and republish from a checkpoint if a release breaks. For database changes, back up before publishing, because rolling back code does not automatically roll back data."]
+ ],
+ "related": ["replit-deployment-types", "replit-agent-security-checklist", "replit-production-database"]
+}
+-->
+<p>On Replit, "deploy" is a button. That's the good news, and also the trap: the button works whether or not your app is ready for real users. This guide is the runbook we follow when we take a client's Replit app live.</p>
+
+<h2 id="before">Step 0: Is the app ready to publish?</h2>
+<p>Before touching deployment settings, run through our <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a>. At minimum, confirm three things:</p>
+<ul>
+<li>No API keys in the code or in the frontend bundle.</li>
+<li>Every private API route checks who is asking <strong>and</strong> whether they own the data.</li>
+<li>You can log in as two different users and each sees only their own data.</li>
+</ul>
+
+<h2 id="type">Step 1: Choose the deployment type</h2>
+<p>Replit offers several <a href="https://docs.replit.com/features/publishing/deployment-types" rel="noopener">deployment types</a>. The short version:</p>
+<table>
+<thead><tr><th>Your app</th><th>Choose</th></tr></thead>
+<tbody>
+<tr><td>Web app or API with normal, uneven traffic</td><td><strong>Autoscale</strong></td></tr>
+<tr><td>Must never sleep: bots, websockets, queues, long jobs</td><td><strong>Reserved VM</strong></td></tr>
+<tr><td>Pure HTML/CSS/JS, no server</td><td><strong>Static</strong></td></tr>
+<tr><td>A task that runs on a schedule (reports, syncs)</td><td><strong>Scheduled</strong></td></tr>
+</tbody>
+</table>
+<p>The full trade-offs, including cold starts and costs, are in <a href="/guides/replit-deployment-types/">Replit Autoscale vs Reserved VM vs Static vs Scheduled</a>.</p>
+
+<h2 id="config">Step 2: Make the app production-aware</h2>
+<ul>
+<li><strong>Bind to the right port and host.</strong> Listen on <code>0.0.0.0</code> and the port Replit provides, not <code>localhost</code>.</li>
+<li><strong>Use a production build.</strong> The run command for the published app should start the built app (for example <code>npm run build</code> then <code>npm start</code>), not a dev server with hot reload.</li>
+<li><strong>Detect production in code.</strong> Replit sets environment variables in published apps (such as <code>REPLIT_DEPLOYMENT</code>) that let you switch off debug output and dev-only routes.</li>
+<li><strong>Add a health route.</strong> A simple <code>GET /health</code> that returns 200 when the app and database are reachable makes monitoring trivial.</li>
+</ul>
+
+<h2 id="secrets">Step 3: Set production secrets</h2>
+<p>Open the publishing settings and confirm every secret the app needs is present for the published app. Use <strong>live</strong> keys in production and <strong>test</strong> keys in development (Stripe, email providers). Rotate any key that has ever appeared in code or in a chat with Agent.</p>
+
+<h2 id="db">Step 4: Prepare the production database</h2>
+<p>Published apps get a production database that is separate from the development database Agent works on. On first publish it gets the schema but not your test data. Decide what reference data (plans, categories, admin user) needs to exist in production and how you'll create it. Read <a href="/guides/replit-production-database/">how Replit's development and production databases work</a> before your first launch.</p>
+
+<!--cta-->
+
+<h2 id="domain">Step 5: Connect your domain</h2>
+<ol>
+<li>Publish once to get the <code>.replit.app</code> URL and check that it works.</li>
+<li>In the publishing settings, link a custom domain. Replit shows the DNS records to add.</li>
+<li>Add those records at your registrar or DNS provider (Cloudflare, Namecheap, GoDaddy…). If you use Cloudflare, follow Replit's instructions on proxy settings while the domain verifies.</li>
+<li>Wait for verification and HTTPS, then test both the apex domain and <code>www</code>.</li>
+</ol>
+
+<h2 id="monitoring">Step 6: Monitoring and alerts</h2>
+<ul>
+<li><strong>Uptime:</strong> point a free uptime monitor at your <code>/health</code> route and alert by email or Slack.</li>
+<li><strong>Errors:</strong> add an error tracker (Sentry or similar) so you hear about failures before customers do.</li>
+<li><strong>Logs:</strong> check the published app's logs after launch, and log enough context (route, user ID, error) to debug without guessing.</li>
+<li><strong>Costs:</strong> set spending alerts on Replit and on every paid API the app calls.</li>
+</ul>
+
+<h2 id="release">Step 7: A release routine you can repeat</h2>
+<ol>
+<li>Make changes in the workspace and test them there, ideally with two test users.</li>
+<li>Back up production data before any change to the database schema.</li>
+<li>Publish.</li>
+<li>Smoke-test the live app: login, the main workflow, one payment in test mode if relevant.</li>
+<li>If something breaks, republish the last good version first and debug second.</li>
+</ol>
+
+<h2 id="checklist">Launch-day checklist</h2>
+<ul>
+<li>Security checklist passed, no must-fix items open</li>
+<li>Correct deployment type and a production run command</li>
+<li>Production secrets set, live keys in production</li>
+<li>Production database ready, with a tested restore</li>
+<li>Custom domain and HTTPS working on apex and www</li>
+<li>Uptime monitor, error tracking and spending alerts on</li>
+<li>Rollback plan written down</li>
+</ul>
+<p>Not sure where you stand? The free <a href="/tools/replit-readiness-score/">Replit Readiness Score</a> gives you a score in two minutes. Or <a href="/replit-app-to-production/">let us review it for $199</a>, or ship it for you in 5 days with the Ship-It Sprint.</p>

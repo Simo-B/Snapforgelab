@@ -1,0 +1,67 @@
+<!--meta
+{
+ "order": 5,
+ "title": "Replit Dev vs Production Database: How Not to Lose Data | Snapforge Lab",
+ "h1": "Replit development vs production database: how it works, and how not to lose data",
+ "kicker": "Databases",
+ "description": "How Replit separates development and production databases, what Agent can and can't touch, how schema changes reach production, and the backup and migration habits that keep customer data safe.",
+ "published": "2026-09-26",
+ "minutes": 8,
+ "tldr": [
+  "Published Replit apps get a production database that is separate from the development database you and Agent work with. Agent cannot modify the production database.",
+  "On first publish, production gets the schema but none of your test data. Later schema changes are applied when you republish, and Agent asks before applying detected changes.",
+  "The main risks left are yours: destructive migrations, no tested restore, and reference data that only exists in development."
+ ],
+ "faq": [
+  ["Does Replit Agent have access to my production database?", "No. Replit separates development and production databases, and Agent can only change the development database. This separation was introduced so that production data stays safe while you build."],
+  ["Why is my production database empty after publishing?", "On the first publish, Replit creates the production database with your schema but not the data from development. Seed the reference data your app needs (plans, categories, an admin account) in production deliberately."],
+  ["Does rolling back a checkpoint restore my database?", "Not by default. Rollbacks restore code and context; to include the development database you have to select it in the additional rollback options. Production data is never rolled back by a workspace checkpoint."],
+  ["How do I avoid losing data during a schema change?", "Back up before publishing schema changes, prefer additive changes (add a column, migrate data, then remove the old column in a later release), and never let a migration drop or rename columns holding customer data without a tested restore."]
+ ],
+ "related": ["deploy-replit-app-to-production", "replit-agent-security-checklist", "replit-agent-keeps-breaking-app"]
+}
+-->
+<p>In July 2025, a widely reported incident saw an AI agent delete a user's production database on Replit. Replit responded by shipping, among other changes, <a href="https://blog.replit.com/introducing-a-safer-way-to-vibe-code-with-replit-databases" rel="noopener">automatic separation of development and production databases</a>. That fixed the biggest risk. It did not remove every way to lose data. Here is how the setup works today and the habits that keep your customers' data safe.</p>
+
+<h2 id="how">How the two databases work</h2>
+<ul>
+<li><strong>Development database:</strong> the one you use while building. Agent can read and change it, including creating tables and test data.</li>
+<li><strong>Production database:</strong> created for your published app. It is separate, and <strong>Agent cannot modify it</strong>.</li>
+<li><strong>First publish:</strong> production gets a fresh copy of the schema, with <strong>no data</strong> from development.</li>
+<li><strong>Later publishes:</strong> if Agent detects schema changes in development, it asks during republishing whether to apply them to production.</li>
+</ul>
+<p>See Replit's documentation on <a href="https://docs.replit.com/cloud-services/storage-and-databases/production-databases" rel="noopener">development and production databases</a> for the current details.</p>
+
+<h2 id="risks">The risks that remain</h2>
+<h3>1. Destructive schema changes</h3>
+<p>Renaming a column looks harmless in development, where the data is fake. Applied to production, a rename can be executed as "drop the old column, create a new one", and the data in it is gone. Review every schema change before accepting it for production.</p>
+
+<h3>2. Missing reference data</h3>
+<p>Your app may depend on rows that only exist in development: pricing plans, categories, feature flags, the first admin user. Production starts empty, so the app breaks in confusing ways. Keep a seed script that creates required reference data and run it deliberately.</p>
+
+<h3>3. Code and data out of sync</h3>
+<p>Rolling back code to a checkpoint does not roll back production data. If a release adds a column and writes to it, rolling the code back leaves data the old code doesn't expect. Plan releases so old and new code can both run against the current schema.</p>
+
+<h3>4. No tested restore</h3>
+<p>Know where your backup and restore options are, what point in time you can go back to, and how long it takes. Test a restore once, before you need it.</p>
+
+<!--cta-->
+
+<h2 id="habits">Five habits for safe production data</h2>
+<ol>
+<li><strong>Back up before every schema change</strong> you publish.</li>
+<li><strong>Make changes additive.</strong> Add the new column, copy the data, switch the code, and remove the old column in a later release.</li>
+<li><strong>Read the migration.</strong> Before accepting a production schema change, look for <code>DROP</code>, <code>RENAME</code> and <code>ALTER … TYPE</code>.</li>
+<li><strong>Seed on purpose.</strong> Keep a script for reference data, and never copy test users or fake orders to production.</li>
+<li><strong>Protect personal data.</strong> Store only what you need, restrict who can query production, and make deletion possible when a customer asks.</li>
+</ol>
+
+<h2 id="checklist">Pre-publish database checklist</h2>
+<ul>
+<li>Backup taken and restore location known</li>
+<li>Schema diff reviewed, with no drops or renames on tables holding customer data</li>
+<li>Reference data seeded in production</li>
+<li>Old and new code both work with the new schema</li>
+<li>Smoke test after publish: create, read, update, delete one real record</li>
+</ul>
+<p>More launch steps are in our <a href="/guides/deploy-replit-app-to-production/">production deployment guide</a>. Want a second pair of eyes on your schema and data setup? That's part of every <a href="/replit-app-to-production/">Ship-Ready Review</a>.</p>

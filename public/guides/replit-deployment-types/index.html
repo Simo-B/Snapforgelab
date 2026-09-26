@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Autoscale vs Reserved VM vs Static vs Scheduled | Snapforge Lab</title>
+<meta name="description" content="A plain-English comparison of Replit&#x27;s deployment types: how Autoscale, Reserved VM, Static and Scheduled deployments work, when to use each, cold starts, background jobs and cost trade-offs.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-deployment-types/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-deployment-types/">
+<meta property="og:title" content="Replit Autoscale vs Reserved VM vs Static vs Scheduled">
+<meta property="og:description" content="A plain-English comparison of Replit&#x27;s deployment types: how Autoscale, Reserved VM, Static and Scheduled deployments work, when to use each, cold starts, background jobs and cost trade-offs.">
+<meta property="og:image" content="https://snapforgelab.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Autoscale vs Reserved VM vs Static vs Scheduled">
+<meta name="twitter:description" content="A plain-English comparison of Replit&#x27;s deployment types: how Autoscale, Reserved VM, Static and Scheduled deployments work, when to use each, cold starts, background jobs and cost trade-offs.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png">
+<link rel="stylesheet" href="/assets/styles.css?v=3">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit Autoscale vs Reserved VM vs Static vs Scheduled: which deployment should you choose?",
+   "description": "A plain-English comparison of Replit's deployment types: how Autoscale, Reserved VM, Static and Scheduled deployments work, when to use each, cold starts, background jobs and cost trade-offs.",
+   "url": "https://snapforgelab.com/guides/replit-deployment-types/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-deployment-types/",
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26",
+   "image": "https://snapforgelab.com/og.png",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "url": "https://snapforgelab.com/"
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit Autoscale vs Reserved VM vs Static vs Scheduled: which deployment should you choose?",
+     "item": "https://snapforgelab.com/guides/replit-deployment-types/"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "What is the cheapest way to host a Replit app?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Static deployments are the cheapest if your app has no backend. For apps with a server, Autoscale is usually cheapest at low or uneven traffic because it can scale to zero when idle. Check Replit's current pricing page, since prices change."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why is my Replit Autoscale app slow on the first request?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "When an Autoscale deployment has scaled down to zero, the first request has to start a new instance. That cold start adds latency. If that is unacceptable for your users, use a Reserved VM."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I run background jobs on Autoscale?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Not reliably. Autoscale instances exist to serve requests and can be stopped when traffic drops. Use a Scheduled deployment for recurring jobs, or a Reserved VM for continuous workers and queues."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I switch deployment types later?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. You can change the deployment type from the publishing settings and republish. Test afterwards, because run commands and assumptions about always-on processes may need to change."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#what">What we build</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/" class="btn p sm">Get a $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Deployment</nav>
+  <article class="article">
+    <div class="kicker">Deployment</div>
+    <h1>Replit Autoscale vs Reserved VM vs Static vs Scheduled: which deployment should you choose?</h1>
+    <p class="byline">By Snapforge Lab · Updated <time datetime="2026-09-26">Sep 26, 2026</time> · 7 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Autoscale is the right default for most web apps and APIs: it scales with traffic and can scale to zero when idle, at the cost of occasional cold starts.</li><li>Reserved VM is for apps that must always be running: bots, websockets, queues, background workers. You pay a predictable fixed price.</li><li>Static is for sites with no server code. Scheduled is for jobs that run on a timer, like nightly syncs or weekly reports.</li></ul></div>
+    <div class="prose">
+<p>Replit gives you <a href="https://docs.replit.com/features/publishing/deployment-types" rel="noopener">several ways to publish an app</a>, and picking the wrong one is one of the most common reasons a Replit app feels slow, flaky or expensive in production. Here is how to choose.</p>
+
+<h2 id="summary">The comparison</h2>
+<table>
+<thead><tr><th></th><th>Autoscale</th><th>Reserved VM</th><th>Static</th><th>Scheduled</th></tr></thead>
+<tbody>
+<tr><td>Best for</td><td>Web apps, APIs</td><td>Always-on services</td><td>Sites with no backend</td><td>Recurring jobs</td></tr>
+<tr><td>Always running</td><td>No, scales to zero</td><td>Yes</td><td>n/a</td><td>Only when triggered</td></tr>
+<tr><td>Cold starts</td><td>Possible after idle</td><td>No</td><td>No</td><td>n/a</td></tr>
+<tr><td>Websockets, bots, queues</td><td>Not ideal</td><td>Yes</td><td>No</td><td>No</td></tr>
+<tr><td>Cost model</td><td>Usage-based</td><td>Fixed monthly</td><td>Low, transfer-based</td><td>Usage-based</td></tr>
+</tbody>
+</table>
+<p>Prices change, so check Replit's pricing page for current numbers before you commit.</p>
+
+<h2 id="autoscale">Autoscale: the default for web apps</h2>
+<p>Autoscale runs your app on servers that are added when traffic grows and removed when it drops, down to zero when nobody is using it. You mostly pay for what you use.</p>
+<p><strong>Choose it when:</strong> you have a normal web app or API, and traffic is uneven. Internal tools, client portals and dashboards used during business hours are a perfect fit.</p>
+<p><strong>Watch out for:</strong></p>
+<ul>
+<li><strong>Cold starts.</strong> After a quiet period, the first request waits for an instance to start.</li>
+<li><strong>No local state.</strong> Several instances can run at once and any can be stopped. Don't keep sessions, uploads or caches in memory or on the local disk. Use the database or object storage.</li>
+<li><strong>No background work.</strong> Timers and queue workers inside a request-serving instance can be cut off. Move them to Scheduled or a Reserved VM.</li>
+</ul>
+
+<h2 id="vm">Reserved VM: when it must never sleep</h2>
+<p>A Reserved VM is a dedicated machine that stays on. Performance is consistent and the monthly price is predictable.</p>
+<p><strong>Choose it when:</strong> you run a Discord or Telegram bot, a websocket server, a queue worker, long-running AI jobs, or an app where the cold start of Autoscale hurts the experience.</p>
+<p><strong>Watch out for:</strong> you pay even when nobody uses it, and one VM is one machine. Size it for your peak, and still keep state in the database.</p>
+
+<h2 id="static">Static: for sites without a server</h2>
+<p>Static deployments serve your HTML, CSS, JavaScript and images from a cache. They are fast and cheap.</p>
+<p><strong>Choose it when:</strong> your app is a landing page, documentation, or a frontend that only talks to external APIs <strong>without secret keys</strong>. If the frontend needs a secret, you need a server, which means Autoscale or a Reserved VM.</p>
+
+<h2 id="scheduled">Scheduled: for jobs on a timer</h2>
+<p>A Scheduled deployment runs a command on a schedule, like a cron job: nightly data syncs, weekly reports, cleaning up old records.</p>
+<p><strong>Choose it when:</strong> the work does not need a user request to start. Many business apps end up with <strong>two deployments</strong>: Autoscale for the web app and Scheduled for the jobs, both using the same database.</p>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
+    <p class="cta-title">Want an expert to check your Replit app before real users do?</p>
+    <p class="cta-text">Security, auth, data, costs and deployment. Prioritized fix list and a video walkthrough in 48 hours. Fewer than 3 real issues found? Full refund.</p>
+  </div>
+  <a href="/replit-app-to-production/" class="btn p" data-buy="review">Get my review</a>
+</aside>
+
+<h2 id="decision">A 30-second decision tree</h2>
+<ol>
+<li>No server code at all? <strong>Static.</strong></li>
+<li>Something must run continuously (bot, websocket, worker)? <strong>Reserved VM.</strong></li>
+<li>Only a recurring task? <strong>Scheduled.</strong></li>
+<li>Everything else: <strong>Autoscale</strong>, plus Scheduled for any background jobs.</li>
+</ol>
+<p>Next step: follow our <a href="/guides/deploy-replit-app-to-production/">production deployment runbook</a>, or check whether your app is ready with the free <a href="/tools/replit-readiness-score/">Replit Readiness Score</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>What is the cheapest way to host a Replit app?</h3>
+<p>Static deployments are the cheapest if your app has no backend. For apps with a server, Autoscale is usually cheapest at low or uneven traffic because it can scale to zero when idle. Check Replit's current pricing page, since prices change.</p>
+<h3>Why is my Replit Autoscale app slow on the first request?</h3>
+<p>When an Autoscale deployment has scaled down to zero, the first request has to start a new instance. That cold start adds latency. If that is unacceptable for your users, use a Reserved VM.</p>
+<h3>Can I run background jobs on Autoscale?</h3>
+<p>Not reliably. Autoscale instances exist to serve requests and can be stopped when traffic drops. Use a Scheduled deployment for recurring jobs, or a Reserved VM for continuous workers and queues.</p>
+<h3>Can I switch deployment types later?</h3>
+<p>Yes. You can change the deployment type from the publishing settings and republish. Test afterwards, because run commands and assumptions about always-on processes may need to change.</p>
+    </div>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
+    <p class="cta-title">Want an expert to check your Replit app before real users do?</p>
+    <p class="cta-text">Security, auth, data, costs and deployment. Prioritized fix list and a video walkthrough in 48 hours. Fewer than 3 real issues found? Full refund.</p>
+  </div>
+  <a href="/replit-app-to-production/" class="btn p" data-buy="review">Get my review</a>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/deploy-replit-app-to-production/"><span class="rel-k">Deployment</span><span class="rel-t">How to deploy a Replit app to production, step by step</span></a><a class="rel" href="/guides/is-replit-production-ready/"><span class="rel-k">Is Replit ready?</span><span class="rel-t">Is Replit production-ready? An honest answer for business apps</span></a><a class="rel" href="/guides/replit-agent-security-checklist/"><span class="rel-k">Security</span><span class="rel-t">Replit Agent security checklist: 15 checks before you launch</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/replit-app-to-production/" class="btn p lg">Get a $199 ship-ready review</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Replit Solution Partner. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><h4>Services</h4><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio.</p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=3" defer></script>
+</body>
+</html>
