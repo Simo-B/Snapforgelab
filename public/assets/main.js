@@ -1,15 +1,12 @@
 (() => {
   const d = document;
 
-  // Paste the Stripe Payment Link for the $199 Ship-Ready Review here.
+  // Paste the checkout link for the $199 Ship-Ready Review here
+  // (Gumroad, Lemon Squeezy, PayPal, Stripe… any payment link works).
   // While empty, "buy" buttons scroll to the review request form instead.
-  const STRIPE_REVIEW_URL = '';
-  if (STRIPE_REVIEW_URL) {
-    d.querySelectorAll('[data-buy="review"]').forEach((a) => {
-      const u = new URL(STRIPE_REVIEW_URL);
-      u.searchParams.set('client_reference_id', 'site' + location.pathname.replace(/\W+/g, '-'));
-      a.href = u.toString();
-    });
+  const PAYMENT_URL = '';
+  if (PAYMENT_URL) {
+    d.querySelectorAll('[data-buy="review"]').forEach((a) => { a.href = PAYMENT_URL; });
   }
 
   // Reveal on scroll
@@ -68,7 +65,7 @@
     new IntersectionObserver(([e]) => mcta.classList.toggle('hide', e.isIntersecting), { threshold: 0.05 }).observe(target);
   }
 
-  // Stripe success redirect (?paid=1): confirm and give next step
+  // Post-checkout redirect (?paid=1): confirm and give next step
   if (q.get('paid') === '1') {
     const m = d.getElementById('main');
     if (m) {

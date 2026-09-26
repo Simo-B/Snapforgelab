@@ -8,11 +8,22 @@
 | Starter Build | 2 500 $ · 1 500 $ pour 3 fondateurs | ~7 jours, case study en échange, 1ᵉʳ mois Care inclus, 50/50 |
 | Care | 249 $/mois | 1ᵉʳ mois inclus, sans engagement |
 
-**Paiement Stripe (priorité n°1)**
-- [ ] Stripe → Payment Links → « Ship-Ready Review » 199 $ USD, collecter l'email, champ personnalisé « Replit app URL », page de confirmation → `https://snapforgelab.com/replit-app-to-production/?paid=1`
-- [ ] Coller l'URL dans `public/assets/main.js` → `const STRIPE_REVIEW_URL = 'https://buy.stripe.com/...'` (tous les boutons « Get my review » deviennent des boutons d'achat direct)
-- [ ] Créer aussi des Payment Links 50 % (Sprint 495 $, Build fondateur 750 $) et un abonnement Care 249 $/mois, à envoyer par email
-- [ ] Quand les 10 places Review sont vendues : passer le prix à 390 $ (Stripe + `index.html` + page review + JSON-LD)
+**Paiement (priorité n°1), sans Stripe**
+
+Option recommandée : **Gumroad** (≈10 min, pas de validation de compte, TVA mondiale gérée, virement bancaire ou PayPal ; frais ≈ 10 % + 0,50 $)
+- [ ] gumroad.com → New product → type « Coaching / Call » ou « Digital product » → nom « Ship-Ready Review », prix 199 $
+- [ ] Description : livrables + « Next step: invite hello@snapforgelab.com to your Repl »
+- [ ] Ajouter un champ personnalisé obligatoire « Replit app URL »
+- [ ] Copier le lien produit (`https://xxx.gumroad.com/l/...`)
+
+Alternatives :
+- **Lemon Squeezy** : frais plus bas (5 % + 0,50 $), TVA gérée, redirection après paiement possible (`https://snapforgelab.com/replit-app-to-production/?paid=1`), mais la boutique doit être validée (quelques jours)
+- **PayPal** (lien de paiement / bouton « Pay now ») : tout le monde connaît, frais ≈ 4–5 % à l'international, pas de gestion de TVA
+- Sprint / Build (50/50) : **facture PayPal** ou **Wise / Payoneer**, envoyée par email
+
+Ensuite :
+- [ ] Coller le lien dans `public/assets/main.js` → `const PAYMENT_URL = '...'` (tous les boutons « Get my review » deviennent des boutons d'achat)
+- [ ] Quand les 10 places Review sont vendues : passer le prix à 390 $ (plateforme + `index.html` + page review + JSON-LD)
 
 ## 2. Déploiement Cloudflare Pages
 1. Cloudflare → Workers & Pages → Create → Pages → **Connect to Git** → `Simo-B/Snapforgelab`
