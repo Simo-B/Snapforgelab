@@ -1,8 +1,19 @@
 # Kit growth X — Snapforge Lab
 
 Objectif : **1ʳᵉ prestation signée en 30 jours**. Le levier le plus rapide n'est pas l'audience, c'est **les conversations**.
-Cible prioritaire sur X : les gens qui construisent avec **Replit Agent / vibe coding** et bloquent avant la mise en prod → offre d'entrée **Ship-Ready Review à $290** (`snapforgelab.com/review`).
-Cible secondaire : fondateurs / ops de petites boîtes qui veulent un outil interne → **Starter Build**.
+Cible prioritaire sur X : les gens qui construisent avec **Replit Agent / vibe coding** et bloquent avant la mise en prod.
+Cible secondaire : fondateurs / ops de petites boîtes qui veulent un outil interne.
+
+### L'échelle d'offres
+| Offre | Prix | Lien |
+|---|---|---|
+| Free Teardown (Loom 5 min) | 0 $ | réponse / DM sur X |
+| Ship-Ready Review | **199 $** (10 places, puis 390 $) · 48h · remboursé si < 3 vrais problèmes | `snapforgelab.com/review` |
+| Ship-It Sprint | **990 $** · 5 jours · review créditée · 1ᵉʳ mois Care inclus | après la review |
+| Starter Build | **2 500 $** · **1 500 $** pour 3 fondateurs (contre case study) | `snapforgelab.com/x` |
+| Care | **249 $/mois** · 1ᵉʳ mois inclus dans Sprint & Build | upsell auto |
+
+Parcours type : Teardown gratuit → Review 199 $ → Sprint 990 $ → Care 249 $/mois.
 
 Tout le contenu est en **anglais** (audience internationale).
 
@@ -20,7 +31,7 @@ Tout le contenu est en **anglais** (audience internationale).
 I turn Replit Agent prototypes into production apps.
 Dashboards · CRMs · portals · AI assistants.
 Fixed price. Live in days. You own the code.
-↓ $290 ship-ready review
+↓ $199 ship-ready review (48h)
 ```
 
 **Lien** : `snapforgelab.com/x` (redirige vers la home avec `utm_source=x`, déjà configuré dans `_redirects`)
@@ -69,8 +80,10 @@ It works. But before real users touch it, check:
 → No backups, no error alerts
 → Unlimited AI calls = surprise bill
 
-I'll review yours in 72h. Fixed $290.
-Credited if I fix it.
+I'll review yours in 48h. $199.
+Fewer than 3 real issues? Full refund.
+
+10 launch spots, then $390.
 
 Link in bio.
 ```
@@ -101,9 +114,9 @@ The bet: AI makes building apps 10x faster,
 but shipping them safely is still the bottleneck.
 
 So I productized it:
-• $290 ship-ready review
-• $1,500 fixed-price business app on Replit
-• live in ~7 days, you own the code
+• $199 ship-ready review (48h, refund guarantee)
+• $990 sprint to fix & ship it
+• custom business apps on Replit, live in ~7 days, you own the code
 
 Documenting everything here. First client, first $, first mistakes.
 ```
@@ -161,7 +174,7 @@ Taking 3 founding clients this month.
 
 You get: a custom business app on Replit
 (dashboard, CRM, client portal, AI assistant)
-$990 instead of $1,500. Live in ~7 days.
+$1,500 instead of $2,500. Live in ~7 days.
 
 I get: a short case study.
 
@@ -196,7 +209,7 @@ Your team spends 5 hours/week copying data between tools.
 
 5h × 52 weeks × $40/h = $10,400/year.
 
-A dashboard that does it automatically: $1,500 once.
+A dashboard that does it automatically: $1,500 once (founding price).
 
 Not a hard decision.
 ```
@@ -229,6 +242,28 @@ Chaque annonce Replit (nouvelle feature Agent, pricing, déploiement…) → pos
 
 ---
 
+## 3 bis. Le moteur : Free Teardown (2×/semaine)
+
+**Post :**
+```
+Built something with Replit Agent?
+
+Reply with the link. I'll record a free 5-min teardown
+for the first 5: what's solid, what breaks in production, what to fix first.
+
+No pitch. Just the video.
+```
+
+**Process :**
+1. Choisis 5 réponses → enregistre un Loom de 5 min chacun (écran + voix).
+2. Réponds en public avec le lien Loom (preuve de compétence visible par tous).
+3. En DM : « Glad it helped. If you want the full audit (auth, data, costs, deploy) with a written fix list: $199, 48h, refund if I find fewer than 3 real issues. »
+4. Demande l'autorisation de reposter un extrait → contenu gratuit pour la semaine.
+
+Objectif : 10 teardowns → 3 reviews → 1 sprint.
+
+---
+
 ## 4. Playbook DM (là où se signent les premiers clients)
 
 **Déclencheur** : quelqu'un a posté un problème Replit / a répondu à un post / a liké 2+ posts.
@@ -243,14 +278,15 @@ Happy to take a quick look at the Repl if you want, no strings.
 **Si oui** → 10 min de regard gratuit, puis :
 ```
 Took a look. The main thing is [issue], plus 3-4 smaller ones.
-I do a full ship-ready review for $290 (72h, written report + video),
-credited if you want me to fix everything.
-Want me to send the details?
+I do a full ship-ready review for $199 (48h, written report + video).
+If I find fewer than 3 real issues, you get a full refund.
+And if you want me to fix everything, the $199 is credited.
+Want the link?
 ```
 
 **Si client « outil interne »** :
 ```
-Sounds like a good fit for a Starter build: fixed $1,500, live in ~7 days, on your own Replit account.
+Sounds like a good fit for a Starter Build: normally $2,500, $1,500 for my 3 founding clients (in exchange for a short case study). Live in ~7 days, on your own Replit account.
 If you send me 3-4 lines on the workflow, I'll send a written scope + price in 48h. No call needed.
 ```
 
@@ -268,7 +304,10 @@ If you send me 3-4 lines on the workflow, I'll send a written scope + price in 4
 | Nouvelles conversations DM | 20 | 35 |
 | Visites site depuis X (`utm_source=x`) | 30 | 150 |
 | Demandes formulaire | 1 | 5 |
-| Clients signés | 0 | 1–3 |
+| Teardowns envoyés | 5 | 10 |
+| Reviews vendues (199 $) | 1 | 8 cumulées |
+| Sprints / Builds signés | 0 | 3–4 cumulés |
+| Abonnés Care | 0 | 3–4 |
 
 Les soumissions Formspree incluent `attr_source`, `attr_utm_campaign` et `attr_landing` → tu sais quel lien a converti.
 

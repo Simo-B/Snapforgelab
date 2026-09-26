@@ -1,15 +1,18 @@
 # Checklist de mise en ligne
 
-## 1. Décisions business à confirmer AVANT de publier
-Ces éléments ont été ajoutés pour convertir plus vite. Modifie-les dans `public/index.html` (+ JSON-LD) si tu n'es pas d'accord :
+## 1. Offres & prix (validés)
+| Offre | Prix | Conditions |
+|---|---|---|
+| Ship-Ready Review | 199 $ (10 places, puis 390 $) | 48h, payé d'avance, remboursé si < 3 vrais problèmes |
+| Ship-It Sprint | 990 $ | 5 jours, review créditée, 1ᵉʳ mois Care inclus, 50/50 |
+| Starter Build | 2 500 $ · 1 500 $ pour 3 fondateurs | ~7 jours, case study en échange, 1ᵉʳ mois Care inclus, 50/50 |
+| Care | 249 $/mois | 1ᵉʳ mois inclus, sans engagement |
 
-- [ ] **Ship-Ready Review à $290** (nouvelle offre d'entrée, 72h, crédité si fixes)
-- [ ] **Offre fondateurs** : 3 prochains Starter à $990 contre un case study
-- [ ] **Paiement 50 % / 50 %** (à la mise en ligne)
-- [ ] **Délai « about 7 days »** pour un Starter
-- [ ] **14 jours de corrections post-lancement** inclus
-- [ ] **Run $300/mois** : support « 1 business day », mises à jour sécurité
-- [ ] Templates $99 passés en « coming soon » (au lieu d'un bouton qui menait au formulaire)
+**Paiement Stripe (priorité n°1)**
+- [ ] Stripe → Payment Links → « Ship-Ready Review » 199 $ USD, collecter l'email, champ personnalisé « Replit app URL », page de confirmation → `https://snapforgelab.com/replit-app-to-production/?paid=1`
+- [ ] Coller l'URL dans `public/assets/main.js` → `const STRIPE_REVIEW_URL = 'https://buy.stripe.com/...'` (tous les boutons « Get my review » deviennent des boutons d'achat direct)
+- [ ] Créer aussi des Payment Links 50 % (Sprint 495 $, Build fondateur 750 $) et un abonnement Care 249 $/mois, à envoyer par email
+- [ ] Quand les 10 places Review sont vendues : passer le prix à 390 $ (Stripe + `index.html` + page review + JSON-LD)
 
 ## 2. Déploiement Cloudflare Pages
 1. Cloudflare → Workers & Pages → Create → Pages → **Connect to Git** → `Simo-B/Snapforgelab`

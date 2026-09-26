@@ -1,6 +1,17 @@
 (() => {
   const d = document;
 
+  // Paste the Stripe Payment Link for the $199 Ship-Ready Review here.
+  // While empty, "buy" buttons scroll to the review request form instead.
+  const STRIPE_REVIEW_URL = '';
+  if (STRIPE_REVIEW_URL) {
+    d.querySelectorAll('[data-buy="review"]').forEach((a) => {
+      const u = new URL(STRIPE_REVIEW_URL);
+      u.searchParams.set('client_reference_id', 'site' + location.pathname.replace(/\W+/g, '-'));
+      a.href = u.toString();
+    });
+  }
+
   // Reveal on scroll
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => {
@@ -55,6 +66,18 @@
   const target = d.getElementById('contact');
   if (mcta && target && 'IntersectionObserver' in window) {
     new IntersectionObserver(([e]) => mcta.classList.toggle('hide', e.isIntersecting), { threshold: 0.05 }).observe(target);
+  }
+
+  // Stripe success redirect (?paid=1): confirm and give next step
+  if (q.get('paid') === '1') {
+    const m = d.getElementById('main');
+    if (m) {
+      const n = d.createElement('div');
+      n.className = 'paid-note';
+      n.setAttribute('role', 'status');
+      n.innerHTML = '<strong>Payment received. Thank you!</strong> Next step: invite <b>hello@snapforgelab.com</b> as a collaborator on your Repl. Your report lands within 48 hours of access.';
+      m.prepend(n);
+    }
   }
 
   d.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
