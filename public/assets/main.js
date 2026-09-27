@@ -2,7 +2,7 @@
   const d = document;
 
   // Paste the checkout link for the $199 Ship-Ready Review here
-  // (Gumroad, Lemon Squeezy, PayPal, Stripe… any payment link works).
+  // (PayPal payment link or paypal.me/<name>/199USD).
   // While empty, "buy" buttons scroll to the review request form instead.
   const PAYMENT_URL = '';
   if (PAYMENT_URL) {

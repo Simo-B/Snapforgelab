@@ -16,7 +16,7 @@ Réalité à accepter : un compte X à 0 abonné ne vend pas en 7 jours. X, c'es
 ---
 
 ## J0 (aujourd'hui, 2h) : pouvoir encaisser et livrer
-- [ ] Lien Gumroad 199 $ créé → envoie-le-moi (je l'intègre au site)
+- [ ] Lien de paiement PayPal 199 $ créé → envoie-le-moi (je l'intègre au site)
 - [ ] Lis `docs/review-delivery-kit.md` : c'est ton process de livraison. Une Review doit te prendre **2–3h max**
 - [ ] Crée ton propre « cobaye » : une petite app avec Replit Agent (30 min), fais-lui une Review complète avec le kit → **ça devient ton exemple de rapport** (preuve + entraînement)
 - [ ] Compte X créé + bio + post épinglé (kit X §1)
