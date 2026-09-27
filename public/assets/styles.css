@@ -353,3 +353,5 @@ footer{padding:56px 0 110px;border-top:1px solid var(--line);color:var(--dim);fo
 .founder p{margin:0 0 14px;color:var(--dim);max-width:62ch}
 .founder a.more{color:var(--accent);font-weight:550}
 @media (max-width:680px){.founder{grid-template-columns:1fr;padding:24px}}
+.proof{border:1px solid rgba(48,209,88,.4);background:rgba(48,209,88,.07);border-radius:12px;padding:14px 18px;font-size:15.5px}
+.copy a{color:var(--dim)} .copy a:hover{color:var(--fg)}

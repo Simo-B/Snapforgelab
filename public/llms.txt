@@ -1,6 +1,6 @@
 # Snapforge Lab
 
-> Snapforge Lab is an independent Replit Solution Partner. We review, fix and deploy Replit and Replit Agent apps, and build custom business apps (dashboards, CRMs, client portals, AI assistants) on Replit at fixed prices, for clients worldwide.
+> Snapforge Lab is an independent Replit specialist studio. We review, fix and deploy Replit and Replit Agent apps, and build custom business apps (dashboards, CRMs, client portals, AI assistants) on Replit at fixed prices, for clients worldwide.
 
 ## Services
 - [Ship-Ready Review](https://snapforgelab.com/replit-app-to-production/): $199 production-readiness audit of a Replit Agent app, delivered in 48 hours, full refund if fewer than 3 real issues are found.
