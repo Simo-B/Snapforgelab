@@ -76,11 +76,17 @@
     if (r) r.checked = true;
   }));
 
-  // Sticky mobile CTA: hide once the contact section is on screen
+  // Sticky mobile CTA: only when no other primary action is on screen
   const mcta = d.querySelector('.m-cta');
-  const target = d.getElementById('contact');
-  if (mcta && target && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => mcta.classList.toggle('hide', e.isIntersecting), { threshold: 0.05 }).observe(target);
+  const zones = ['.hero', '#book', '#contact'].map((sel) => d.querySelector(sel)).filter(Boolean);
+  if (mcta && zones.length && 'IntersectionObserver' in window) {
+    const seen = new Set();
+    mcta.classList.add('hide');
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
+      mcta.classList.toggle('hide', seen.size > 0);
+    }, { threshold: 0.05 });
+    zones.forEach((z) => io.observe(z));
   }
 
   // Post-checkout redirect (?paid=1): confirm and give next step

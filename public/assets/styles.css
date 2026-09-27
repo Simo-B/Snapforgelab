@@ -362,3 +362,33 @@ footer{padding:56px 0 110px;border-top:1px solid var(--line);color:var(--dim);fo
 .need-opt{display:flex!important;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);color:var(--fg)!important;font-size:15px!important;cursor:pointer}
 .need-opt input{accent-color:var(--accent);width:18px;height:18px;margin:0}
 .need-opt:has(input:checked){border-color:var(--accent);background:rgba(41,151,255,.08)}
+
+/* Hero doors: two equal entry points */
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.door{display:grid;gap:8px;align-content:start;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel);transition:border-color .2s,background .2s}
+.door:hover{border-color:rgba(255,255,255,.28);background:var(--panel2)}
+.door-review{border-color:rgba(41,151,255,.55);background:rgba(41,151,255,.07)}
+.door-review:hover{border-color:var(--accent);background:rgba(41,151,255,.12)}
+.door-q{font-size:16.5px;font-weight:620;letter-spacing:-.015em;color:var(--fg)}
+.door-offer{font-size:14px;color:var(--dim)}
+.door-offer strong{color:var(--fg);font-weight:600}
+.door .btn{margin-top:6px;justify-self:start;padding:11px 18px;font-size:14.5px}
+.door:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* Booking step before PayPal */
+.book{text-align:left}
+.book-steps{margin:24px 0 0;padding-left:22px;display:grid;gap:12px;color:#d2d2d7;line-height:1.55}
+.book-steps a{color:var(--accent)}
+.book-guarantee{margin:20px 0 0;padding:14px 16px;border-radius:12px;border:1px solid rgba(48,209,88,.35);background:rgba(48,209,88,.06);font-size:15px}
+.book-cta{display:grid;gap:10px;justify-items:start;margin-top:24px}
+.book-note{margin:0;color:var(--dim);font-size:14px}
+.book-note a{color:var(--accent)}
+
+@media (max-width:680px){
+  .doors{grid-template-columns:1fr}
+  .nav .inner > .btn.sm{display:none}
+}
+.door{display:flex;flex-direction:column}
+.door .btn{margin-top:auto}
+.door-offer{margin-bottom:8px}
+section[id],[id].contact-box{scroll-margin-top:76px}
