@@ -4,7 +4,7 @@
   // Paste the checkout link for the $199 Ship-Ready Review here
   // (PayPal payment link or paypal.me/<name>/199USD).
   // While empty, "buy" buttons scroll to the review request form instead.
-  const PAYMENT_URL = '';
+  const PAYMENT_URL = 'https://paypal.me/mbsimo/199USD';
   if (PAYMENT_URL) {
     d.querySelectorAll('[data-buy="review"]').forEach((a) => { a.href = PAYMENT_URL; });
   }

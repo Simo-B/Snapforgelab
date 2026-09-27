@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "3"
+ASSET_V = "4"
 
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
