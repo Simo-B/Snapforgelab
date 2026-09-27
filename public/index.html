@@ -25,7 +25,7 @@
 <meta name="twitter:description" content="Dashboards, CRMs, client portals and AI assistants. Production-ready, fixed price, and you own the code.">
 <meta name="twitter:image" content="https://snapforgelab.com/og.png">
 
-<link rel="stylesheet" href="/assets/styles.css?v=9">
+<link rel="stylesheet" href="/assets/styles.css?v=10">
 <script>document.documentElement.classList.add('js')</script>
 
 <script type="application/ld+json">
@@ -139,31 +139,21 @@
       </ul>
     </div>
 
-    <div class="mock reveal" role="img" aria-label="Example of a sales dashboard built by Snapforge Lab on Replit">
-      <div class="bar"><i></i><i></i><i></i><span>acme-ops.replit.app</span></div>
-      <div class="body">
-        <div class="side"><b class="on">Overview</b><b>Pipeline</b><b>Clients</b><b>Invoices</b><b>AI assistant</b></div>
-        <div class="main">
-          <div class="kpis">
-            <div class="kpi"><small>Revenue (MTD)</small><strong>$48.2k</strong><em>+12%</em></div>
-            <div class="kpi"><small>Open deals</small><strong>37</strong><em>+5</em></div>
-            <div class="kpi"><small>Hours saved/wk</small><strong>14</strong><em>auto</em></div>
-          </div>
-          <div class="chart">
-            <svg viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true">
-              <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2997ff" stop-opacity=".45"/><stop offset="1" stop-color="#2997ff" stop-opacity="0"/></linearGradient></defs>
-              <path d="M0 55 L30 50 L60 52 L90 40 L120 44 L150 30 L180 34 L210 22 L240 26 L270 12 L300 8 L300 70 L0 70Z" fill="url(#g)"/>
-              <path d="M0 55 L30 50 L60 52 L90 40 L120 44 L150 30 L180 34 L210 22 L240 26 L270 12 L300 8" fill="none" stroke="#2997ff" stroke-width="2"/>
-            </svg>
-          </div>
-          <div class="rows">
-            <div><span>Northwind — renewal</span><span class="tag">Won</span></div>
-            <div><span>Globex — onboarding portal</span><span class="tag b">In review</span></div>
-            <div><span>Initech — quote #1042</span><span class="tag y">Sent</span></div>
-          </div>
-        </div>
+    <figure class="report reveal" aria-labelledby="report-cap">
+      <div class="report-head">
+        <span class="report-tag">Example report</span>
+        <span class="report-app">invoice-tracker.replit.app <em>(fictional app)</em></span>
       </div>
-    </div>
+      <p class="report-verdict"><strong>Not ready for real users.</strong> 2 must-fix, 3 fix soon, 4 solid.</p>
+      <ol class="report-list">
+        <li><span class="sev must">Must-fix</span><span>Any logged-in user can open any invoice by changing its ID in the URL.</span><span class="report-area">Security</span></li>
+        <li><span class="sev must">Must-fix</span><span>The OpenAI key is shipped to the browser in the JavaScript bundle.</span><span class="report-area">Secrets</span></li>
+        <li><span class="sev soon">Fix soon</span><span>No rate limit on <code>/api/generate</code>: one user can burn the monthly AI budget.</span><span class="report-area">Costs</span></li>
+        <li><span class="sev soon">Fix soon</span><span>Backups were never restored once, so nobody knows if they work.</span><span class="report-area">Data</span></li>
+        <li><span class="sev ok">Solid</span><span>Login uses Replit Auth, and sessions expire.</span><span class="report-area">Auth</span></li>
+      </ol>
+      <figcaption id="report-cap" class="report-foot">Each finding comes with how to fix it, plus a 10-minute video walkthrough. <a href="/replit-app-to-production/example-report/">Read the full example report →</a></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -269,6 +259,7 @@
             <li>Prioritized fix list + video walkthrough</li>
             <li>Fewer than 3 real issues found? Full refund</li>
           </ul>
+          <a class="plan-sample" href="/replit-app-to-production/example-report/">See an example report →</a>
           <a href="/replit-app-to-production/#book" class="btn p">Book the $199 review</a>
         </div>
         <div class="plan">
@@ -462,6 +453,6 @@
   </div>
 </footer>
 
-<script src="/assets/main.js?v=9" defer></script>
+<script src="/assets/main.js?v=10" defer></script>
 </body>
 </html>

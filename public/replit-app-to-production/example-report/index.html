@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example Ship-Ready Review Report for a Replit Agent App</title>
+<meta name="description" content="See exactly what the $199 Ship-Ready Review delivers: an example report for a fictional Replit Agent app, with verdict, scorecard, ranked findings and how to fix each one.">
+<link rel="canonical" href="https://snapforgelab.com/replit-app-to-production/example-report/">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Example Ship-Ready Review report">
+<meta property="og:description" content="What the $199 review of a Replit Agent app looks like, on a fictional app.">
+<meta property="og:image" content="https://snapforgelab.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/styles.css?v=10">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#what">What we build</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/" class="btn p sm">Get a $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/replit-app-to-production/">Ship-Ready Review</a> / Example report</nav>
+  <article class="article">
+    <p class="example-banner"><strong>Example report.</strong> This is a fictional app, written to show the format you receive. It is not a client and not real data.</p>
+    <h1>Ship-Ready Review: invoice-tracker</h1>
+    <p class="byline">invoice-tracker.replit.app (fictional) · Built with Replit Agent · Reviewed by Simo, Snapforge Lab</p>
+
+    <div class="prose">
+      <h2>Verdict</h2>
+      <p><strong>Not ready for real users.</strong> The app works well for a single user, but two issues would expose customer data or run up costs as soon as more people sign up. Both are quick to fix. Everything else can wait until after launch.</p>
+
+      <h2>Scorecard</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Status</th><th>Summary</th></tr></thead>
+        <tbody>
+          <tr><td>Security &amp; access</td><td><span class="sev must">Must-fix</span></td><td>Missing ownership check; AI key in the browser</td></tr>
+          <tr><td>Data</td><td><span class="sev soon">Fix soon</span></td><td>Backups never tested</td></tr>
+          <tr><td>Reliability</td><td><span class="sev soon">Fix soon</span></td><td>No error alerts</td></tr>
+          <tr><td>Costs</td><td><span class="sev soon">Fix soon</span></td><td>AI endpoint has no rate limit</td></tr>
+          <tr><td>Deployment</td><td><span class="sev ok">Solid</span></td><td>Right deployment type, domain and HTTPS</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section class="findings" aria-labelledby="must-title">
+      <h2 id="must-title">Must-fix before launch</h2>
+      <div class="finding">
+        <h3><span class="sev must">Must-fix</span> 1. Any logged-in user can open any invoice</h3>
+        <dl>
+          <dt>What</dt><dd><code>GET /api/invoices/:id</code> checks that a user is logged in, but not that the invoice belongs to them. Changing the ID in the URL shows another customer's invoice.</dd>
+          <dt>Why it matters</dt><dd>Customer names, amounts and addresses are exposed to every other user. This is the kind of issue that ends trust in a product overnight.</dd>
+          <dt>How to fix</dt><dd>Scope every invoice query to the current user (<code>where: &#123; id, ownerId: req.user.id &#125;</code>) and return 404 otherwise. Apply the same check to update and delete routes. Test with two accounts.</dd>
+          <dt>Effort</dt><dd>Small, under an hour</dd>
+        </dl>
+      </div>
+
+      <div class="finding">
+        <h3><span class="sev must">Must-fix</span> 2. The OpenAI key is shipped to the browser</h3>
+        <dl>
+          <dt>What</dt><dd>The invoice-summary feature calls OpenAI directly from React. The key is inlined in the JavaScript bundle and visible in DevTools.</dd>
+          <dt>Why it matters</dt><dd>Anyone can copy the key and use it at your expense until the account is drained or blocked.</dd>
+          <dt>How to fix</dt><dd>Move the call to a backend route (<code>POST /api/summarize</code>) that reads the key from Replit Secrets. Then rotate the key, since the old one must be considered public.</dd>
+          <dt>Effort</dt><dd>Small, about an hour</dd>
+        </dl>
+      </div>
+
+    </section>
+
+    <section class="findings" aria-labelledby="soon-title">
+      <h2 id="soon-title">Fix soon</h2>
+      <div class="finding">
+        <h3><span class="sev soon">Fix soon</span> 3. No rate limit on /api/generate</h3>
+        <dl>
+          <dt>What</dt><dd>One user can trigger unlimited AI calls.</dd>
+          <dt>Why it matters</dt><dd>A script or a curious user can burn the month's AI budget in an afternoon.</dd>
+          <dt>How to fix</dt><dd>Add a per-user rate limit (for example 20 calls per hour) and a spending cap at the provider.</dd>
+          <dt>Effort</dt><dd>Small</dd>
+        </dl>
+      </div>
+
+      <div class="finding">
+        <h3><span class="sev soon">Fix soon</span> 4. Backups were never restored</h3>
+        <dl>
+          <dt>What</dt><dd>Backups exist, but nobody has tried restoring one.</dd>
+          <dt>Why it matters</dt><dd>You only find out a backup is broken when you need it.</dd>
+          <dt>How to fix</dt><dd>Restore the latest backup into a copy once, and note the steps and the time it took.</dd>
+          <dt>Effort</dt><dd>Small, 30 minutes</dd>
+        </dl>
+      </div>
+
+      <div class="finding">
+        <h3><span class="sev soon">Fix soon</span> 5. No error alerts</h3>
+        <dl>
+          <dt>What</dt><dd>Errors only show up in the logs.</dd>
+          <dt>Why it matters</dt><dd>Customers find outages before you do.</dd>
+          <dt>How to fix</dt><dd>Add an uptime monitor on a <code>/health</code> route and an error tracker that emails you.</dd>
+          <dt>Effort</dt><dd>Small</dd>
+        </dl>
+      </div>
+
+    </section>
+
+    <div class="prose">
+      <h2>What's solid</h2>
+      <ul>
+        <li>Login uses Replit Auth, and sessions expire.</li>
+        <li>Other API keys are stored in Replit Secrets and only read on the server.</li>
+        <li>The published app uses its own production database.</li>
+        <li>Autoscale fits the traffic, and the custom domain serves HTTPS.</li>
+      </ul>
+
+      <h2>Next steps</h2>
+      <p><strong>Option A:</strong> fix it yourself with this list. Each item above has the exact change to make.</p>
+      <p><strong>Option B:</strong> the Ship-It Sprint. I fix every must-fix and fix-soon item and deploy to production in 5 days, for $990, with the $199 review credited. The first month of Care is included.</p>
+    </div>
+
+    <aside class="cta-box">
+      <div>
+        <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
+        <p class="cta-title">Get this report for your own Replit app.</p>
+        <p class="cta-text">Written report plus a 10-minute video walkthrough within 48 hours of access. Fewer than 3 real issues found? Full refund.</p>
+      </div>
+      <a href="/replit-app-to-production/#book" class="btn p">Book the $199 review</a>
+    </aside>
+  </article>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><h4>Services</h4><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=10" defer></script>
+</body>
+</html>

@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "9"
+ASSET_V = "10"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
@@ -29,6 +29,7 @@ STATIC_PAGES = [
     ("/replit-app-to-production/", "0.9"),
     ("/hire-replit-developer/", "0.9"),
     ("/about/", "0.6"),
+    ("/replit-app-to-production/example-report/", "0.7"),
     ("/privacy/", "0.2"),
     ("/terms/", "0.2"),
     ("/tools/replit-readiness-score/", "0.8"),
