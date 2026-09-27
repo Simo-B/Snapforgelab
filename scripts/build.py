@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "5"
+ASSET_V = "6"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
@@ -28,6 +28,7 @@ STATIC_PAGES = [
     ("/", "1.0"),
     ("/replit-app-to-production/", "0.9"),
     ("/hire-replit-developer/", "0.9"),
+    ("/about/", "0.6"),
     ("/tools/replit-readiness-score/", "0.8"),
 ]
 
@@ -106,7 +107,7 @@ def footer(mobile_cta=True):
       <div><a href="/" class="logo">{LOGO}Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Replit Solution Partner. Productized, fixed-price business apps for growing teams worldwide.</p></div>
       <div><h4>Services</h4><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
-      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><h4>Contact</h4><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio.</p>
@@ -117,6 +118,19 @@ def footer(mobile_cta=True):
 </html>
 """
 
+
+AUTHOR_LD = {"@type": "Person", "@id": f"{SITE}/about/#simo", "name": "Simo", "url": f"{SITE}/about/",
+             "jobTitle": "Founder, Snapforge Lab", "worksFor": {"@id": f"{SITE}/#org"},
+             "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+             "knowsAbout": ["Replit", "Replit Agent", "Web application security", "Deployment", "PostgreSQL"]}
+
+AUTHOR_BOX = """<aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>"""
 
 CTA_BOX = """<aside class="cta-box">
   <div>
@@ -143,7 +157,7 @@ def build_guide(g, by_slug):
             "image": og_image(g),
             "inLanguage": "en",
             "about": {"@type": "SoftwareApplication", "name": "Replit", "applicationCategory": "DeveloperApplication"},
-            "author": {"@type": "Organization", "@id": f"{SITE}/#org", "name": "Snapforge Lab", "url": f"{SITE}/"},
+            "author": AUTHOR_LD,
             "publisher": {"@type": "Organization", "@id": f"{SITE}/#org", "name": "Snapforge Lab",
                           "logo": {"@type": "ImageObject", "url": f"{SITE}/apple-touch-icon.png"}},
         },
@@ -181,12 +195,13 @@ def build_guide(g, by_slug):
   <article class="article">
     <div class="kicker">{esc(g["kicker"])}</div>
     <h1>{esc(g["h1"])}</h1>
-    <p class="byline">By Snapforge Lab · Updated <time datetime="{updated}">{format_date(updated)}</time> · {g.get("minutes", 8)} min read</p>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="{updated}">{format_date(updated)}</time> · {g.get("minutes", 8)} min read</p>
     <div class="tldr"><p class="tldr-t">Short answer</p><ul>{tldr}</ul></div>
     <div class="prose">
 {body}
 {faq_html}
     </div>
+    {AUTHOR_BOX}
     {CTA_BOX}
   </article>
 </div>
@@ -288,6 +303,7 @@ def build_llms(guides):
         "## Guides",
     ]
     lines += [f"- [{g['h1']}]({g['url']}): {g['description']}" for g in guides]
+    lines += ["", "## About", f"- [Simo]({SITE}/about/): founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Writes every guide on this site."]
     lines += ["", "## Contact", "- Email: hello@snapforgelab.com", f"- Website: {SITE}/", ""]
     (PUBLIC / "llms.txt").write_text("\n".join(lines))
 

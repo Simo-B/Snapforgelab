@@ -23,6 +23,9 @@
 - [Replit Secrets: how to store API keys safely](https://snapforgelab.com/guides/replit-secrets-api-keys/): How Replit Secrets work, how to read them in Node.js and Python, how to keep keys out of the browser and out of Agent chats, and what to do if a key was ever exposed.
 - [Replit vs Lovable vs Bolt for business apps: which should you choose?](https://snapforgelab.com/guides/replit-vs-lovable-vs-bolt/): An independent comparison of Replit, Lovable and Bolt for real business apps: backend and database, deployment, background jobs, code ownership and what each is best at.
 
+## About
+- [Simo](https://snapforgelab.com/about/): founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Writes every guide on this site.
+
 ## Contact
 - Email: hello@snapforgelab.com
 - Website: https://snapforgelab.com/

@@ -22,7 +22,7 @@
 <meta name="twitter:title" content="How to Deploy a Replit App to Production: Step-by-Step (2026)">
 <meta name="twitter:description" content="A practical launch runbook for Replit apps: pick the right deployment type, set production secrets, prepare the database, connect a custom domain, add monitoring and plan rollbacks.">
 <meta name="twitter:image" content="https://snapforgelab.com/og/deploy-replit-app-to-production.png">
-<link rel="stylesheet" href="/assets/styles.css?v=5">
+<link rel="stylesheet" href="/assets/styles.css?v=6">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
 {
@@ -44,10 +44,22 @@
     "applicationCategory": "DeveloperApplication"
    },
    "author": {
-    "@type": "Organization",
-    "@id": "https://snapforgelab.com/#org",
-    "name": "Snapforge Lab",
-    "url": "https://snapforgelab.com/"
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
    },
    "publisher": {
     "@type": "Organization",
@@ -139,7 +151,7 @@
   <article class="article">
     <div class="kicker">Deployment</div>
     <h1>How to deploy a Replit app to production, step by step</h1>
-    <p class="byline">By Snapforge Lab · Updated <time datetime="2026-09-26">Sep 26, 2026</time> · 10 min read</p>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-09-26">Sep 26, 2026</time> · 10 min read</p>
     <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Publishing on Replit takes one click. Running in production takes a checklist: deployment type, production secrets, database, domain, monitoring and a rollback plan.</li><li>Your published app is a separate snapshot from your workspace. Editing in the workspace does not change what users see until you publish again.</li><li>Budget one to three hours for a first production launch if the app passes a security review.</li></ul></div>
     <div class="prose">
 <p>On Replit, "deploy" is a button. That's the good news, and also the trap: the button works whether or not your app is ready for real users. This guide is the runbook we follow when we take a client's Replit app live.</p>
@@ -235,6 +247,13 @@
 <h3>How do I roll back a bad deployment on Replit?</h3>
 <p>Keep the last known good version identifiable, test changes in the workspace before publishing, and republish from a checkpoint if a release breaks. For database changes, back up before publishing, because rolling back code does not automatically roll back data.</p>
     </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
     <aside class="cta-box">
   <div>
     <p class="cta-kicker">Ship-Ready Review · $199 · 48h</p>
@@ -255,12 +274,12 @@
       <div><a href="/" class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Replit Solution Partner. Productized, fixed-price business apps for growing teams worldwide.</p></div>
       <div><h4>Services</h4><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
-      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><h4>Contact</h4><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio.</p>
   </div>
 </footer>
-<script src="/assets/main.js?v=5" defer></script>
+<script src="/assets/main.js?v=6" defer></script>
 </body>
 </html>
