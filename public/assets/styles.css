@@ -425,3 +425,11 @@ a.more,a.plan-sample{display:inline-block;padding:12px 0}
 .plan-sample{margin:-22px 0 10px}
 .crumbs a{display:inline-block;padding:14px 0}
 .copy a{padding:13px 2px}
+
+/* Polish */
+footer{padding-bottom:56px}
+@media (max-width:680px){footer{padding-bottom:110px}}
+.link{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.faq .a a,.sub a,.alt a,.book-steps a,.book-note a,.book-sample a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.swipe-hint{display:none;margin:-36px 0 12px;font-size:13.5px;color:var(--dim)}
+@media (max-width:760px){.swipe-hint{display:block}}
