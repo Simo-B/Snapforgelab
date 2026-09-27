@@ -2,10 +2,11 @@
 {
  "topic": "Deployment",
  "order": 2,
- "title": "How to Deploy a Replit App to Production: Step-by-Step (2026) | Snapforge Lab",
+ "title": "How to Deploy a Replit App to Production (2026 Guide)",
  "h1": "How to deploy a Replit app to production, step by step",
  "kicker": "Deployment",
  "description": "A practical launch runbook for Replit apps: pick the right deployment type, set production secrets, prepare the database, connect a custom domain, add monitoring and plan rollbacks.",
+ "updated": "2026-09-27",
  "published": "2026-09-26",
  "minutes": 10,
  "tldr": [
@@ -50,6 +51,7 @@
 <li><strong>Bind to the right port and host.</strong> Listen on <code>0.0.0.0</code> and the port Replit provides, not <code>localhost</code>.</li>
 <li><strong>Use a production build.</strong> The run command for the published app should start the built app (for example <code>npm run build</code> then <code>npm start</code>), not a dev server with hot reload.</li>
 <li><strong>Detect production in code.</strong> Replit sets environment variables in published apps (such as <code>REPLIT_DEPLOYMENT</code>) that let you switch off debug output and dev-only routes.</li>
+<li><strong>Answer the publish health check fast.</strong> When you publish, Replit checks that your homepage (<code>/</code>) returns a 200 response within about five seconds. Slow startup work (database migrations, big data loads, missing secrets) makes publishing fail at the last step. Keep <code>/</code> fast and move heavy startup work to the background. See Replit's <a href="https://docs.replit.com/cloud-services/deployments/troubleshooting" rel="noopener">publishing troubleshooting</a>.</li>
 <li><strong>Add a health route.</strong> A simple <code>GET /health</code> that returns 200 when the app and database are reachable makes monitoring trivial.</li>
 </ul>
 

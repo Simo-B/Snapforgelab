@@ -2,10 +2,11 @@
 {
  "topic": "Security",
  "order": 1,
- "title": "Replit Agent Security Checklist: 15 Checks Before Launch | Snapforge Lab",
+ "title": "Replit Agent Security Checklist: 15 Checks Before Launch",
  "h1": "Replit Agent security checklist: 15 checks before you launch",
  "kicker": "Security",
- "description": "The 15 security checks to run on every Replit Agent app before launch: secrets, authorization, input validation, databases, dependencies, costs and deployment. With how to test and fix each one.",
+ "description": "15 security checks for Replit Agent apps before launch: secrets, authorization, validation, data, dependencies and costs, with how to test and fix each.",
+ "updated": "2026-09-27",
  "published": "2026-09-26",
  "minutes": 11,
  "tldr": [
@@ -19,7 +20,7 @@
   ["Do I need to re-check security after every Agent change?", "Yes, for anything that touches authentication, data access, payments or file uploads. Agent can rewrite a route and silently remove a check. A quick re-test of the authorization and admin checks after each major change catches most regressions."],
   ["What is the most common security bug in AI-built apps?", "Missing authorization, often called IDOR. The app checks that you are logged in but not that the record you ask for belongs to you, so changing an ID in the URL or API call exposes other users' data."]
  ],
- "related": ["is-replit-production-ready", "deploy-replit-app-to-production", "replit-production-database"]
+ "related": ["replit-secrets-api-keys", "deploy-replit-app-to-production", "replit-production-database"]
 }
 -->
 <p>Replit Agent can take an idea to a working app in an afternoon. What it can't do reliably is think like an attacker. The same handful of gaps show up again and again in AI-built apps, and none of them are visible when you click around your own app as the only user.</p>
@@ -106,4 +107,5 @@ app.get("/api/invoices/:id", requireLogin, async (req, res) =&gt; {
 </tbody>
 </table>
 <p>Want a quick score first? Take the free <a href="/tools/replit-readiness-score/">Replit Readiness Score</a>. It takes about two minutes. When you're ready to publish, follow our step-by-step <a href="/guides/deploy-replit-app-to-production/">guide to deploying a Replit app to production</a>.</p>
+<p><strong>Also run Replit's own scanners.</strong> Dependency scans run automatically in the Security panel, and paid plans can run a full scan with <a href="https://blog.replit.com/meet-replit-security-agent" rel="noopener">Security Agent</a>. They catch code-level vulnerabilities well. They can't know your business rules, so checks 5, 6, 12, 13 and 15 still need a human.</p>
 <p>Replit also publishes its own <a href="https://docs.replit.com/tutorials/vibe-code-security-checklist" rel="noopener">security checklist</a> and <a href="https://blog.replit.com/16-ways-to-vibe-code-securely" rel="noopener">secure vibe coding tips</a>, which are worth reading alongside this one.</p>

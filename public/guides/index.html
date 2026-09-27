@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Replit Guides: Take Your Replit Agent App to Production | Snapforge Lab</title>
+<title>Replit Guides: Ship Your Replit Agent App to Production</title>
 <meta name="description" content="Practical, no-fluff guides to ship Replit and Replit Agent apps to production: security, deployment, databases, costs and fixing broken apps.">
 <link rel="canonical" href="https://snapforgelab.com/guides/">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -13,13 +13,13 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Snapforge Lab">
 <meta property="og:url" content="https://snapforgelab.com/guides/">
-<meta property="og:title" content="Replit Guides: Take Your Replit Agent App to Production">
+<meta property="og:title" content="Replit Guides: Ship Your Replit Agent App to Production">
 <meta property="og:description" content="Practical, no-fluff guides to ship Replit and Replit Agent apps to production: security, deployment, databases, costs and fixing broken apps.">
 <meta property="og:image" content="https://snapforgelab.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Replit Guides: Take Your Replit Agent App to Production">
+<meta name="twitter:title" content="Replit Guides: Ship Your Replit Agent App to Production">
 <meta name="twitter:description" content="Practical, no-fluff guides to ship Replit and Replit Agent apps to production: security, deployment, databases, costs and fixing broken apps.">
 <meta name="twitter:image" content="https://snapforgelab.com/og.png">
 <link rel="stylesheet" href="/assets/styles.css?v=6">
@@ -95,6 +95,23 @@
      "name": "Replit vs Lovable vs Bolt for business apps: which should you choose?"
     }
    ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    }
+   ]
   }
  ]
 }
@@ -120,7 +137,7 @@
   </div>
 </section>
 <section style="padding-top:40px">
-  <div class="wrap"><div class="topic"><h2 class="topic-h">Getting started</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/is-replit-production-ready/"><span class="kicker">Is Replit ready?</span><h3>Is Replit production-ready? An honest answer for business apps</h3><p>Can you run a real business app on Replit? What the platform handles well, where AI-built apps usually fall short, which apps are a good fit, and a 10-point test before you launch.</p><span class="more">Read the guide →</span></a><a class="card guide-card" href="/guides/replit-vs-lovable-vs-bolt/"><span class="kicker">Comparison</span><h3>Replit vs Lovable vs Bolt for business apps: which should you choose?</h3><p>An independent comparison of Replit, Lovable and Bolt for real business apps: backend and database, deployment, background jobs, code ownership and what each is best at.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Security</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-agent-security-checklist/"><span class="kicker">Security</span><h3>Replit Agent security checklist: 15 checks before you launch</h3><p>The 15 security checks to run on every Replit Agent app before launch: secrets, authorization, input validation, databases, dependencies, costs and deployment. With how to test and fix each one.</p><span class="more">Read the guide →</span></a><a class="card guide-card" href="/guides/replit-secrets-api-keys/"><span class="kicker">Security</span><h3>Replit Secrets: how to store API keys safely</h3><p>How Replit Secrets work, how to read them in Node.js and Python, how to keep keys out of the browser and out of Agent chats, and what to do if a key was ever exposed.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Deployment</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/deploy-replit-app-to-production/"><span class="kicker">Deployment</span><h3>How to deploy a Replit app to production, step by step</h3><p>A practical launch runbook for Replit apps: pick the right deployment type, set production secrets, prepare the database, connect a custom domain, add monitoring and plan rollbacks.</p><span class="more">Read the guide →</span></a><a class="card guide-card" href="/guides/replit-deployment-types/"><span class="kicker">Deployment</span><h3>Replit Autoscale vs Reserved VM vs Static vs Scheduled: which deployment should you choose?</h3><p>A plain-English comparison of Replit&#x27;s deployment types: how Autoscale, Reserved VM, Static and Scheduled deployments work, when to use each, cold starts, background jobs and cost trade-offs.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Data</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-production-database/"><span class="kicker">Databases</span><h3>Replit development vs production database: how it works, and how not to lose data</h3><p>How Replit separates development and production databases, what Agent can and can&#x27;t touch, how schema changes reach production, and the backup and migration habits that keep customer data safe.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Costs</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-agent-costs/"><span class="kicker">Costs</span><h3>Replit Agent costs: 12 ways to cut your bill without slowing down</h3><p>Why Replit Agent bills climb under effort-based pricing, where the money actually goes (Agent, deployments, databases), and 12 practical habits to keep your monthly spend predictable.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Troubleshooting</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-agent-keeps-breaking-app/"><span class="kicker">Troubleshooting</span><h3>Replit Agent keeps breaking your app? How to stop the fix loop</h3><p>Why Replit Agent gets stuck fixing one bug and breaking another, how to roll back safely with checkpoints, and a prompting workflow that stops the loop and your credit bill from spiraling.</p><span class="more">Read the guide →</span></a></div></div></div>
+  <div class="wrap"><div class="topic"><h2 class="topic-h">Getting started</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/is-replit-production-ready/"><span class="kicker">Is Replit ready?</span><h3>Is Replit production-ready? An honest answer for business apps</h3><p>Can you run a real business app on Replit? What the platform handles well, where AI-built apps usually fall short, which apps are a good fit, and a 10-point test before you launch.</p><span class="more">Read the guide →</span></a><a class="card guide-card" href="/guides/replit-vs-lovable-vs-bolt/"><span class="kicker">Comparison</span><h3>Replit vs Lovable vs Bolt for business apps: which should you choose?</h3><p>An independent comparison of Replit, Lovable and Bolt for real business apps: backend and database, deployment, background jobs, code ownership and what each is best at.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Security</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-agent-security-checklist/"><span class="kicker">Security</span><h3>Replit Agent security checklist: 15 checks before you launch</h3><p>15 security checks for Replit Agent apps before launch: secrets, authorization, validation, data, dependencies and costs, with how to test and fix each.</p><span class="more">Read the guide →</span></a><a class="card guide-card" href="/guides/replit-secrets-api-keys/"><span class="kicker">Security</span><h3>Replit Secrets: how to store API keys safely</h3><p>How Replit Secrets work, how to read them in Node.js and Python, how to keep keys out of the browser and out of Agent chats, and what to do if a key was ever exposed.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Deployment</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/deploy-replit-app-to-production/"><span class="kicker">Deployment</span><h3>How to deploy a Replit app to production, step by step</h3><p>A practical launch runbook for Replit apps: pick the right deployment type, set production secrets, prepare the database, connect a custom domain, add monitoring and plan rollbacks.</p><span class="more">Read the guide →</span></a><a class="card guide-card" href="/guides/replit-deployment-types/"><span class="kicker">Deployment</span><h3>Replit Autoscale vs Reserved VM vs Static vs Scheduled: which deployment should you choose?</h3><p>Autoscale, Reserved VM, Static or Scheduled? How each Replit deployment type works, cold starts, background jobs and costs, plus a 30-second decision tree.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Data</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-production-database/"><span class="kicker">Databases</span><h3>Replit development vs production database: how it works, and how not to lose data</h3><p>How Replit&#x27;s dev and production databases work, what Agent can&#x27;t touch, how schema changes reach production, and 5 habits to never lose customer data.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Costs</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-agent-costs/"><span class="kicker">Costs</span><h3>Replit Agent costs: 12 ways to cut your bill without slowing down</h3><p>Why Replit Agent bills climb under effort-based pricing, where the money actually goes (Agent, deployments, databases), and 12 practical habits to keep your monthly spend predictable.</p><span class="more">Read the guide →</span></a></div></div><div class="topic"><h2 class="topic-h">Troubleshooting</h2><div class="cards guides-grid"><a class="card guide-card" href="/guides/replit-agent-keeps-breaking-app/"><span class="kicker">Troubleshooting</span><h3>Replit Agent keeps breaking your app? How to stop the fix loop</h3><p>Why Replit Agent gets stuck fixing one bug and breaking another, how to roll back safely with checkpoints, and a prompting workflow that stops the loop and your credit bill from spiraling.</p><span class="more">Read the guide →</span></a></div></div></div>
 </section>
 </main>
 <div class="m-cta"><a href="/replit-app-to-production/" class="btn p lg">Get a $199 ship-ready review</a></div>

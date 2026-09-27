@@ -138,7 +138,7 @@ CTA_BOX = """<aside class="cta-box">
     <p class="cta-title">Want an expert to check your Replit app before real users do?</p>
     <p class="cta-text">Security, auth, data, costs and deployment. Prioritized fix list and a video walkthrough in 48 hours. Fewer than 3 real issues found? Full refund.</p>
   </div>
-  <a href="/replit-app-to-production/" class="btn p" data-buy="review">Get my review</a>
+  <a href="/replit-app-to-production/" class="btn p">See the $199 review</a>
 </aside>"""
 
 
@@ -187,7 +187,7 @@ def build_guide(g, by_slug):
         rel_html = f'<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid">{items}</div></div></section>'
 
     updated = g.get("updated", g["published"])
-    out = head(g["title"], g["description"], g["url"], extra=ld, image=og_image(g))
+    out = head(full_title(g["title"]), g["description"], g["url"], extra=ld, image=og_image(g))
     out += f"""
 <main id="main">
 <div class="wrap narrow">
@@ -214,6 +214,11 @@ def build_guide(g, by_slug):
     dest.write_text(out)
 
 
+def full_title(t):
+    """Append the brand only when the title stays under ~60 characters."""
+    return t if "Snapforge" in t or len(t) + 16 > 60 else f"{t} | Snapforge Lab"
+
+
 def og_image(g):
     """Per-guide social image (made by scripts/og.js) with the site image as fallback."""
     if (PUBLIC / "og" / f"{g['slug']}.png").exists():
@@ -235,6 +240,9 @@ def build_hub(guides):
          "publisher": {"@id": f"{SITE}/#org"}},
         {"@type": "ItemList", "itemListElement": [
             {"@type": "ListItem", "position": i + 1, "url": g["url"], "name": g["h1"]} for i, g in enumerate(guides)]},
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": "Guides", "item": url}]},
     ]}
     extra = '<script type="application/ld+json">\n' + json.dumps(ld, indent=1) + "\n</script>\n"
     groups = {}
@@ -249,7 +257,7 @@ def build_hub(guides):
             f'<h3>{esc(g["h1"])}</h3><p>{esc(g["description"])}</p><span class="more">Read the guide →</span></a>'
             for g in groups[topic])
         sections += f'<div class="topic"><h2 class="topic-h">{esc(topic)}</h2><div class="cards guides-grid">{cards}</div></div>'
-    out = head("Replit Guides: Take Your Replit Agent App to Production | Snapforge Lab",
+    out = head("Replit Guides: Ship Your Replit Agent App to Production",
                "Practical, no-fluff guides to ship Replit and Replit Agent apps to production: security, deployment, databases, costs and fixing broken apps.",
                url, og_type="website", extra=extra)
     out += f"""
