@@ -426,3 +426,14 @@ section[id],[id].contact-box{scroll-margin-top:76px}
 .plan-sample{font-size:14.5px;margin:-12px 0 20px;font-weight:550}
 @media (max-width:680px){.finding dl{grid-template-columns:1fr;gap:2px}.finding dt{margin-top:8px}}
 .sev{white-space:nowrap}
+
+/* How it works: two paths, no cards */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.path h3{font-size:20px;margin:0 0 16px;letter-spacing:-.02em}
+.path ol{margin:0;padding:0;list-style:none;counter-reset:p;display:grid;gap:16px}
+.path li{counter-increment:p;display:grid;grid-template-columns:32px 1fr;gap:12px;color:var(--dim);line-height:1.55}
+.path li::before{content:counter(p);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:650;color:var(--fg);border:1px solid var(--line);background:var(--panel2)}
+.path li strong{color:var(--fg)}
+@media (max-width:760px){.paths{grid-template-columns:1fr;gap:36px}}
+.path li{display:block;position:relative;padding-left:44px;min-height:28px}
+.path li::before{position:absolute;left:0;top:-2px}
