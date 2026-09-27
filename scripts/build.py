@@ -19,7 +19,9 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "4"
+ASSET_V = "5"
+
+TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
@@ -53,7 +55,8 @@ def load_guides():
     return guides
 
 
-def head(title, description, canonical, og_type="article", extra=""):
+def head(title, description, canonical, og_type="article", extra="", image=None):
+    image = image or f"{SITE}/og.png"
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -71,11 +74,13 @@ def head(title, description, canonical, og_type="article", extra=""):
 <meta property="og:url" content="{canonical}">
 <meta property="og:title" content="{esc(title.split(' | ')[0])}">
 <meta property="og:description" content="{esc(description)}">
-<meta property="og:image" content="{SITE}/og.png">
+<meta property="og:image" content="{image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(title.split(' | ')[0])}">
 <meta name="twitter:description" content="{esc(description)}">
-<meta name="twitter:image" content="{SITE}/og.png">
+<meta name="twitter:image" content="{image}">
 <link rel="stylesheet" href="/assets/styles.css?v={ASSET_V}">
 <script>document.documentElement.classList.add('js')</script>
 {extra}</head>
@@ -135,7 +140,7 @@ def build_guide(g, by_slug):
             "mainEntityOfPage": g["url"],
             "datePublished": g["published"],
             "dateModified": g.get("updated", g["published"]),
-            "image": f"{SITE}/og.png",
+            "image": og_image(g),
             "inLanguage": "en",
             "about": {"@type": "SoftwareApplication", "name": "Replit", "applicationCategory": "DeveloperApplication"},
             "author": {"@type": "Organization", "@id": f"{SITE}/#org", "name": "Snapforge Lab", "url": f"{SITE}/"},
@@ -168,7 +173,7 @@ def build_guide(g, by_slug):
         rel_html = f'<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid">{items}</div></div></section>'
 
     updated = g.get("updated", g["published"])
-    out = head(g["title"], g["description"], g["url"], extra=ld)
+    out = head(g["title"], g["description"], g["url"], extra=ld, image=og_image(g))
     out += f"""
 <main id="main">
 <div class="wrap narrow">
@@ -194,6 +199,13 @@ def build_guide(g, by_slug):
     dest.write_text(out)
 
 
+def og_image(g):
+    """Per-guide social image (made by scripts/og.js) with the site image as fallback."""
+    if (PUBLIC / "og" / f"{g['slug']}.png").exists():
+        return f"{SITE}/og/{g['slug']}.png"
+    return f"{SITE}/og.png"
+
+
 def format_date(d):
     y, m, day = d.split("-")
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -210,10 +222,18 @@ def build_hub(guides):
             {"@type": "ListItem", "position": i + 1, "url": g["url"], "name": g["h1"]} for i, g in enumerate(guides)]},
     ]}
     extra = '<script type="application/ld+json">\n' + json.dumps(ld, indent=1) + "\n</script>\n"
-    cards = "".join(
-        f'<a class="card guide-card" href="/guides/{g["slug"]}/"><span class="kicker">{esc(g["kicker"])}</span>'
-        f'<h2>{esc(g["h1"])}</h2><p>{esc(g["description"])}</p><span class="more">Read the guide →</span></a>'
-        for g in guides)
+    groups = {}
+    for g in guides:
+        groups.setdefault(g.get("topic", g["kicker"]), []).append(g)
+    sections = ""
+    for topic in TOPIC_ORDER + [t for t in groups if t not in TOPIC_ORDER]:
+        if topic not in groups:
+            continue
+        cards = "".join(
+            f'<a class="card guide-card" href="/guides/{g["slug"]}/"><span class="kicker">{esc(g["kicker"])}</span>'
+            f'<h3>{esc(g["h1"])}</h3><p>{esc(g["description"])}</p><span class="more">Read the guide →</span></a>'
+            for g in groups[topic])
+        sections += f'<div class="topic"><h2 class="topic-h">{esc(topic)}</h2><div class="cards guides-grid">{cards}</div></div>'
     out = head("Replit Guides: Take Your Replit Agent App to Production | Snapforge Lab",
                "Practical, no-fluff guides to ship Replit and Replit Agent apps to production: security, deployment, databases, costs and fixing broken apps.",
                url, og_type="website", extra=extra)
@@ -228,7 +248,7 @@ def build_hub(guides):
   </div>
 </section>
 <section style="padding-top:40px">
-  <div class="wrap"><div class="cards guides-grid">{cards}</div></div>
+  <div class="wrap">{sections}</div>
 </section>
 </main>
 """

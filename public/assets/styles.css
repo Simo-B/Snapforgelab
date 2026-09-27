@@ -333,3 +333,6 @@ footer{padding:56px 0 110px;border-top:1px solid var(--line);color:var(--dim);fo
 .foot{grid-template-columns:2fr 1fr 1fr 1fr}
 @media (max-width:960px){.rel-grid{grid-template-columns:1fr 1fr}.resources{grid-template-columns:1fr}.foot{grid-template-columns:1fr 1fr}}
 @media (max-width:680px){.rel-grid,.guides-grid{grid-template-columns:1fr}.foot{grid-template-columns:1fr}.bar{grid-template-columns:90px 1fr 42px}.cta-box{padding:22px}}
+.topic + .topic{margin-top:56px}
+.topic-h{font-size:clamp(22px,2.6vw,28px);margin:0 0 18px}
+.guide-card h3{font-size:20px;line-height:1.28;margin:0;letter-spacing:-.02em}

@@ -31,11 +31,11 @@ Les moteurs IA (ChatGPT, Perplexity) peuvent citer plus tôt : d'où les blocs �
 ## Calendrier : 2 articles / semaine pendant 6 semaines
 | Sem. | Article | Requête |
 |---|---|---|
-| 1 | Replit Agent pricing & how to cut your credit bill | replit agent cost, replit effort based pricing |
-| 1 | Replit Secrets: how to store API keys safely | replit secrets, replit environment variables |
+| 1 | ✅ Replit Agent costs: 12 ways to cut your bill | replit agent cost, replit effort based pricing |
+| 1 | ✅ Replit Secrets: how to store API keys safely | replit secrets, replit environment variables |
 | 2 | Replit Auth vs Clerk vs Supabase Auth for business apps | replit authentication |
 | 2 | How to connect a custom domain to Replit (+ Cloudflare) | replit custom domain |
-| 3 | Replit vs Lovable vs Bolt for business apps | replit vs lovable, replit vs bolt |
+| 3 | ✅ Replit vs Lovable vs Bolt for business apps | replit vs lovable, replit vs bolt |
 | 3 | Build an internal dashboard on Replit from Google Sheets | replit dashboard, google sheets dashboard app |
 | 4 | Replit app slow? Fix cold starts and slow queries | replit app slow, replit cold start |
 | 4 | Stripe payments in a Replit app: the production checklist | replit stripe |
@@ -73,3 +73,11 @@ Règle : chaque article = une vraie réponse en haut (Short answer), du concret 
 - **Mettre un vrai auteur** : prénom, photo, 2 lignes de bio, lien X/LinkedIn → dis-le-moi et je l'ajoute sur tous les guides (schema `Person`)
 - Ajouter des **exemples réels** (captures, extraits anonymisés) dès les premières reviews
 - Mettre à jour les guides quand Replit change (dates `updated` visibles)
+
+## Images de partage
+Chaque guide a sa propre image (`public/og/<slug>.png`). Après un nouveau guide :
+`node scripts/og.js && python3 scripts/build.py` (nécessite le paquet `playwright`).
+
+## Cloudflare : indexation instantanée
+Cloudflare → ton domaine → **Caching → Configuration → Crawler Hints : ON**.
+Cloudflare prévient alors Bing/Yandex (IndexNow) à chaque mise à jour → indexation en heures au lieu de jours.

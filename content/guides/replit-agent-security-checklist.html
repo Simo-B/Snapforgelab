@@ -1,10 +1,11 @@
 <!--meta
 {
+ "topic": "Security",
  "order": 1,
  "title": "Replit Agent Security Checklist: 15 Checks Before Launch | Snapforge Lab",
  "h1": "Replit Agent security checklist: 15 checks before you launch",
  "kicker": "Security",
- "description": "The 15 security checks we run on every Replit Agent app before launch: secrets, authorization, input validation, databases, dependencies, costs and deployment. With how to test and fix each one.",
+ "description": "The 15 security checks to run on every Replit Agent app before launch: secrets, authorization, input validation, databases, dependencies, costs and deployment. With how to test and fix each one.",
  "published": "2026-09-26",
  "minutes": 11,
  "tldr": [
@@ -27,7 +28,7 @@
 <h2 id="secrets">1. Secrets and API keys</h2>
 <h3>Check 1: No keys in the code or its history</h3>
 <p><strong>Test:</strong> search the project for strings like <code>sk-</code>, <code>api_key</code>, <code>secret</code>, <code>password</code> and <code>Bearer</code>. Also check the version history: a key that was committed once and removed later is still exposed.</p>
-<p><strong>Fix:</strong> move every value into the <a href="https://docs.replit.com/core-concepts/project-editor/app-setup/secrets" rel="noopener">Secrets pane</a>, read it with <code>process.env</code> or <code>os.environ</code>, and <strong>rotate any key that was ever in the code</strong>. Deleting the line is not enough.</p>
+<p><strong>Fix:</strong> move every value into the <a href="https://docs.replit.com/core-concepts/project-editor/app-setup/secrets" rel="noopener">Secrets pane</a>, read it with <code>process.env</code> or <code>os.environ</code>, and <strong>rotate any key that was ever in the code</strong>. Deleting the line is not enough. Full walkthrough: <a href="/guides/replit-secrets-api-keys/">Replit Secrets: how to store API keys safely</a>.</p>
 
 <h3>Check 2: No keys shipped to the browser</h3>
 <p>This one is subtle. Agent often calls third-party APIs (OpenAI, Stripe, Google) straight from frontend code. Even if the key sits in Secrets, a build step can inline it into the JavaScript bundle that every visitor downloads.</p>
