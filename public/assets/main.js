@@ -31,13 +31,23 @@
     try { sessionStorage.setItem(KEY, JSON.stringify(attr)); } catch (_) {}
   }
 
-  // Lead form: async submit to Formspree, inline confirmation
+  // Lead form: async submit to Formspree, inline confirmation matched to the request
+  const SUCCESS = {
+    build: 'Got it. Your fixed-price plan lands in your inbox within 48 hours.',
+    review: 'Got it. I’ll reply within 24 hours with the payment link and next steps.',
+    'ship-ready-review': 'Got it. I’ll reply within 24 hours with the payment link and next steps.',
+    care: 'Got it. I’ll reply within 48 hours about Care for your app.',
+    'readiness-score': 'Got it. I’ll email your results and the full checklist within 24 hours.',
+  };
   d.querySelectorAll('form[data-lead]').forEach((form) => {
     const msg = form.querySelector('.form-msg');
     const btn = form.querySelector('button[type=submit]');
+    const label = btn.textContent;
     form.addEventListener('submit', async (ev) => {
       ev.preventDefault();
       const data = new FormData(form);
+      const kind = data.get('interest') || data.get('offer') || 'build';
+      if (data.get('interest')) data.set('_subject', `New ${kind} request — snapforgelab.com`);
       Object.entries(attr).forEach(([k, v]) => data.append('attr_' + k, v));
       data.append('page', location.pathname);
       btn.disabled = true; btn.textContent = 'Sending…';
@@ -47,16 +57,24 @@
         if (!res.ok) throw new Error(String(res.status));
         form.reset();
         msg.className = 'form-msg ok';
-        msg.textContent = 'Got it. Your fixed-price plan lands in your inbox within 48 hours.';
+        msg.textContent = SUCCESS[kind] || SUCCESS.build;
         btn.textContent = 'Sent ✓';
-        if (window.plausible) window.plausible('Lead');
+        if (window.plausible) window.plausible('Lead', { props: { kind } });
       } catch (_) {
         msg.className = 'form-msg err';
-        msg.innerHTML = 'Something went wrong. Email us at <a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a>.';
-        btn.disabled = false; btn.textContent = 'Get my fixed-price plan';
+        msg.innerHTML = navigator.onLine === false
+          ? 'You seem to be offline. Check your connection and send again; your message is still here.'
+          : 'Your message didn’t go through. Send again, or email <a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a>. Your message is still here.';
+        btn.disabled = false; btn.textContent = label;
       }
     });
   });
+
+  // Buttons that lead to the form pre-select what the visitor needs
+  d.querySelectorAll('[data-interest]').forEach((a) => a.addEventListener('click', () => {
+    const r = d.querySelector(`input[name="interest"][value="${a.dataset.interest}"]`);
+    if (r) r.checked = true;
+  }));
 
   // Sticky mobile CTA: hide once the contact section is on screen
   const mcta = d.querySelector('.m-cta');
