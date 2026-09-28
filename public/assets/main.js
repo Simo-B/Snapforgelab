@@ -35,7 +35,7 @@
   const SUCCESS = {
     build: 'Got it. Your fixed-price plan lands in your inbox within 48 hours.',
     review: 'Got it. I’ll reply within 24 hours with the payment link and next steps.',
-    'ship-ready-review': 'Got it. I’ll reply within 24 hours with the payment link and next steps.',
+    'ship-ready-review': 'Got it. I’ll answer your question within 24 hours.',
     care: 'Got it. I’ll reply within 48 hours about Care for your app.',
     'readiness-score': 'Got it. I’ll email your results and the full checklist within 24 hours.',
   };

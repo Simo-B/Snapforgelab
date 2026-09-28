@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "17"
+ASSET_V = "18"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
@@ -94,7 +94,7 @@ def head(title, description, canonical, og_type="article", extra="", image=None)
   <div class="inner">
     <a href="/" class="logo" aria-label="Snapforge Lab home">{LOGO}Snapforge Lab</a>
     <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
-    <a href="/replit-app-to-production/" class="btn p sm">Get a $199 review</a>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
   </div>
 </header>
 """
