@@ -35,21 +35,38 @@ Ordres de grandeur (règles de pouce, pas une garantie) : réseau chaud, 30 mess
 
 ## 2. Les messages (à copier, à personnaliser en 1re ligne)
 
-### 2.1 Réseau chaud
+### 2.0 Profil = ta landing page (5 min, avant tout message)
+
+Les gens qui reçoivent ton message ouvrent ton profil. La ligne sous ton nom doit contenir : une promesse chiffrée, une preuve, un appel à l'action. Ton contenu intrigue, ton profil convertit.
+
+**Titre LinkedIn / bio X :**
+```
+I review Replit apps before launch: written report + video in 48h, from $199 · Top 1% Replit Agent user · DM me for a free 5-min teardown
+```
+(48 h et 199 $ = chiffres, top 1 % = preuve vérifiable sur `/about/`, « DM me » = appel à l'action. N'ajoute aucun chiffre de clients ou de résultats que tu n'as pas encore.)
+
+### 2.0b Les 5 règles d'un message de setting
+
+Un message n'a **pas pour but de vendre : il sert à déclencher un échange** (ça enlève aussi la peur de déranger). Le prix et le lien viennent après leur réponse. Avant d'envoyer, vérifie :
+1. **Cadre tes questions** avec un contexte : « juste pour comprendre… » / « just to understand… ».
+2. **Écris comme tu parles.** Un message trop écrit sonne faux.
+3. **Termine toujours par une question**, sinon la conversation s'arrête.
+4. **Relis lentement** : d'abord leur message, puis le tien.
+5. **Effet miroir** : répète la fin de leur phrase et ajoute « C'est-à-dire ? » / « Meaning? ».
+
+### 2.1 Réseau chaud (message d'ouverture, sans prix ni lien)
 
 **FR**
 ```
-Salut [prénom] ! Petit message perso : je viens de lancer Snapforge Lab. Je fais la revue « prêt pour la prod » d'apps créées avec Replit (sécurité, base de données, déploiement) : rapport écrit + vidéo en 48h.
-Toi, ou quelqu'un que tu connais, a une app faite avec Replit / Lovable / Bolt qu'il veut lancer sans mauvaise surprise ? Je prends 3 clients fondateurs à 99 $ au lieu de 199 $.
-Même un simple partage ou une intro m'aiderait énormément 🙏 Le détail : https://snapforgelab.com/founding-review/
+Salut [prénom] ! Juste pour comprendre : tu as un projet d'app en cours, ou quelqu'un autour de toi qui en construit une avec Replit / Lovable / Bolt ? Je viens de me lancer dans la revue « prêt pour la prod » de ce genre d'apps et j'essaie de comprendre ce qui bloque avant le lancement. Tu en es où ?
 ```
 
 **EN**
 ```
-Hey [name]! Quick personal note: I just launched Snapforge Lab. I review apps built with Replit before launch (security, database, deployment) and send a written report + video in 48h.
-Do you, or someone you know, have an app built with Replit / Lovable / Bolt that they want to launch without nasty surprises? I'm taking 3 founding clients at $99 instead of $199.
-Even a share or an intro would help me a lot 🙏 Details: https://snapforgelab.com/founding-review/
+Hey [name]! Just to understand: are you, or is someone around you, building an app with Replit / Lovable / Bolt? I just started reviewing that kind of app before launch and I'm trying to understand what blocks people before going live. Where are you at?
 ```
+
+Quand ils répondent : miroir (« [fin de leur phrase]… c'est-à-dire ? »), une ou deux questions sur leur situation, puis seulement : « Je prends 3 clients fondateurs à 99 $ au lieu de 199 $ pour la review (rapport + vidéo en 48h). Si tu veux le détail : https://snapforgelab.com/founding-review/ ». S'ils n'ont pas d'app mais connaissent quelqu'un : « Tu peux me mettre en contact ? » 
 
 À qui : contacts WhatsApp / LinkedIn / Instagram qui construisent, freelancent ou ont un side project ; anciens collègues ; communautés (Discord, Slack) où l'auto-promo est autorisée.
 
@@ -85,7 +102,11 @@ Guides à citer selon le problème (sur X, ou en DM) :
 Seulement à : (a) quelqu'un qui a répondu à ta réponse publique, ou (b) quelqu'un qui vient de lancer publiquement une app faite avec Replit et dont les DMs sont ouverts. Jamais de DM Reddit non sollicité.
 
 ```
-Hey [name], saw [app]: nice work getting it live. I review apps built with Replit before real users hit them (I'm a top 1% Replit Agent user). Want me to spot the 3 biggest risks from the outside and send you a 5-min video? Free, no strings.
+Hey [name], saw [app]: nice work getting it built. Just to understand: is it already open to real users, or still in testing?
+```
+Puis, après leur réponse (miroir + une question sur ce qui les inquiète pour le lancement) :
+```
+I review apps built with Replit before real users hit them (top 1% Replit Agent user). Want me to spot the 3 biggest risks from the outside and send you a 5-min video? Free, no strings.
 ```
 
 ### 2.4 Après leur « oui » : la vidéo, puis l'offre
@@ -96,6 +117,15 @@ Enregistre un Loom de 5 minutes sur leur app publique : 3 risques visibles de l'
 Here's the video: [loom link]. Those are the risks visible from the outside. The ones that usually hurt (access control on every route, secrets, database, cost limits) need a look inside, which is what my 48h review does. Normally $199.
 I'm taking 3 founding clients at $99 in exchange for a short testimonial: https://snapforgelab.com/founding-review/ (example report: https://snapforgelab.com/replit-app-to-production/example-report/). Want a spot?
 ```
+
+### 2.4b Structure d'un échange (chat ou appel), toujours dans cet ordre
+
+1. **Comprendre leur situation** : qui utilise l'app, quelles données, ce qui les bloque ou les inquiète. Écoute, questions cadrées, miroir.
+2. **Seulement ensuite, présenter l'offre** en chiffres : « Rapport écrit + vidéo de 10 à 15 minutes, en 48 h, 99 $ (fondateur) au lieu de 199 $. Moins de 3 problèmes réels trouvés = remboursement. » Remplace toute formule floue par un chiffre, un délai ou un prix.
+3. **Répondre aux objections par une question** (§2.7).
+4. **Fixer la suite** : « Je t'envoie le lien de paiement maintenant ? »
+
+Un refus ne ferme pas la porte : « peut-être pas maintenant, mais plus tard ». Note la date et relance (§2.6).
 
 ### 2.5 Closing (après un « oui » explicite)
 
@@ -114,16 +144,20 @@ No pressure, just making sure the video didn't get buried. It's yours to keep ei
 Quick note: [N] of the 3 founding spots are still open. If your launch is further out, keep the video and ping me when it gets close.
 ```
 
-### 2.7 Objections
+### 2.7 Objections : réponds par une question, ne te défends pas
 
-| Ils disent | Tu réponds |
+La question t'apprend ce qui bloque vraiment et t'évite de perdre un prospect sur un malentendu.
+
+| Ils disent | Tu réponds (question d'abord) |
 |---|---|
-| « Pourquoi pas le Security Agent de Replit ou un scanner automatique ? » | « Bonne première passe, je le lance aussi. Il ne teste pas ton app avec plusieurs utilisateurs, ne regarde pas ta base de prod, tes sauvegardes, tes coûts ni ton déploiement. C'est ce que je regarde. » |
-| « Tu peux aussi corriger ? » | « Oui : le Ship-It Sprint (990 $, 5 jours) corrige toute la liste, et ta review de 99 $ est déduite. » |
-| « Trop cher / pas de budget » | « Compris. La vidéo de 5 minutes reste à toi. Recontacte-moi quand le lancement approche. » |
-| « Qui es-tu ? » | Page `/about/` (badge Replit Agent top 1 %), rapport exemple, garantie remboursement, paiement PayPal en « Biens et services ». |
-| « Mon code reste confidentiel ? » | « Accès en lecture seule, je ne modifie rien, et mes conditions (`/terms/`) disent que code et données restent confidentiels. » |
-| « Je dois donner un témoignage ? » | « Seulement si la review t'a servi. Et tu valides tout cas d'étude avant publication. » |
+| « Je dois réfléchir » | « Sur quoi voudrais-tu réfléchir en particulier ? » |
+| « C'est trop cher » | « Trop cher par rapport à quoi en particulier ? » (puis : la vidéo de 5 min reste à eux) |
+| « Ce n'est pas le bon moment » | « Qu'est-ce qui rend ce moment compliqué aujourd'hui ? » (puis : « Tu lances quand ? » et relance à cette date) |
+| « On a déjà quelqu'un / Replit a un Security Agent » | « Qu'est-ce qui est déjà couvert aujourd'hui ? » Puis : le Security Agent est une bonne première passe (tu le lances aussi), il ne teste pas plusieurs utilisateurs, la base de prod, les sauvegardes, les coûts ni le déploiement. |
+| « Envoie-moi un mail » | « Avec plaisir. Qu'est-ce qui t'aiderait le plus d'y trouver pour décider ? » |
+| « Tu peux aussi corriger ? » | « Oui : qu'est-ce que tu voudrais faire corriger en priorité ? » Puis : Ship-It Sprint 990 $, 5 jours, review déduite. |
+| « Qui es-tu ? / Je ne te connais pas » | « Qu'est-ce qui te rassurerait le plus ? » Puis : `/about/` (badge Replit Agent top 1 %), rapport exemple, remboursement, PayPal « Biens et services ». |
+| « Mon code reste confidentiel ? » | « Quelles données sont sensibles dans ton app ? » Puis : lecture seule, rien modifié, `/terms/` prévoit la confidentialité. |
 
 ### 2.8 Post « free teardown » (X et LinkedIn, ce soir)
 
@@ -181,6 +215,8 @@ Glad it was useful. Could you write 2-3 sentences about the review that I can qu
 5. Dis-moi « première vente » : je remplace l'exemple fictif par le rapport anonymisé et j'ajoute le témoignage sur le site.
 
 ## 6. Suivi du jour
+
+Teste les canaux **un par un** et garde celui qui marche : ce soir, compte les réponses obtenues par canal (réseau, X, Reddit, forum, LinkedIn). Demain, mets 70 % de ton temps sur le meilleur.
 
 | Heure | Canal | Contact | Étape (contacté / répondu / vidéo / offre / payé) | Prochaine action |
 |---|---|---|---|---|
