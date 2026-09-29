@@ -9,6 +9,16 @@
     d.querySelectorAll('[data-buy="review"]').forEach((a) => { a.href = PAYMENT_URL; });
   }
 
+  // Founding-client offer: private page /founding-review/ (first 3 clients, $99).
+  // Set open to false once the three spots are taken; the page then sends
+  // visitors to the regular $199 review instead.
+  const FOUNDING = { open: true, url: 'https://paypal.me/mbsimo/99USD' };
+  const founding = d.querySelectorAll('[data-buy="founding"]');
+  if (founding.length) {
+    if (FOUNDING.open) founding.forEach((a) => { a.href = FOUNDING.url; });
+    else location.replace('/replit-app-to-production/#book');
+  }
+
   // Reveal on scroll
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => {

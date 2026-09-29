@@ -1,5 +1,7 @@
 # Cash Sprint : 7 jours pour encaisser la 1ʳᵉ vente
 
+> **Tu veux encaisser aujourd'hui ?** Plan heure par heure, offre « client fondateur » à 99 $ et messages prêts à copier : `docs/first-sale-today.md`.
+
 **Objectif : 1 Review vendue (199 $) avant J+7 et 1 Sprint ou Build en discussion.**
 
 Réalité à accepter : un compte X à 0 abonné ne vend pas en 7 jours. X, c'est pour le mois 2.
