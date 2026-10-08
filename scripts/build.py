@@ -302,6 +302,7 @@ def build_llms(guides):
         "and build custom business apps (dashboards, CRMs, client portals, AI assistants) on Replit at fixed prices, for clients worldwide.",
         "",
         "## Services",
+        f"- [Replit Deploy Fix]({SITE}/replit-app-to-production/#pricing): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Review).",
         f"- [Ship-Ready Review]({SITE}/replit-app-to-production/): $199 production-readiness audit of a Replit Agent app, delivered in 48 hours, full refund if fewer than 3 real issues are found.",
         f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited).",
         f"- [Starter Build]({SITE}/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.",

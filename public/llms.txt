@@ -3,6 +3,7 @@
 > Snapforge Lab is an independent Replit specialist studio. We review, fix and deploy Replit and Replit Agent apps, and build custom business apps (dashboards, CRMs, client portals, AI assistants) on Replit at fixed prices, for clients worldwide.
 
 ## Services
+- [Replit Deploy Fix](https://snapforgelab.com/replit-app-to-production/#pricing): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Review).
 - [Ship-Ready Review](https://snapforgelab.com/replit-app-to-production/): $199 production-readiness audit of a Replit Agent app, delivered in 48 hours, full refund if fewer than 3 real issues are found.
 - [Ship-It Sprint](https://snapforgelab.com/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited).
 - [Starter Build](https://snapforgelab.com/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.
