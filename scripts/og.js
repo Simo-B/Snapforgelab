@@ -22,7 +22,7 @@ h1{font-size:${g.h1.length > 70 ? 56 : 64}px;line-height:1.06;letter-spacing:-2p
 .foot{display:flex;justify-content:space-between;align-items:center;margin-top:34px;font-size:22px;color:#a1a1a6}
 .pill{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);padding:8px 18px;border-radius:999px;color:#d2d2d7}
 </style></head><body><div class="glow"></div><div class="c">
-<div class="logo"><svg width="40" height="40" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2997ff"/><path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>Snapforge Lab</div>
+<div class="logo"><svg width="40" height="40" viewBox="0 0 100 100"><defs><linearGradient id="og-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#og-g)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</div>
 <div class="k">${esc(g.kicker)} · Replit guide</div>
 <h1>${esc(g.h1)}</h1>
 <div class="foot"><span class="pill">${g.minutes || 8} min read</span><span>snapforgelab.com/guides</span></div>

@@ -35,8 +35,16 @@ STATIC_PAGES = [
     ("/tools/replit-readiness-score/", "0.8"),
 ]
 
-LOGO = ('<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2997ff"/>'
-        '<path d="M18.5 5 9 18h6.5L13.5 27 23 14h-6.5z" fill="#fff"/></svg>')
+def logo(gid):
+    # Each inline copy needs its own gradient id: header and footer share a page.
+    return ('<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="%s" x1="0" y1="0" x2="1" y2="1">'
+            '<stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>'
+            '<rect width="100" height="100" rx="24" fill="url(#%s)"/>'
+            '<path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>') % (gid, gid)
+
+
+LOGO_HEAD = logo("sfl-logo-h")
+LOGO_FOOT = logo("sfl-logo-f")
 
 
 def esc(s):
@@ -60,7 +68,7 @@ def load_guides():
 
 
 def head(title, description, canonical, og_type="article", extra="", image=None):
-    image = image or f"{SITE}/og.png"
+    image = image or f"{SITE}/og.png?v=2"
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -71,7 +79,8 @@ def head(title, description, canonical, og_type="article", extra="", image=None)
 <link rel="canonical" href="{canonical}">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#050506">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="Snapforge Lab">
@@ -92,7 +101,7 @@ def head(title, description, canonical, og_type="article", extra="", image=None)
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav">
   <div class="inner">
-    <a href="/" class="logo" aria-label="Snapforge Lab home">{LOGO}Snapforge Lab</a>
+    <a href="/" class="logo" aria-label="Snapforge Lab home">{LOGO_HEAD}Snapforge Lab</a>
     <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
     <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
   </div>
@@ -107,7 +116,7 @@ def footer(mobile_cta=True):
 <footer>
   <div class="wrap">
     <div class="foot">
-      <div><a href="/" class="logo">{LOGO}Snapforge Lab</a>
+      <div><a href="/" class="logo">{LOGO_FOOT}Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
       <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
       <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
@@ -226,7 +235,7 @@ def og_image(g):
     """Per-guide social image (made by scripts/og.js) with the site image as fallback."""
     if (PUBLIC / "og" / f"{g['slug']}.png").exists():
         return f"{SITE}/og/{g['slug']}.png"
-    return f"{SITE}/og.png"
+    return f"{SITE}/og.png?v=2"
 
 
 def format_date(d):
