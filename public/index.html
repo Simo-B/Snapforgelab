@@ -26,6 +26,7 @@
 <meta name="twitter:image" content="https://snapforgelab.com/og.png">
 
 <link rel="stylesheet" href="/assets/styles.css?v=19">
+<style>@media (min-width:681px) and (max-width:960px){.plans:not(.two) .plan:last-child{grid-column:1/-1}}</style>
 <script>document.documentElement.classList.add('js')</script>
 
 <script type="application/ld+json">
@@ -43,12 +44,14 @@
       "description": "Independent Replit specialist studio building production-ready business apps — dashboards, CRMs, client portals, automations and AI assistants — at a fixed price.",
       "areaServed": "Worldwide",
       "founder": {"@type": "Person", "@id": "https://snapforgelab.com/about/#simo", "name": "Simo", "url": "https://snapforgelab.com/about/"},
-      "priceRange": "$199 - $2,500",
+      "priceRange": "$49 - $2,500",
       "knowsAbout": ["Replit", "Replit Agent", "Internal tools", "Business dashboards", "CRM development", "Client portals", "Workflow automation", "AI assistants"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Replit development services",
         "itemListElement": [
+          {"@type": "Offer", "name": "Replit Deploy Fix", "price": "49", "priceCurrency": "USD", "url": "https://snapforgelab.com/replit-app-to-production/#pricing",
+           "itemOffered": {"@type": "Service", "name": "Fix one Replit deployment blocker in 48 hours"}},
           {"@type": "Offer", "name": "Ship-Ready Review", "price": "199", "priceCurrency": "USD", "url": "https://snapforgelab.com/replit-app-to-production/",
            "itemOffered": {"@type": "Service", "name": "48-hour production-readiness review for Replit Agent apps"}},
           {"@type": "Offer", "name": "Ship-It Sprint", "price": "990", "priceCurrency": "USD", "url": "https://snapforgelab.com/replit-app-to-production/",
@@ -83,7 +86,7 @@
         {"@type": "Question", "name": "I already built an app with Replit Agent. Can you make it production-ready?",
          "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Ship-Ready Review ($199) audits security, data, authentication, performance and deployment, and delivers a prioritized fix list within 48 hours. If I find fewer than 3 real issues, you get a full refund. Want me to fix everything? The Ship-It Sprint ($990) does it in 5 days, and the review fee is credited."}},
         {"@type": "Question", "name": "How do payments work?",
-         "acceptedAnswer": {"@type": "Answer", "text": "The review is paid upfront and covered by the refund guarantee. Sprints and builds are paid half at the start and half when your app is live in production. The first month of Care is included with every Sprint and Build; after that it is $249/month and you can cancel anytime."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "The $49 Deploy Fix and the review are paid upfront via PayPal and covered by a refund guarantee. Sprints and builds are paid half at the start and half when your app is live in production. The first month of Care is included with every Sprint and Build; after that it is $249/month and you can cancel anytime."}},
         {"@type": "Question", "name": "Do you work with clients outside the US?",
          "acceptedAnswer": {"@type": "Answer", "text": "Yes. I work fully async and remote with clients worldwide, in English, with written updates."}}
       ]
@@ -191,7 +194,22 @@
     </div>
     <div class="track reveal">
       <div class="track-head"><h3>Already built something with Replit Agent?</h3><p>Find out what breaks before your users do, then ship it.</p></div>
-      <div class="plans two">
+      <div class="plans">
+        <div class="plan" style="order:-2">
+          <span class="badge">Quick fix · 48h</span>
+          <div class="name">Replit Deploy Fix</div>
+          <div class="for">One deployment blocker, fixed.</div>
+          <div class="price">$49</div>
+          <div class="per">one-time · 48h · refunded if I can't fix it</div>
+          <ul>
+            <li>Failing build or publish</li>
+            <li>Secrets, env vars or database connection</li>
+            <li>Custom domain not resolving</li>
+            <li>Credited toward the Ship-Ready Review</li>
+          </ul>
+          <a href="https://paypal.me/mbsimo/49USD" class="btn g" target="_blank" rel="noopener" data-buy="deploy-fix">Pay $49 with PayPal</a>
+          <p class="book-note" style="margin-top:12px;text-align:center">Then email <a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a> with your Repl link and the error.</p>
+        </div>
         <div class="plan hl">
           <span class="badge">Start here · 10 launch spots</span>
           <div class="name">Ship-Ready Review</div>
@@ -318,7 +336,7 @@
       <details><summary>Do I own the code?</summary><div class="a"><p>Yes. The app lives on your own Replit account. It is standard code you can export, and it keeps running if you stop working with me.</p></div></details>
       <details><summary>Do I need a Replit account?</summary><div class="a"><p>Yes, the app is deployed on your Replit account so you keep full ownership. I handle setup, deployment and configuration for you.</p></div></details>
       <details><summary>I already built an app with Replit Agent. Can you make it production-ready?</summary><div class="a"><p>Yes. The <a href="/replit-app-to-production/" class="link">Ship-Ready Review</a> ($199) audits security, data, authentication, performance and deployment, and delivers a prioritized fix list within 48 hours. If I find fewer than 3 real issues, you get a full refund. Want me to fix everything? The Ship-It Sprint ($990) does it in 5 days, and the review fee is credited.</p></div></details>
-      <details><summary>How do payments work?</summary><div class="a"><p>The review is paid upfront and covered by the refund guarantee. Sprints and builds are paid half at the start and half when your app is live in production. The first month of Care is included with every Sprint and Build; after that it is $249/month and you can cancel anytime.</p></div></details>
+      <details><summary>How do payments work?</summary><div class="a"><p>The $49 Deploy Fix and the review are paid upfront via PayPal and covered by a refund guarantee. Sprints and builds are paid half at the start and half when your app is live in production. The first month of Care is included with every Sprint and Build; after that it is $249/month and you can cancel anytime.</p></div></details>
       <details><summary>Do you work with clients outside the US?</summary><div class="a"><p>Yes. I work fully async and remote with clients worldwide, in English, with written updates.</p></div></details>
     </div>
   </div>
