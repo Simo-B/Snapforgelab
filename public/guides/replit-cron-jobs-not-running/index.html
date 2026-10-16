@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Cron Jobs Not Running? Use Scheduled Deployments</title>
+<meta name="description" content="Your setInterval or node-cron job works in the preview but not on Replit Autoscale. Move it to a Scheduled deployment or a protected endpoint on a schedule.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-cron-jobs-not-running/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-cron-jobs-not-running/">
+<meta property="og:title" content="Replit Cron Jobs Not Running? Use Scheduled Deployments">
+<meta property="og:description" content="Your setInterval or node-cron job works in the preview but not on Replit Autoscale. Move it to a Scheduled deployment or a protected endpoint on a schedule.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Cron Jobs Not Running? Use Scheduled Deployments">
+<meta name="twitter:description" content="Your setInterval or node-cron job works in the preview but not on Replit Autoscale. Move it to a Scheduled deployment or a protected endpoint on a schedule.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit cron jobs not running in production? Here is why",
+   "description": "Your setInterval or node-cron job works in the preview but not on Replit Autoscale. Move it to a Scheduled deployment or a protected endpoint on a schedule.",
+   "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit cron jobs not running in production? Here is why",
+     "item": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/"
+    }
+   ]
+  },
+  {
+   "@type": "HowTo",
+   "name": "Replit cron jobs not running in production? Here is why",
+   "description": "Your setInterval or node-cron job works in the preview but not on Replit Autoscale. Move it to a Scheduled deployment or a protected endpoint on a schedule.",
+   "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "position": 1,
+     "name": "Pull the job out of the web server",
+     "text": "Move the job's logic into its own script, such as scripts/daily-digest.ts, that does the work once and exits. Remove the timer from the server code.",
+     "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/#step-1"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 2,
+     "name": "Option A: Scheduled deployment",
+     "text": "Replit's Scheduled deployments run a command on a cron schedule (for example 0 9 * * 1-5 for weekdays at 9am) in a time zone you choose, then stop. They have a job timeout, alert you when a run fails, and have no public URL. Set the run command to your script and give it the same database and secrets. A simple setup is a separate small Replit App for the job that uses the same production database.",
+     "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/#step-2"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 3,
+     "name": "Option B: a protected endpoint on a schedule",
+     "text": "Expose the job as POST /api/cron/daily-digest, require a secret header, and have a scheduler call it. A request wakes an Autoscale app, so this works without changing deployment type.",
+     "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/#step-3"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 4,
+     "name": "Option C: Reserved VM for continuous work",
+     "text": "Queue consumers, bots and anything that must run all the time need an always-on machine. A Reserved VM never sleeps and has a fixed monthly cost.",
+     "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/#step-4"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 5,
+     "name": "Make runs idempotent and visible",
+     "text": "Store each run in a table (job name, started, finished, status). Before sending, check whether today's run already happened, so a retry or a double trigger does not email users twice.",
+     "url": "https://snapforgelab.com/guides/replit-cron-jobs-not-running/#step-5"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Why does my cron job only run when someone visits the app?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "On Autoscale, your server runs only while it handles traffic. A visit starts an instance, which restarts the timer, and when traffic stops the instance and the timer stop too."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What is a Replit Scheduled deployment?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A deployment type that runs a command on a schedule you set with a cron expression and time zone, then stops until the next run. It suits backups, notifications and reports, not web apps."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why did my job run twice?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Autoscale can run more than one instance under load, and each instance runs its own timer. Moving the job out of the web server and making it idempotent fixes this."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Deployment</nav>
+  <article class="article">
+    <div class="kicker">Deployment</div>
+    <h1>Replit cron jobs not running in production? Here is why</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 4 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>A timer inside your web app only runs while an instance is alive. Autoscale scales to zero when idle, so the job silently stops.</li><li>Use a Scheduled deployment (a cron expression and time zone) for periodic work, or a Reserved VM for continuous background work.</li><li>Make every job safe to run twice, and log each run so you can see gaps.</li></ul></div>
+    <div class="prose">
+<p>Daily emails stop going out. The nightly sync ran Monday, skipped Tuesday, ran twice Wednesday. In the preview it worked perfectly. If the job is a <code>setInterval</code>, <code>node-cron</code> or APScheduler task inside your web server, the deployment type is the problem: Autoscale runs your server only while there is traffic.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Scheduled emails, reports or syncs run on some days and not others.</li><li>The job runs only after someone visits the app.</li><li>Jobs run twice when two instances are up at the same time.</li><li>Autoscale costs go up after you add a background timer.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>Autoscale scales to zero when idle, which stops any timer inside the process.</li><li>Under load, Autoscale can run several instances, and each one runs its own copy of the timer.</li><li>A busy timer keeps an instance alive longer, which costs compute.</li><li>The job relies on in-memory state that is lost when the instance stops.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Pull the job out of the web server</h3>
+<p>Move the job's logic into its own script, such as <code>scripts/daily-digest.ts</code>, that does the work once and exits. Remove the timer from the server code.</p><pre><code>// scripts/daily-digest.ts
+import { sendDigests } from "../server/digest";
+await sendDigests();      // do the work once
+process.exit(0);</code></pre>
+
+<h3 id="step-2">2. Option A: Scheduled deployment</h3>
+<p>Replit's Scheduled deployments run a command on a cron schedule (for example <code>0 9 * * 1-5</code> for weekdays at 9am) in a time zone you choose, then stop. They have a job timeout, alert you when a run fails, and have no public URL. Set the run command to your script and give it the same database and secrets. A simple setup is a separate small Replit App for the job that uses the same production database.</p>
+
+<h3 id="step-3">3. Option B: a protected endpoint on a schedule</h3>
+<p>Expose the job as <code>POST /api/cron/daily-digest</code>, require a secret header, and have a scheduler call it. A request wakes an Autoscale app, so this works without changing deployment type.</p><pre><code>app.post("/api/cron/daily-digest", async (req, res) =&gt; {
+  if (req.get("x-cron-secret") !== process.env.CRON_SECRET) return res.sendStatus(401);
+  await sendDigests();
+  res.json({ ok: true });
+});</code></pre>
+
+<h3 id="step-4">4. Option C: Reserved VM for continuous work</h3>
+<p>Queue consumers, bots and anything that must run all the time need an always-on machine. A Reserved VM never sleeps and has a fixed monthly cost.</p>
+
+<h3 id="step-5">5. Make runs idempotent and visible</h3>
+<p>Store each run in a table (job name, started, finished, status). Before sending, check whether today's run already happened, so a retry or a double trigger does not email users twice.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My background job (setInterval/node-cron) is inside the web server and does not run reliably on Replit Autoscale.
+Please:
+1. Move the job logic into a standalone script that runs once and exits, and remove the timer from the server.
+2. Also expose it as POST /api/cron/&lt;job-name&gt;, protected by a CRON_SECRET header, returning JSON.
+3. Add a job_runs table and make the job idempotent: skip if a successful run already exists for the current period.
+4. Log start, end and the number of items processed.
+Tell me what to configure for a Replit Scheduled deployment (run command, cron expression, time zone) as the next step.</code></pre></div>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The <code>job_runs</code> table has exactly one successful row per scheduled period over several days.</li><li>Calling the endpoint without the secret returns 401.</li><li>Triggering the job twice in a row does not send duplicates.</li><li>Scheduled deployment logs show each run and its exit status.</li></ul>
+
+<p>To compare the four deployment types side by side, read <a href="/guides/replit-deployment-types/">Autoscale vs Reserved VM vs Static vs Scheduled</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Why does my cron job only run when someone visits the app?</h3>
+<p>On Autoscale, your server runs only while it handles traffic. A visit starts an instance, which restarts the timer, and when traffic stops the instance and the timer stop too.</p>
+<h3>What is a Replit Scheduled deployment?</h3>
+<p>A deployment type that runs a command on a schedule you set with a cron expression and time zone, then stops until the next run. It suits backups, notifications and reports, not web apps.</p>
+<h3>Why did my job run twice?</h3>
+<p>Autoscale can run more than one instance under load, and each instance runs its own timer. Moving the job out of the web server and making it idempotent fixes this.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/replit-deployment-types/"><span class="rel-k">Deployment</span><span class="rel-t">Replit Autoscale vs Reserved VM vs Static vs Scheduled: which deployment should you choose?</span></a><a class="rel" href="/guides/replit-autoscale-cold-start/"><span class="rel-k">Deployment</span><span class="rel-t">Replit Autoscale cold starts: why the first load is slow</span></a><a class="rel" href="/guides/replit-deployment-costs-too-high/"><span class="rel-k">Costs</span><span class="rel-t">Replit deployment costs too high? How to find and cut them</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>

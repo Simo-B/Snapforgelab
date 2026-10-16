@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Deployment Failed? Fix Port and 0.0.0.0 Errors</title>
+<meta name="description" content="Publishing fails at the promote step, or the live app says it failed to respond? Fix the host, PORT and .replit port settings that break Replit deployments.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-deployment-failed-port/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-deployment-failed-port/">
+<meta property="og:title" content="Replit Deployment Failed? Fix Port and 0.0.0.0 Errors">
+<meta property="og:description" content="Publishing fails at the promote step, or the live app says it failed to respond? Fix the host, PORT and .replit port settings that break Replit deployments.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Deployment Failed? Fix Port and 0.0.0.0 Errors">
+<meta name="twitter:description" content="Publishing fails at the promote step, or the live app says it failed to respond? Fix the host, PORT and .replit port settings that break Replit deployments.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit deployment failed: fix the port and 0.0.0.0 errors",
+   "description": "Publishing fails at the promote step, or the live app says it failed to respond? Fix the host, PORT and .replit port settings that break Replit deployments.",
+   "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-deployment-failed-port/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit deployment failed: fix the port and 0.0.0.0 errors",
+     "item": "https://snapforgelab.com/guides/replit-deployment-failed-port/"
+    }
+   ]
+  },
+  {
+   "@type": "HowTo",
+   "name": "Replit deployment failed: fix the port and 0.0.0.0 errors",
+   "description": "Publishing fails at the promote step, or the live app says it failed to respond? Fix the host, PORT and .replit port settings that break Replit deployments.",
+   "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "position": 1,
+     "name": "Bind to 0.0.0.0 and read PORT",
+     "text": "Replit's own docs are explicit: a published app must listen on 0.0.0.0. Read the port from the environment and keep a fallback for the workspace.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/#step-1"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 2,
+     "name": "Check the [[ports]] section in .replit",
+     "text": "If .replit lists ports, Replit stops detecting the port for you. You need exactly one entry with externalPort = 80, and its localPort must be the port your server really uses. Delete the externalPort lines of any other port (a second dev server, a debugger, a websocket helper). Extra exposed ports are a common reason Autoscale publishing fails.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/#step-2"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 3,
+     "name": "Make the homepage answer fast",
+     "text": "Before marking the app live, Replit sends an HTTP request to your homepage. If it takes longer than about five seconds, publishing can fail. Start listening first, then do slow work: run migrations in the build step, load caches lazily, and never seed data inside the request for /.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/#step-3"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 4,
+     "name": "Confirm the run command",
+     "text": "Open the publishing settings and read the run command. It should start the production server (for example npm run start or node dist/index.js) after the build command (npm run build). A dev command such as npm run dev can start a dev server on a different port. A command that exits after running a script leaves nothing to answer the health check.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/#step-4"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 5,
+     "name": "Read the deployment logs, then republish",
+     "text": "Open the failed deployment's logs from the Publishing pane and find the first error line. A crash during startup (a missing secret, a failed import) looks exactly like a port problem from the outside. Fix it, then publish again.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-failed-port/#step-5"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Why does my Replit app work in Preview but fail to publish?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Preview runs inside your workspace, where a server on localhost is reachable. A published app runs on separate infrastructure that needs the server on 0.0.0.0, a single external port mapped to 80, and a homepage that answers the health check quickly."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What port should a Replit app use?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Use the PORT environment variable with a fallback such as 5000 or 3000. If your .replit file has a [[ports]] section, the localPort must match that port and the externalPort must be 80."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What does \"healthcheck failed: context deadline exceeded\" mean?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Replit's check of your homepage did not get an answer in time. Either the server never started listening on the right host and port, or startup work made the first response too slow."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Deployment</nav>
+  <article class="article">
+    <div class="kicker">Deployment</div>
+    <h1>Replit deployment failed: fix the port and 0.0.0.0 errors</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 4 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Your server must listen on 0.0.0.0, not localhost or 127.0.0.1, and should use the PORT environment variable.</li><li>If .replit has a [[ports]] section, automatic port detection is off: map your server's localPort to externalPort 80, and expose only one external port.</li><li>Replit checks your homepage before the app goes live. If / takes more than about five seconds to answer, publishing can fail at the last step.</li></ul></div>
+    <div class="prose">
+<p>Your app runs fine in the Replit preview, you hit Publish, and the build succeeds. Then it fails at the very last step, or the live URL says <em>Application failed to respond</em>. In most cases the code is fine. The problem is how the server is bound to its host and port, and how fast it answers Replit's health check. This guide walks through the checks in the order that fixes the most apps.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Publishing fails during the <strong>promote</strong> step, after the build has finished.</li><li>Deployment logs show <code>healthcheck failed</code> or <code>context deadline exceeded</code>.</li><li>The live URL shows <em>Application failed to respond</em> or a blank error page, while the preview works.</li><li>A warning in the publishing settings about multiple ports, or about a port bound to localhost.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The server listens on <code>localhost</code> or <code>127.0.0.1</code>. That works in the workspace but not in a published app.</li><li>The port is hard-coded to a value that does not match the <code>[[ports]]</code> mapping in <code>.replit</code>.</li><li><code>.replit</code> exposes several external ports. Autoscale and Reserved VM deployments support a single external port.</li><li>The homepage is slow at startup (database seeding, cache warm-up, big imports) and misses the health check window.</li><li>The run command starts a dev server or a one-shot script instead of a long-running production server.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Bind to 0.0.0.0 and read PORT</h3>
+<p>Replit's own docs are explicit: a published app must listen on <code>0.0.0.0</code>. Read the port from the environment and keep a fallback for the workspace.</p><pre><code>// Node.js / Express
+const PORT = Number(process.env.PORT) || 5000;
+app.listen(PORT, "0.0.0.0", () =&gt; console.log(`listening on ${PORT}`));</code></pre><pre><code># Python
+uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+gunicorn --bind 0.0.0.0:${PORT:-8000} app:app</code></pre>
+
+<h3 id="step-2">2. Check the [[ports]] section in .replit</h3>
+<p>If <code>.replit</code> lists ports, Replit stops detecting the port for you. You need exactly one entry with <code>externalPort = 80</code>, and its <code>localPort</code> must be the port your server really uses.</p><pre><code>[[ports]]
+localPort = 5000
+externalPort = 80</code></pre><p>Delete the <code>externalPort</code> lines of any other port (a second dev server, a debugger, a websocket helper). Extra exposed ports are a common reason Autoscale publishing fails.</p>
+
+<h3 id="step-3">3. Make the homepage answer fast</h3>
+<p>Before marking the app live, Replit sends an HTTP request to your homepage. If it takes longer than about five seconds, publishing can fail. Start listening first, then do slow work: run migrations in the build step, load caches lazily, and never seed data inside the request for <code>/</code>.</p>
+
+<h3 id="step-4">4. Confirm the run command</h3>
+<p>Open the publishing settings and read the run command. It should start the production server (for example <code>npm run start</code> or <code>node dist/index.js</code>) after the build command (<code>npm run build</code>). A dev command such as <code>npm run dev</code> can start a dev server on a different port. A command that exits after running a script leaves nothing to answer the health check.</p>
+
+<h3 id="step-5">5. Read the deployment logs, then republish</h3>
+<p>Open the failed deployment's logs from the Publishing pane and find the first error line. A crash during startup (a missing secret, a failed import) looks exactly like a port problem from the outside. Fix it, then publish again.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit app works in Preview but publishing fails (promote step / health check / "Application failed to respond").
+Please check the publishing setup only, without changing app features:
+1. Make the server listen on 0.0.0.0 and use process.env.PORT with a fallback.
+2. Open .replit and keep exactly one [[ports]] entry with externalPort = 80 whose localPort matches the port the server uses. Remove externalPort from any other entry.
+3. Make sure the deployment run command starts the production server (not a dev server) and that the build command builds the app.
+4. Make GET / respond in under 2 seconds at startup: move seeding, migrations and heavy work out of the startup path.
+Show me the diff of .replit and the server entry file before you publish.</code></pre></div>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Publishing completes and the deployment shows as live.</li><li><code>curl -I https://your-app.replit.app/</code> returns <code>200</code> (or a redirect) in well under five seconds.</li><li>The deployment logs show your own <em>listening on</em> line with the expected port.</li><li>Republishing a second time also succeeds, so the fix is stable.</li></ul>
+
+<p>If the app now goes live but behaves differently from the preview, continue with <a href="/guides/replit-works-in-preview-not-deployed/">Replit app works in preview but not after deploy</a>. To pick the right deployment type in the first place, see <a href="/guides/replit-deployment-types/">Autoscale vs Reserved VM vs Static vs Scheduled</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Why does my Replit app work in Preview but fail to publish?</h3>
+<p>Preview runs inside your workspace, where a server on localhost is reachable. A published app runs on separate infrastructure that needs the server on 0.0.0.0, a single external port mapped to 80, and a homepage that answers the health check quickly.</p>
+<h3>What port should a Replit app use?</h3>
+<p>Use the PORT environment variable with a fallback such as 5000 or 3000. If your .replit file has a [[ports]] section, the localPort must match that port and the externalPort must be 80.</p>
+<h3>What does &quot;healthcheck failed: context deadline exceeded&quot; mean?</h3>
+<p>Replit's check of your homepage did not get an answer in time. Either the server never started listening on the right host and port, or startup work made the first response too slow.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/replit-works-in-preview-not-deployed/"><span class="rel-k">Deployment</span><span class="rel-t">Replit app works in preview but not after deploy</span></a><a class="rel" href="/guides/replit-deployment-build-failed/"><span class="rel-k">Deployment</span><span class="rel-t">Replit deployment build failed: how to read the logs and fix it</span></a><a class="rel" href="/guides/replit-502-bad-gateway/"><span class="rel-k">Troubleshooting</span><span class="rel-t">Replit 502 Bad Gateway or 500 error after publishing: how to fix it</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>

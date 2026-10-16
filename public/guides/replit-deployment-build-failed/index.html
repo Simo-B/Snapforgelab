@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Deployment Build Failed: How to Fix It</title>
+<meta name="description" content="Replit publish fails during the build, gets stuck, or says the image exceeds 8 GiB? Read the build log, find the first error and fix the usual causes.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-deployment-build-failed/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-deployment-build-failed/">
+<meta property="og:title" content="Replit Deployment Build Failed: How to Fix It">
+<meta property="og:description" content="Replit publish fails during the build, gets stuck, or says the image exceeds 8 GiB? Read the build log, find the first error and fix the usual causes.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Deployment Build Failed: How to Fix It">
+<meta name="twitter:description" content="Replit publish fails during the build, gets stuck, or says the image exceeds 8 GiB? Read the build log, find the first error and fix the usual causes.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit deployment build failed: how to read the logs and fix it",
+   "description": "Replit publish fails during the build, gets stuck, or says the image exceeds 8 GiB? Read the build log, find the first error and fix the usual causes.",
+   "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-deployment-build-failed/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit deployment build failed: how to read the logs and fix it",
+     "item": "https://snapforgelab.com/guides/replit-deployment-build-failed/"
+    }
+   ]
+  },
+  {
+   "@type": "HowTo",
+   "name": "Replit deployment build failed: how to read the logs and fix it",
+   "description": "Replit publish fails during the build, gets stuck, or says the image exceeds 8 GiB? Read the build log, find the first error and fix the usual causes.",
+   "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "position": 1,
+     "name": "Find the first error",
+     "text": "Open Publishing \u2192 History, select the failed deployment and open its build log. Scroll to the first ERROR or FAILED line. Copy that line and the ten lines above it. That is what you give Agent, not the whole log.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/#step-1"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 2,
+     "name": "Reproduce the build in the Shell",
+     "text": "Run the same build command in the workspace Shell (for example npm ci && npm run build). If it fails there too, you can fix it with fast feedback instead of publishing again and again.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/#step-2"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 3,
+     "name": "Fix dependencies and type errors",
+     "text": "Add missing packages properly (npm install package-name so it lands in package.json). Fix TypeScript errors rather than disabling checks across the whole project. If the lockfile is out of sync, regenerate it.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/#step-3"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 4,
+     "name": "Reset a stuck run command",
+     "text": "Replit's help center gives a specific fix for No run command configured: in the deployment settings, disconnect the run command, add it back, save and publish again.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/#step-4"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 5,
+     "name": "Get under the size limit",
+     "text": "Find what is large with du -sh * .[^.]* | sort -h in the Shell. Move datasets and media to App Storage, delete generated folders, and keep build output out of the project. Before deleting anything, take a checkpoint or remix the app so you can go back.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/#step-5"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 6,
+     "name": "Unstick a hung deployment",
+     "text": "Open the command palette (Cmd+K or Ctrl+K), run Restart compute, then publish again. If it keeps hanging, contact Replit support with the full build log.",
+     "url": "https://snapforgelab.com/guides/replit-deployment-build-failed/#step-6"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Why does my app build in the workspace but not when publishing?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The workspace may have packages installed by hand or a dev server that tolerates type errors. The deployment runs a clean install and the production build, so anything not declared in your dependency files or any type error shows up there."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What is the size limit for Replit deployments?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Replit's docs state that Reserved VM and Autoscale deployments support apps up to 8 GB and Static deployments up to 1 GB."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Should I accept Replit's suggested fixes when the image is too large?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Take a checkpoint or remix the app first. Then review each suggestion so you only remove files you do not need."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Deployment</nav>
+  <article class="article">
+    <div class="kicker">Deployment</div>
+    <h1>Replit deployment build failed: how to read the logs and fix it</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 4 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Open Publishing → History, select the failed deployment and find the first line marked ERROR or FAILED. Later lines are usually side effects.</li><li>Most build failures come from missing dependencies, a wrong build or run command, type errors, or a failed database migration.</li><li>Autoscale and Reserved VM apps are limited to 8 GB, Static to 1 GB. Remove large files and generated output.</li></ul></div>
+    <div class="prose">
+<p>The publish button spins, then fails with a wall of red log text. Or it hangs at <em>Building</em> forever. A build failure feels scary, but the log almost always names the cause near the top. The trick is to find the first real error and ignore the dozens of lines that follow from it.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Publishing stops at the build step with <code>Build failed</code>.</li><li>The log shows <code>Cannot find module</code>, <code>npm ERR!</code>, <code>error TS…</code> or <code>exit code 1</code>.</li><li><code>No run command configured</code> even though you set one.</li><li><code>Image size exceeds the 8 GiB limit</code>.</li><li>The deployment is stuck in building or migration for a long time.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>A dependency is installed in the workspace but missing from <code>package.json</code> or <code>requirements.txt</code>/<code>pyproject.toml</code>.</li><li>TypeScript or lint errors fail the production build, even though the dev server ignores them.</li><li>The build command or output folder does not match the project.</li><li>A database migration in the build step fails.</li><li>Large files (datasets, videos, model weights, <code>node_modules</code> copies, build output) push the app over the size limit.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Find the first error</h3>
+<p>Open <strong>Publishing → History</strong>, select the failed deployment and open its build log. Scroll to the first <code>ERROR</code> or <code>FAILED</code> line. Copy that line and the ten lines above it. That is what you give Agent, not the whole log.</p>
+
+<h3 id="step-2">2. Reproduce the build in the Shell</h3>
+<p>Run the same build command in the workspace Shell (for example <code>npm ci &amp;&amp; npm run build</code>). If it fails there too, you can fix it with fast feedback instead of publishing again and again.</p>
+
+<h3 id="step-3">3. Fix dependencies and type errors</h3>
+<p>Add missing packages properly (<code>npm install package-name</code> so it lands in <code>package.json</code>). Fix TypeScript errors rather than disabling checks across the whole project. If the lockfile is out of sync, regenerate it.</p>
+
+<h3 id="step-4">4. Reset a stuck run command</h3>
+<p>Replit's help center gives a specific fix for <code>No run command configured</code>: in the deployment settings, disconnect the run command, add it back, save and publish again.</p>
+
+<h3 id="step-5">5. Get under the size limit</h3>
+<p>Find what is large with <code>du -sh * .[^.]* | sort -h</code> in the Shell. Move datasets and media to App Storage, delete generated folders, and keep build output out of the project. Before deleting anything, take a checkpoint or remix the app so you can go back.</p>
+
+<h3 id="step-6">6. Unstick a hung deployment</h3>
+<p>Open the command palette (Cmd+K or Ctrl+K), run <strong>Restart compute</strong>, then publish again. If it keeps hanging, contact Replit support with the full build log.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit deployment fails during the build. Here is the first error from Publishing &gt; History and the lines above it:
+[paste ~10-20 lines]
+Please:
+1. Explain the root cause in one sentence.
+2. Reproduce the build in the Shell with the same build command the deployment uses, and fix the cause (add missing dependencies to package.json, fix type errors, correct the build output path).
+3. Do not disable type checking or delete features to make the build pass.
+4. If the app is close to the 8 GB limit, list the largest folders and propose what can move to App Storage or be removed. Do not delete anything without asking me.
+Run the build again and show me it passes before I publish.</code></pre></div>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The build command passes in the Shell with no errors.</li><li>Publishing completes and the new deployment appears as live in History.</li><li>The live app shows the change you just made.</li></ul>
+
+<p>If the build passes but the app fails at the promote step, the cause is elsewhere: see <a href="/guides/replit-deployment-failed-port/">port and 0.0.0.0 errors</a>. If Agent keeps reintroducing errors, read <a href="/guides/replit-agent-keeps-breaking-app/">how to stop the fix loop</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Why does my app build in the workspace but not when publishing?</h3>
+<p>The workspace may have packages installed by hand or a dev server that tolerates type errors. The deployment runs a clean install and the production build, so anything not declared in your dependency files or any type error shows up there.</p>
+<h3>What is the size limit for Replit deployments?</h3>
+<p>Replit's docs state that Reserved VM and Autoscale deployments support apps up to 8 GB and Static deployments up to 1 GB.</p>
+<h3>Should I accept Replit&#x27;s suggested fixes when the image is too large?</h3>
+<p>Take a checkpoint or remix the app first. Then review each suggestion so you only remove files you do not need.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/replit-deployment-failed-port/"><span class="rel-k">Deployment</span><span class="rel-t">Replit deployment failed: fix the port and 0.0.0.0 errors</span></a><a class="rel" href="/guides/replit-database-migration-production/"><span class="rel-k">Data</span><span class="rel-t">How to run database migrations on Replit production safely</span></a><a class="rel" href="/guides/replit-agent-keeps-breaking-app/"><span class="rel-k">Troubleshooting</span><span class="rel-t">Replit Agent keeps breaking your app? How to stop the fix loop</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>

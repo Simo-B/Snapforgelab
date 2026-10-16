@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit App Not Indexed by Google? Fix Your SEO</title>
+<meta name="description" content="Google ignores your Replit app, robots.txt or sitemap.xml returns HTML, or every page has the same title. Fix the technical SEO basics of a Replit Agent app.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-app-not-indexed-google/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-app-not-indexed-google/">
+<meta property="og:title" content="Replit App Not Indexed by Google? Fix Your SEO">
+<meta property="og:description" content="Google ignores your Replit app, robots.txt or sitemap.xml returns HTML, or every page has the same title. Fix the technical SEO basics of a Replit Agent app.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit App Not Indexed by Google? Fix Your SEO">
+<meta name="twitter:description" content="Google ignores your Replit app, robots.txt or sitemap.xml returns HTML, or every page has the same title. Fix the technical SEO basics of a Replit Agent app.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit app not indexed by Google? How to fix it",
+   "description": "Google ignores your Replit app, robots.txt or sitemap.xml returns HTML, or every page has the same title. Fix the technical SEO basics of a Replit Agent app.",
+   "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-app-not-indexed-google/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit app not indexed by Google? How to fix it",
+     "item": "https://snapforgelab.com/guides/replit-app-not-indexed-google/"
+    }
+   ]
+  },
+  {
+   "@type": "HowTo",
+   "name": "Replit app not indexed by Google? How to fix it",
+   "description": "Google ignores your Replit app, robots.txt or sitemap.xml returns HTML, or every page has the same title. Fix the technical SEO basics of a Replit Agent app.",
+   "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "position": 1,
+     "name": "Test robots.txt and sitemap.xml",
+     "text": "If they return HTML, serve them as real files before the SPA fallback (see SPA routing on Replit). robots.txt should allow crawling and link to the sitemap.",
+     "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/#step-1"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 2,
+     "name": "Give every page its own head",
+     "text": "Each public page needs a unique <title>, meta description and canonical URL. In React, react-helmet-async sets them per route. For pages you want to rank (home, pricing, features, articles), the content should also be in the HTML the server sends: prerender those routes at build time or render them on the server.",
+     "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/#step-2"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 3,
+     "name": "Choose one canonical domain",
+     "text": "Add <link rel=\"canonical\" href=\"https://yourdomain.com/page\"> on every page, and redirect other hosts with a 301.",
+     "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/#step-3"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 4,
+     "name": "Return real 404s",
+     "text": "Unknown URLs should return status 404, not 200 with the app shell. Keep a list of valid routes on the server, or return 404 from the fallback for paths your router does not know.",
+     "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/#step-4"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 5,
+     "name": "Submit and request indexing",
+     "text": "Verify the domain in Google Search Console, submit the sitemap, and use URL Inspection on your key pages. Indexing can take days to weeks after the fixes.",
+     "url": "https://snapforgelab.com/guides/replit-app-not-indexed-google/#step-5"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Does Replit block Google from indexing my app?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No, a public Replit deployment can be indexed. Problems usually come from the app: robots.txt or the sitemap returning HTML, client-only rendering, duplicate domains or soft 404s. A private deployment cannot be crawled."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why does my sitemap.xml return HTML?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The single-page app fallback answers every unknown path with index.html. Serve sitemap.xml and robots.txt as real files before the fallback."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Should I keep my .replit.app URL indexed?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Pick one canonical domain, usually your custom domain, and 301-redirect the .replit.app URL to it so Google does not see two copies of every page."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / SEO</nav>
+  <article class="article">
+    <div class="kicker">SEO</div>
+    <h1>Replit app not indexed by Google? How to fix it</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 4 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Check robots.txt and sitemap.xml first: in many SPAs they return index.html, so Google cannot read them.</li><li>A client-rendered React app sends the same empty HTML and title for every URL. Give each page its own title, description and content in the HTML.</li><li>Pick one domain as canonical and redirect the other (.replit.app or www) to it.</li></ul></div>
+    <div class="prose">
+<p>Weeks after launch, a search for your product finds nothing, and Search Console says <em>Discovered – currently not indexed</em> or <em>Sitemap could not be read</em>. Replit itself does not block Google. The usual causes are in the app: the way Agent sets up a single-page React app makes every URL look like the same empty page. Here is the checklist we run in every audit.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><code>site:yourdomain.com</code> in Google shows nothing, or only the homepage.</li><li>Search Console reports the sitemap as HTML or unreadable.</li><li>Every page in search results shows the same title and description.</li><li>Pages are indexed under the <code>.replit.app</code> domain instead of your own.</li><li>Search Console shows <em>Soft 404</em> or <em>Duplicate without user-selected canonical</em>.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The SPA fallback serves <code>index.html</code> for <code>/robots.txt</code> and <code>/sitemap.xml</code>.</li><li>No sitemap, or a sitemap listing URLs that redirect or 404.</li><li>Pages render only in JavaScript, with one shared title and no text in the initial HTML.</li><li>Both <code>.replit.app</code> and the custom domain serve the same pages, with no canonical.</li><li>Missing pages return 200 with the app shell, which Google treats as soft 404s.</li><li>A leftover <code>noindex</code> tag or a private deployment.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Test robots.txt and sitemap.xml</h3>
+<pre><code>curl -sI https://yourdomain.com/robots.txt   # expect content-type: text/plain
+curl -sI https://yourdomain.com/sitemap.xml  # expect application/xml or text/xml
+curl -s  https://yourdomain.com/robots.txt   # should NOT start with &lt;!doctype html&gt;</code></pre><p>If they return HTML, serve them as real files before the SPA fallback (see <a href="/guides/replit-404-on-page-refresh/">SPA routing on Replit</a>). robots.txt should allow crawling and link to the sitemap.</p>
+
+<h3 id="step-2">2. Give every page its own head</h3>
+<p>Each public page needs a unique <code>&lt;title&gt;</code>, meta description and canonical URL. In React, <code>react-helmet-async</code> sets them per route. For pages you want to rank (home, pricing, features, articles), the content should also be in the HTML the server sends: prerender those routes at build time or render them on the server.</p>
+
+<h3 id="step-3">3. Choose one canonical domain</h3>
+<p>Add <code>&lt;link rel="canonical" href="https://yourdomain.com/page"&gt;</code> on every page, and redirect other hosts with a 301.</p><pre><code>app.use((req, res, next) =&gt; {
+  if (req.hostname.endsWith(".replit.app")) {
+    return res.redirect(301, `https://yourdomain.com${req.originalUrl}`);
+  }
+  next();
+});</code></pre>
+
+<h3 id="step-4">4. Return real 404s</h3>
+<p>Unknown URLs should return status 404, not 200 with the app shell. Keep a list of valid routes on the server, or return 404 from the fallback for paths your router does not know.</p>
+
+<h3 id="step-5">5. Submit and request indexing</h3>
+<p>Verify the domain in Google Search Console, submit the sitemap, and use URL Inspection on your key pages. Indexing can take days to weeks after the fixes.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit app is not indexed by Google. Please fix technical SEO without changing the design:
+1. Make /robots.txt (allow all, with a Sitemap: line) and /sitemap.xml real files served before the SPA fallback, with correct content types.
+2. Generate sitemap.xml at build time from the public routes, with absolute URLs on https://yourdomain.com.
+3. Add per-route title, meta description, canonical and Open Graph tags (react-helmet-async or equivalent).
+4. Prerender the public marketing pages at build time so their text is in the initial HTML.
+5. 301-redirect *.replit.app requests to https://yourdomain.com and return a real 404 status for unknown paths.
+Remove any noindex tags on public pages.</code></pre></div>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li><code>curl -s https://yourdomain.com/pricing | grep -i '&lt;title&gt;'</code> shows the pricing page's own title.</li><li>robots.txt is plain text and sitemap.xml is XML, both with status 200.</li><li><code>curl -sI https://yourapp.replit.app/</code> returns a 301 to your domain.</li><li>Search Console's URL Inspection shows the page as indexable, and the sitemap as read successfully.</li></ul>
+
+<p>robots.txt, sitemap, titles and soft 404s are part of what the free audit checks on your live app.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Does Replit block Google from indexing my app?</h3>
+<p>No, a public Replit deployment can be indexed. Problems usually come from the app: robots.txt or the sitemap returning HTML, client-only rendering, duplicate domains or soft 404s. A private deployment cannot be crawled.</p>
+<h3>Why does my sitemap.xml return HTML?</h3>
+<p>The single-page app fallback answers every unknown path with index.html. Serve sitemap.xml and robots.txt as real files before the fallback.</p>
+<h3>Should I keep my .replit.app URL indexed?</h3>
+<p>Pick one canonical domain, usually your custom domain, and 301-redirect the .replit.app URL to it so Google does not see two copies of every page.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/replit-404-on-page-refresh/"><span class="rel-k">Deployment</span><span class="rel-t">Replit app shows 404 on page refresh? Fix SPA routing</span></a><a class="rel" href="/guides/replit-custom-domain-not-working/"><span class="rel-k">Deployment</span><span class="rel-t">Replit custom domain or SSL not working? Fix the DNS</span></a><a class="rel" href="/guides/deploy-replit-app-to-production/"><span class="rel-k">Deployment</span><span class="rel-t">How to deploy a Replit app to production, step by step</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>

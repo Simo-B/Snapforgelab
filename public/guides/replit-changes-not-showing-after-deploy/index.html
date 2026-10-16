@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Changes Not Showing After Deploy? Fix It</title>
+<meta name="description" content="You published, but the live Replit app still shows the old version. Republish, fix index.html caching and service workers, and check the data source.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/">
+<meta property="og:title" content="Replit Changes Not Showing After Deploy? Fix It">
+<meta property="og:description" content="You published, but the live Replit app still shows the old version. Republish, fix index.html caching and service workers, and check the data source.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Changes Not Showing After Deploy? Fix It">
+<meta name="twitter:description" content="You published, but the live Replit app still shows the old version. Republish, fix index.html caching and service workers, and check the data source.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Replit changes not showing after deploy? 5 reasons and fixes",
+   "description": "You published, but the live Replit app still shows the old version. Republish, fix index.html caching and service workers, and check the data source.",
+   "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Replit changes not showing after deploy? 5 reasons and fixes",
+     "item": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/"
+    }
+   ]
+  },
+  {
+   "@type": "HowTo",
+   "name": "Replit changes not showing after deploy? 5 reasons and fixes",
+   "description": "You published, but the live Replit app still shows the old version. Republish, fix index.html caching and service workers, and check the data source.",
+   "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "position": 1,
+     "name": "Confirm what is live",
+     "text": "Open Publishing \u2192 History and check the time of the latest successful deployment. If it is older than your change, or the last attempt failed, publish again and read the log.",
+     "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/#step-1"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 2,
+     "name": "Test without cache",
+     "text": "Open the live URL in a private window, or on your phone with Wi-Fi off. If the new version shows there, the problem is caching on your device.",
+     "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/#step-2"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 3,
+     "name": "Stop caching index.html",
+     "text": "Vite and similar tools put a hash in JS and CSS file names, so those can be cached for a long time. The HTML that points to them must not be. Send a no-cache header for HTML responses.",
+     "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/#step-3"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 4,
+     "name": "Check for a service worker",
+     "text": "In DevTools, open Application \u2192 Service Workers. If one is registered and you do not need offline mode, unregister it in code and remove the plugin. If you need it, make it update on new deploys.",
+     "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/#step-4"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 5,
+     "name": "Check the data source",
+     "text": "If the text or images come from the database, they must be changed in production data. Use the app's admin on the live URL, or the Production view of the Database pane.",
+     "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/#step-5"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 6,
+     "name": "Check the domain",
+     "text": "Compare the .replit.app URL and your custom domain. If only the domain is old, it may be attached to another app. Check Publishing \u2192 Domains.",
+     "url": "https://snapforgelab.com/guides/replit-changes-not-showing-after-deploy/#step-6"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Does Replit update my live app automatically when I change code?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Your published app runs the snapshot from your last publish. Select Publish again to deploy new changes."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why do my users still see the old version after I republish?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Their browser or a service worker is serving a cached index.html. Send no-cache headers for HTML and remove or update the service worker."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why is content I changed in the preview missing live?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The preview uses the development database and the published app uses the production database. Content stored as data must be changed in production."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Deployment</nav>
+  <article class="article">
+    <div class="kicker">Deployment</div>
+    <h1>Replit changes not showing after deploy? 5 reasons and fixes</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 4 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>A deployment is a snapshot. Changes in the workspace reach the live app only after you select Publish again.</li><li>If you did republish, the old version usually comes from a cached index.html or a service worker.</li><li>Content stored in the database is different in production: editing dev data does not change the live site.</li></ul></div>
+    <div class="prose">
+<p>Agent made the change, the preview shows it, you published, and the live app looks exactly the same. It is one of the most viewed questions on the Replit forum. Before asking Agent to redo the work, check these five causes. Each takes a minute.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>The live URL shows an old layout or old text after publishing.</li><li>You see the new version, but a client or a phone still sees the old one.</li><li>Some pages are updated and others are not.</li><li>Content you edited in the app's admin area in the preview does not appear live.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The change was made after the last publish, or the publish failed and the previous deployment is still live.</li><li>The browser or an intermediate cache keeps an old <code>index.html</code> that points to old JavaScript files.</li><li>A service worker (PWA) serves cached files until it updates.</li><li>The content lives in the database, and you edited development data, not production.</li><li>The custom domain points to another Replit App or an old deployment.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Confirm what is live</h3>
+<p>Open <strong>Publishing → History</strong> and check the time of the latest successful deployment. If it is older than your change, or the last attempt failed, publish again and read the log.</p>
+
+<h3 id="step-2">2. Test without cache</h3>
+<p>Open the live URL in a private window, or on your phone with Wi-Fi off. If the new version shows there, the problem is caching on your device.</p>
+
+<h3 id="step-3">3. Stop caching index.html</h3>
+<p>Vite and similar tools put a hash in JS and CSS file names, so those can be cached for a long time. The HTML that points to them must not be. Send a no-cache header for HTML responses.</p><pre><code>app.use(express.static(distPath, {
+  setHeaders(res, filePath) {
+    if (filePath.endsWith(".html")) res.setHeader("Cache-Control", "no-cache");
+  },
+}));
+// and in the SPA fallback:
+res.setHeader("Cache-Control", "no-cache");
+res.sendFile(path.join(distPath, "index.html"));</code></pre>
+
+<h3 id="step-4">4. Check for a service worker</h3>
+<p>In DevTools, open Application → Service Workers. If one is registered and you do not need offline mode, unregister it in code and remove the plugin. If you need it, make it update on new deploys.</p>
+
+<h3 id="step-5">5. Check the data source</h3>
+<p>If the text or images come from the database, they must be changed in production data. Use the app's admin on the live URL, or the Production view of the Database pane.</p>
+
+<h3 id="step-6">6. Check the domain</h3>
+<p>Compare the <code>.replit.app</code> URL and your custom domain. If only the domain is old, it may be attached to another app. Check <strong>Publishing → Domains</strong>.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>After publishing, my live Replit app still shows an old version, even though the preview is up to date.
+Please:
+1. Add Cache-Control: no-cache for HTML responses (static index.html and the SPA fallback), and long caching only for hashed assets.
+2. Check whether a service worker is registered; if offline mode is not needed, remove it and add code that unregisters existing ones.
+3. Add GET /api/version that returns the build time, set at build, so I can check which version is live.
+Do not change app features.</code></pre></div>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li><code>/api/version</code> on the live URL shows the time of your latest publish.</li><li><code>curl -I https://your-app/</code> shows <code>cache-control: no-cache</code> on the HTML.</li><li>A private window and a phone both show the new version right after the next publish.</li></ul>
+
+<p>If the live app is not only old but broken, go to <a href="/guides/replit-works-in-preview-not-deployed/">Replit app works in preview but not after deploy</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Does Replit update my live app automatically when I change code?</h3>
+<p>No. Your published app runs the snapshot from your last publish. Select Publish again to deploy new changes.</p>
+<h3>Why do my users still see the old version after I republish?</h3>
+<p>Their browser or a service worker is serving a cached index.html. Send no-cache headers for HTML and remove or update the service worker.</p>
+<h3>Why is content I changed in the preview missing live?</h3>
+<p>The preview uses the development database and the published app uses the production database. Content stored as data must be changed in production.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/replit-works-in-preview-not-deployed/"><span class="rel-k">Deployment</span><span class="rel-t">Replit app works in preview but not after deploy</span></a><a class="rel" href="/guides/replit-404-on-page-refresh/"><span class="rel-k">Deployment</span><span class="rel-t">Replit app shows 404 on page refresh? Fix SPA routing</span></a><a class="rel" href="/guides/replit-database-migration-production/"><span class="rel-k">Data</span><span class="rel-t">How to run database migrations on Replit production safely</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>

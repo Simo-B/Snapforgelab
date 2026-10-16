@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replit Login Not Working After Deploy: Session Fix</title>
+<meta name="description" content="Users log in on your Replit app, then get logged out on the next click or loop back to login. Fix trust proxy, secure cookies, session secret and store.">
+<link rel="canonical" href="https://snapforgelab.com/guides/replit-login-not-working-after-deploy/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/replit-login-not-working-after-deploy/">
+<meta property="og:title" content="Replit Login Not Working After Deploy: Session Fix">
+<meta property="og:description" content="Users log in on your Replit app, then get logged out on the next click or loop back to login. Fix trust proxy, secure cookies, session secret and store.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Replit Login Not Working After Deploy: Session Fix">
+<meta name="twitter:description" content="Users log in on your Replit app, then get logged out on the next click or loop back to login. Fix trust proxy, secure cookies, session secret and store.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "Login not working after deploy on Replit? Fix sessions and cookies",
+   "description": "Users log in on your Replit app, then get logged out on the next click or loop back to login. Fix trust proxy, secure cookies, session secret and store.",
+   "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "Replit",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Login not working after deploy on Replit? Fix sessions and cookies",
+     "item": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/"
+    }
+   ]
+  },
+  {
+   "@type": "HowTo",
+   "name": "Login not working after deploy on Replit? Fix sessions and cookies",
+   "description": "Users log in on your Replit app, then get logged out on the next click or loop back to login. Fix trust proxy, secure cookies, session secret and store.",
+   "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "position": 1,
+     "name": "Trust the proxy",
+     "text": "Add this before your session middleware. It tells Express to trust the X-Forwarded-Proto header from Replit's proxy.",
+     "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/#step-1"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 2,
+     "name": "Configure the session cookie for production",
+     "text": "Leave domain unset unless you really share cookies across subdomains.",
+     "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/#step-2"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 3,
+     "name": "Set SESSION_SECRET once",
+     "text": "Generate a long random value and save it in the deployment secrets. Never generate it at startup, and never reuse the development value in production.",
+     "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/#step-3"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 4,
+     "name": "Pick one canonical domain",
+     "text": "A cookie set on yourapp.replit.app is not sent to yourdomain.com. Redirect secondary domains to the main one so users always log in on the same host.",
+     "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/#step-4"
+    },
+    {
+     "@type": "HowToStep",
+     "position": 5,
+     "name": "Check frontend requests",
+     "text": "If the frontend calls the API on the same domain with relative URLs, cookies are sent automatically. If it calls another origin, it needs credentials: \"include\" and a matching CORS setup. See CORS errors on Replit.",
+     "url": "https://snapforgelab.com/guides/replit-login-not-working-after-deploy/#step-5"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Why does my Replit app log users out after every deploy?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Sessions are probably stored in memory, or the session secret changes at startup. Store sessions in the database and use a fixed SESSION_SECRET from the deployment secrets."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why is my session cookie not set in production?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "With secure cookies, Express only sets the cookie when it believes the request is HTTPS. Behind Replit's proxy, that requires app.set(\"trust proxy\", 1)."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does Autoscale break in-memory sessions?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Autoscale can run several instances and restarts them, and memory is not shared or kept. Use a database-backed session store."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Auth</nav>
+  <article class="article">
+    <div class="kicker">Auth</div>
+    <h1>Login not working after deploy on Replit? Fix sessions and cookies</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 4 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>Behind Replit's HTTPS proxy, Express needs app.set("trust proxy", 1), or secure session cookies are never sent.</li><li>Set a fixed SESSION_SECRET in the deployment, and store sessions in Postgres, not in memory.</li><li>Do not hard-code a cookie domain from development. Test login on each domain users can reach.</li></ul></div>
+    <div class="prose">
+<p>Login succeeds, the dashboard flashes, and the next click sends users back to the login page. Or they get logged out every time the app restarts. In the preview everything was fine. Session problems after deploy come from a short list of settings that only matter in production. Here they are.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Login redirects back to the login page in a loop.</li><li>Users are logged out after a few minutes, or after each deploy.</li><li>No <code>Set-Cookie</code> header in the login response, or the cookie is never sent back.</li><li>Logged in on one domain, logged out on the other.</li><li><em>403 Forbidden</em> on a published app with many cookies.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li><code>cookie.secure</code> is true but Express does not trust the proxy, so it thinks the request is HTTP and refuses to set the cookie.</li><li><code>SESSION_SECRET</code> is missing in production or random at startup, so every restart invalidates sessions.</li><li>Sessions are stored in memory: lost on restart, and not shared between Autoscale instances.</li><li>A cookie <code>domain</code> or <code>sameSite</code> value copied from development.</li><li>Oversized headers from too many cookies, which Replit's help center lists as a cause of 403 errors.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Trust the proxy</h3>
+<p>Add this before your session middleware. It tells Express to trust the <code>X-Forwarded-Proto</code> header from Replit's proxy.</p><pre><code>app.set("trust proxy", 1);</code></pre>
+
+<h3 id="step-2">2. Configure the session cookie for production</h3>
+<pre><code>import session from "express-session";
+import connectPg from "connect-pg-simple";
+const PgStore = connectPg(session);
+
+app.use(session({
+  store: new PgStore({ conString: process.env.DATABASE_URL, createTableIfMissing: true }),
+  secret: process.env.SESSION_SECRET,          // fixed value from deployment secrets
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+}));</code></pre><p>Leave <code>domain</code> unset unless you really share cookies across subdomains.</p>
+
+<h3 id="step-3">3. Set SESSION_SECRET once</h3>
+<p>Generate a long random value and save it in the deployment secrets. Never generate it at startup, and never reuse the development value in production.</p>
+
+<h3 id="step-4">4. Pick one canonical domain</h3>
+<p>A cookie set on <code>yourapp.replit.app</code> is not sent to <code>yourdomain.com</code>. Redirect secondary domains to the main one so users always log in on the same host.</p>
+
+<h3 id="step-5">5. Check frontend requests</h3>
+<p>If the frontend calls the API on the same domain with relative URLs, cookies are sent automatically. If it calls another origin, it needs <code>credentials: "include"</code> and a matching CORS setup. See <a href="/guides/replit-cors-error/">CORS errors on Replit</a>.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>Login works in the Replit preview, but in the published app users are logged out right away or loop back to the login page.
+Please fix session handling for production:
+1. Add app.set("trust proxy", 1) before the session middleware.
+2. Store sessions in Postgres (connect-pg-simple) instead of memory.
+3. Read SESSION_SECRET from the environment and fail at startup if it is missing; do not generate it at runtime.
+4. Cookie: secure in production, httpOnly, sameSite "lax", no hard-coded domain.
+5. Make sure frontend API calls use relative URLs on the same domain.
+Show me the session config diff. Do not change the user table.</code></pre></div>
+
+<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>In DevTools → Network, the login response has a <code>Set-Cookie</code> header with <code>Secure; HttpOnly</code>.</li><li>After login, refresh three times and open a new tab: you stay logged in.</li><li>Republish the app: you are still logged in afterwards.</li><li>The sessions table in production has a row for your session.</li></ul>
+
+<p>Session settings are also security settings. Review them with the <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a>.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Why does my Replit app log users out after every deploy?</h3>
+<p>Sessions are probably stored in memory, or the session secret changes at startup. Store sessions in the database and use a fixed SESSION_SECRET from the deployment secrets.</p>
+<h3>Why is my session cookie not set in production?</h3>
+<p>With secure cookies, Express only sets the cookie when it believes the request is HTTPS. Behind Replit's proxy, that requires app.set("trust proxy", 1).</p>
+<h3>Does Autoscale break in-memory sessions?</h3>
+<p>Yes. Autoscale can run several instances and restarts them, and memory is not shared or kept. Use a database-backed session store.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/replit-google-oauth-redirect-uri-mismatch/"><span class="rel-k">Auth</span><span class="rel-t">Google sign-in fails on Replit with redirect_uri_mismatch: fix it</span></a><a class="rel" href="/guides/replit-cors-error/"><span class="rel-k">Troubleshooting</span><span class="rel-t">CORS error on your Replit deployment? How to fix it</span></a><a class="rel" href="/guides/replit-secrets-not-working-deployment/"><span class="rel-k">Deployment</span><span class="rel-t">Replit secrets not working in deployment? How to fix it</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>
