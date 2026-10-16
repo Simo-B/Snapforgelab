@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Lovable &amp; Bolt App Audit in 24h | Snapforge Lab</title>
+<meta name="description" content="Free audit of your live Lovable or Bolt app in 24h: Supabase RLS, exposed service_role keys, open storage buckets, Stripe webhooks, auth redirects, SPA SEO. Exact fix steps, no call.">
+<link rel="canonical" href="https://snapforgelab.com/lovable-bolt-audit">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/lovable-bolt-audit">
+<meta property="og:title" content="Built with Lovable or Bolt? Free production audit in 24h.">
+<meta property="og:description" content="I check your live Lovable or Bolt app for what breaks in production (Supabase RLS, leaked keys, auth redirects, SEO) and send you a private audit page with exact fix steps. No call, no obligation.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Built with Lovable or Bolt? Free production audit in 24h.">
+<meta name="twitter:description" content="I check your live Lovable or Bolt app for what breaks in production (Supabase RLS, leaked keys, auth redirects, SEO) and send you a private audit page with exact fix steps. No call, no obligation.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSecntXMJnBzEsxl-kSxVJsKDEEwzXzOYkSZFOxfOkVsYpCwFg/viewform" target="_blank" rel="noopener" class="btn p sm">Get my free audit</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <article class="article">
+    <h1>Built with Lovable or Bolt? Free production audit in 24h.</h1>
+    <p class="lede">For founders who shipped with Lovable or Bolt.new. I check your live app for the problems these stacks get wrong in production, then send you a private audit page with exact fix steps you can paste back into Lovable or Bolt. No call, no obligation.</p>
+    <div class="cta"><a href="https://docs.google.com/forms/d/e/1FAIpQLSecntXMJnBzEsxl-kSxVJsKDEEwzXzOYkSZFOxfOkVsYpCwFg/viewform" target="_blank" rel="noopener" class="btn p lg" data-cta="lovable-bolt-audit">Get my free audit <span class="arrow" aria-hidden="true">→</span></a></div>
+    <ul class="micro"><li>Free, no obligation</li><li>Audit page in 24h</li><li>No call needed</li></ul>
+
+    <div class="prose">
+      <h2>What I check</h2>
+      <ul>
+        <li><strong>Supabase Row Level Security:</strong> your anon key is public by design, so if RLS is disabled or missing on a table, anyone can read or write it. I test which tables answer anonymous requests (read-only, I never touch your data).</li>
+        <li><strong>service_role key in the frontend:</strong> the Supabase admin key shipped in your JS bundle, which bypasses every security rule.</li>
+        <li><strong>Open storage buckets:</strong> public Supabase buckets exposing user uploads, invoices or private files.</li>
+        <li><strong>Stripe keys and webhooks:</strong> secret keys in the client, unverified webhooks, checkout that never updates the database.</li>
+        <li><strong>Auth redirect URLs:</strong> sign-up, magic link and OAuth redirects still pointing to a preview or lovable.app domain instead of your real one.</li>
+        <li><strong>SEO of client-rendered SPAs:</strong> empty HTML for Google, missing titles and meta descriptions, no sitemap or robots.txt, every route returning the same page.</li>
+        <li><strong>Hosting setup:</strong> Netlify, Vercel or Lovable hosting misconfigurations, like 404s on refresh, missing redirects, env vars and custom domain issues.</li>
+      </ul>
+
+      <h2>How it works</h2>
+      <ol>
+        <li><strong>Submit your app URL.</strong> Takes 30 seconds.</li>
+        <li><strong>Get your audit page by email within 24h.</strong> Every issue, with exact fix steps you can paste into Lovable or Bolt.</li>
+        <li><strong>Fix it yourself for free, or let me do it:</strong> the <a class="link" href="https://paypal.me/mbsimo/49USD" target="_blank" rel="noopener">$49 Deploy Fix</a> in 48h (refunded if not fixed), or the <a class="link" href="/replit-app-to-production/">$199 Ship-Ready Review</a> for a full pre-launch check.</li>
+      </ol>
+    </div>
+  </article>
+</div>
+
+<section id="start" aria-labelledby="start-title">
+  <div class="wrap narrow">
+    <div class="contact-box book">
+      <h2 id="start-title">Get your free audit</h2>
+      <p class="sub" style="margin:0">Send me your live Lovable or Bolt app URL. You get your private audit page by email within 24 hours.</p>
+      <div class="book-cta">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSecntXMJnBzEsxl-kSxVJsKDEEwzXzOYkSZFOxfOkVsYpCwFg/viewform" target="_blank" rel="noopener" class="btn p lg" data-cta="lovable-bolt-audit">Get my free audit <span class="arrow" aria-hidden="true">→</span></a>
+        <p class="book-note">— Simo, Snapforge Lab</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>
