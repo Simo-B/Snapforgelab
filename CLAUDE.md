@@ -33,6 +33,7 @@ Marketing site for snapforgelab.com: Simo, an independent Replit specialist, sel
 - `main.js`: `PAYMENT_URL` (review), `FOUNDING`, PayPal next-steps note (`NEXT`), Formspree form (`https://formspree.io/f/xjybzkza`) with UTM attribution, sticky mobile CTA.
 - Logo: inline SVG; gradient ids must be unique per page (`sfl-logo-h` header, `sfl-logo-f` footer). Files: `logo.svg`, `favicon.svg`, `favicon.ico`, `apple-touch-icon.png`.
 - `docs/` (French, not deployed): sales kits, audits, playbooks. `.claude/agents/`: marketing and sales agents.
+- Free audit delivery: `scripts/free_audit_check.py` (passive checker; run it outside the cloud container, which cannot reach client sites) and `docs/free-audit-kit.md` (workflow and email templates).
 
 ## Checks before pushing
 - `python3 -m http.server 8099 --directory public`. It does not serve extensionless pages (`/free-audit`); Cloudflare does.
