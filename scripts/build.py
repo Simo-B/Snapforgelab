@@ -190,6 +190,22 @@ FIX_CTA_BOX = """<aside class="cta-box">
 </aside>"""
 
 
+# Security guides for AI-built apps ("cta": "security"): free audit first, then the $199 review,
+# with the $49 Deploy Fix for one blocker.
+SECURITY_CTA_BOX = """<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free security audit · 24h</p>
+    <p class="cta-title">Not sure which of your tables are open? Get a free read-only audit</p>
+    <p class="cta-text">Send me your live app URL (Lovable, Bolt, Replit or any Supabase app). Within 24 hours you get a private audit page: what is exposed and exact fix steps you can paste into your AI tool. Want the full check? The $199 Ship-Ready Security Review covers RLS, grants, secrets, auth and webhooks in 48 hours. One blocker to fix now? The $49 Deploy Fix, or a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/replit-app-to-production/#book" class="btn g">$199 Security Review</a>
+    <a href="https://paypal.me/mbsimo/49USD" class="btn g" rel="noopener">$49 Deploy Fix</a>
+  </div>
+</aside>"""
+
+
 def build_guide(g, by_slug):
     faq = g.get("faq", [])
     related = [by_slug[s] for s in g.get("related", []) if s in by_slug]
@@ -204,7 +220,7 @@ def build_guide(g, by_slug):
             "dateModified": g.get("updated", g["published"]),
             "image": og_image(g),
             "inLanguage": "en",
-            "about": {"@type": "SoftwareApplication", "name": "Replit", "applicationCategory": "DeveloperApplication"},
+            "about": {"@type": "SoftwareApplication", "name": g.get("about", "Replit"), "applicationCategory": "DeveloperApplication"},
             "author": AUTHOR_LD,
             "publisher": {"@type": "Organization", "@id": f"{SITE}/#org", "name": "Snapforge Lab",
                           "logo": {"@type": "ImageObject", "url": f"{SITE}/apple-touch-icon.png"}},
@@ -229,9 +245,10 @@ def build_guide(g, by_slug):
             for q, a in faq]})
     ld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, indent=1) + "\n</script>\n"
 
-    fix = g.get("cta") == "fix"
+    sec = g.get("cta") == "security"
+    fix = g.get("cta") == "fix" or sec
     deploy = g.get("topic") in DEPLOY_TOPICS
-    box = FIX_CTA_BOX if fix else DEPLOY_CTA_BOX if deploy else CTA_BOX
+    box = SECURITY_CTA_BOX if sec else FIX_CTA_BOX if fix else DEPLOY_CTA_BOX if deploy else CTA_BOX
     body = g["body"].replace("<!--cta-->", box)
     tldr = "".join(f"<li>{t}</li>" for t in g.get("tldr", []))
     faq_html = ""
