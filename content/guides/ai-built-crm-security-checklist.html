@@ -1,0 +1,136 @@
+<!--meta
+{
+ "topic": "Security",
+ "order": 3,
+ "cta": "security",
+ "about": "AI-built CRM",
+ "ogLabel": "Security guide",
+ "title": "AI-Built CRM Security Checklist (Before You Sell It)",
+ "h1": "AI-built CRM security checklist: 12 checks before you sell it (or after you bought one)",
+ "kicker": "Security · AI-built CRMs",
+ "description": "Built a CRM or ERP with Claude Code, Lovable or Replit for a client? 12 read-only security checks: mailbox OAuth, API keys, RLS, admin routes, .env, backups.",
+ "published": "2026-10-16",
+ "minutes": 9,
+ "tldr": [
+  "A custom CRM built with Claude Code, Lovable or Replit Agent usually holds the riskiest data a small business has: customer records, and often a live connection to its Gmail or Outlook mailbox.",
+  "The usual holes are not exotic: tables readable with the public key (Supabase RLS off), secret keys shipped in the frontend JavaScript, admin routes with no server-side auth check, an exposed <code>.env</code> on the server, and no backups.",
+  "Run the 12 read-only checks below before you hand it over, paste the hardening prompt into your AI tool, and give your client a short written summary of what the app can access and how to revoke it."
+ ],
+ "faq": [
+  ["Is a CRM built with Lovable, Replit or Claude Code less secure than a commercial CRM?", "Not by definition. The code an AI tool writes can be secure, but nobody reviews it by default. A commercial CRM has a security team, access control tested across thousands of customers and documented data handling. A custom AI-built CRM has whatever the prompts asked for. The checks in this guide close most of that gap."],
+  ["What is the biggest risk when a CRM connects to a client's Gmail or Outlook?", "The stored OAuth token. With a broad scope such as Gmail's gmail.modify or Microsoft Graph's Mail.ReadWrite plus Mail.Send, anyone who gets that token can read the mailbox and send email as the business. Request the narrowest scope that works, keep tokens encrypted on the server only, and give the client a way to revoke access."],
+  ["Who is responsible if a CRM I built for a client leaks customer data?", "It depends on your contract and the law that applies, so ask a lawyer for your case. Under the GDPR, the business that decides why the data is processed is the controller. If you also host or operate the CRM for it, you are likely a processor, which requires a written contract (Article 28) and means you must tell the client without undue delay if you notice a breach (Article 33)."],
+  ["Can I check my own CRM's security without being a developer?", "Partly. You can open the admin pages in a private window, search the site's JavaScript in your browser's developer tools for words like secret or service_role, try opening /.env on your domain, and review the third-party apps connected to your Google or Microsoft account. Checking database policies and server configuration needs access to the project, or someone who has it."],
+  ["Does the free audit touch my client's data?", "No. The free audit is passive and read-only: I look at what any visitor's browser can already see on the live app (public JavaScript, exposed endpoints, headers, public database access). I never log in as your users, never change data and never use a secret I find. You get a private audit page with what is exposed and the fix steps."]
+ ],
+ "related": [
+  "supabase-october-30-grants-change",
+  "replit-agent-security-checklist",
+  "replit-secrets-api-keys"
+ ]
+}
+-->
+<p>A new kind of software is being sold to small businesses: a custom CRM or ERP built with Claude Code, Lovable or Replit Agent in days instead of months, sold to an agency, a restaurant, a real estate office or a body shop. It manages their customers, quotes and invoices, and it is often wired straight into their Gmail or Outlook inbox, their WhatsApp messages and a handful of API keys, running on a cheap VPS or a hosted backend like Supabase.</p>
+<p>That is a lot of trust placed in code that nobody reviewed. This guide is for two people: the freelancer or agency who builds these CRMs for clients, and the business owner who bought one. It covers why this setup is risky, 12 checks you can run without changing anything, a prompt to paste into your AI tool to harden the app, and what to tell the client.</p>
+
+<h2 id="why-risky">Why an AI-built CRM is a high-stakes app</h2>
+<p>A to-do app with a bug is an annoyance. A CRM with a bug is a data breach, because of what it holds and what it can do:</p>
+<ul>
+<li><strong>Customer personal data.</strong> Names, phone numbers, emails, addresses, sometimes notes about deals, payments or vehicles. For the business, that is regulated personal data.</li>
+<li><strong>Mailbox access.</strong> To log emails or send follow-ups, the CRM asks for an OAuth token on the business's Gmail or Microsoft 365 account. Google classifies <code>gmail.modify</code> ("Read, compose, and send emails from your Gmail account") and <code>https://mail.google.com/</code> as <em>restricted</em> scopes (<a class="link" href="https://developers.google.com/workspace/gmail/api/auth/scopes" rel="noopener">Gmail API scopes</a>). On Microsoft Graph, <code>Mail.ReadWrite</code> lets an app create, read, update and delete mail, and <code>Mail.Send</code> lets it send as the user; with <code>offline_access</code>, the app keeps that access when nobody is using it (<a class="link" href="https://learn.microsoft.com/en-us/graph/permissions-reference" rel="noopener">Microsoft Graph permissions reference</a>). Whoever steals that token can read the inbox and email the business's customers as the business.</li>
+<li><strong>Paid API keys.</strong> OpenAI, WhatsApp, SMS, maps, email-sending keys. If one ends up in the frontend JavaScript, anyone can copy it and spend on the client's account.</li>
+<li><strong>Open database tables.</strong> AI tools love Supabase and Firebase, which let the browser talk to the database directly. That is only safe if access rules are on. Supabase's own docs: "A table in an exposed schema without RLS is readable and writable by any role with a grant on it" (<a class="link" href="https://supabase.com/docs/guides/database/postgres/row-level-security" rel="noopener">Supabase Row Level Security</a>).</li>
+<li><strong>Admin pages protected only by the UI.</strong> The AI hides the "Admin" button for normal users, but the route or API behind it answers anyone. OWASP ranks this class of bug, broken access control, first in its Top 10 (<a class="link" href="https://owasp.org/Top10/2021/A01_2021-Broken_Access_Control/index.html" rel="noopener">OWASP A01:2021</a>).</li>
+<li><strong>A VPS nobody maintains.</strong> A <code>.env</code> file or <code>.git</code> folder served by the web server, a database port open to the internet, no backups.</li>
+<li><strong>Liability for the seller.</strong> Under the GDPR, a business must use only processors "providing sufficient guarantees to implement appropriate technical and organisational measures" (<a class="link" href="https://gdpr-info.eu/art-28-gdpr/" rel="noopener">Article 28</a>). If you build and also host or run the CRM, you are probably one of them. Selling to Swiss clients? The revised Swiss data protection act (nLPD/revFADP) has its own duties. Get proper legal advice for your situation; this guide is about the technical side.</li>
+</ul>
+
+<h2 id="checklist">The 12-point checklist (all read-only)</h2>
+<p>None of these checks change data. Run them on the app you built or own. For the database checks you need access to the project; the others work from any browser.</p>
+
+<h3 id="check-1">1. Write down what the app holds and connects to</h3>
+<p>One list: data tables (customers, deals, invoices, messages), integrations (Gmail, Outlook, WhatsApp, OpenAI, payment, SMS) and where each secret lives. You cannot secure what you have not listed, and your client will need this list anyway (see <a class="link" href="#tell-client">what to tell your client</a>).</p>
+
+<h3 id="check-2">2. No table is readable with the public key</h3>
+<p>On Supabase, run this in the SQL Editor. Any row with <code>rls_enabled = false</code> and <code>anon_can_select = true</code> means anyone holding the public anon key, which ships in your frontend, can read that table:</p>
+<pre><code>select c.relname as table_name,
+       c.relrowsecurity as rls_enabled,
+       has_table_privilege('anon', c.oid, 'select') as anon_can_select
+from pg_class c
+join pg_namespace n on n.oid = c.relnamespace
+where n.nspname = 'public' and c.relkind = 'r'
+order by rls_enabled, table_name;</code></pre>
+<p>On Firebase, open the Firestore and Storage rules and look for anything like <code>allow read, write: if true;</code> or rules that only check <code>request.auth != null</code> on customer data (any signed-up user could read every record).</p>
+
+<h3 id="check-3">3. Policies isolate each client and each user</h3>
+<p>RLS on is not enough: the policy must restrict rows. If one deployment serves several businesses, every customer row needs an owner or tenant column, and every policy must filter on it. Note from Supabase's docs: adding policies does not take back grants, and views bypass RLS by default unless created with <code>security_invoker = true</code>.</p>
+
+<h3 id="check-4">4. No secret key in the frontend JavaScript</h3>
+<p>Open the live app, then your browser's developer tools, Sources (or Debugger), and search all files for <code>service_role</code>, <code>secret</code>, <code>sk-</code>, <code>sk_live</code>, <code>api_key</code> and the names of your providers. A Supabase anon or publishable key is meant to be public. A service role or secret key, an OpenAI key, a WhatsApp or SMS token is not: it must live on the server only. If you find one, rotate it at the provider after moving it server-side; deleting it from the code does not un-leak it. More in <a class="link" href="/guides/replit-secrets-api-keys/">how to keep API keys out of your frontend</a>.</p>
+
+<h3 id="check-5">5. Mailbox access uses the narrowest scope</h3>
+<p>Check exactly which scopes the app requests: they show on the consent screen and in the OAuth code. If the CRM only logs incoming emails, it does not need to send or delete. If it only sends, Gmail's <code>gmail.send</code> is a sensitive scope, not a restricted one. Google's guidance: "choose the most narrowly focused scope possible". Also note that a public app requesting restricted Gmail scopes must go through Google's verification, and storing that data on servers triggers a security assessment, so a narrower scope also saves the seller real work.</p>
+
+<h3 id="check-6">6. OAuth tokens are encrypted and server-side only</h3>
+<p>Find where refresh tokens are stored. They must be in a server-only table or vault, encrypted at rest, never in <code>localStorage</code>, never in a table the browser can query, never written to logs. A refresh token sitting in an open Supabase table is the worst finding a CRM can have: full mailbox access for anyone who reads it.</p>
+
+<h3 id="check-7">7. Every admin route and API checks auth on the server</h3>
+<p>Open a private browser window (logged out) and paste the URLs of admin pages and API endpoints: <code>/admin</code>, <code>/api/users</code>, <code>/api/export</code> and whatever your app has. Then log in as a basic user and try the same. If anything returns data instead of a redirect or a 401/403, the protection only lives in the interface.</p>
+
+<h3 id="check-8">8. Changing an ID in the URL does not show another customer</h3>
+<p>Logged in as one user, open a record (<code>/clients/123</code>) and change the number, or change the ID in an API request. If you see someone else's record, that is an insecure direct object reference, one of the access-control failures listed by OWASP.</p>
+
+<h3 id="check-9">9. The server does not leak files or ports</h3>
+<p>On a VPS, try <code>https://yourapp.com/.env</code>, <code>/.git/config</code> and <code>/backup.sql</code> in a browser. All should return 404 or 403. OWASP's advice: make sure file metadata such as <code>.git</code> and backup files are not in the web root. Then check that the database port (5432 for Postgres, 3306 for MySQL, 27017 for MongoDB) is not open to the internet: the database should only listen locally or behind a firewall.</p>
+
+<h3 id="check-10">10. Webhooks verify their signature</h3>
+<p>WhatsApp, payment and email providers call your app through webhooks. Each provider signs its requests; your endpoint must verify that signature and reject unsigned calls. Otherwise anyone can post fake "message received" or "invoice paid" events into the CRM.</p>
+
+<h3 id="check-11">11. Backups exist, live elsewhere, and restore</h3>
+<p>Ask three questions: is there an automatic backup, is it stored off the server, and has anyone restored it once? A CRM is the business's memory. A deleted table or a wiped VPS without backup is not a security incident on paper, but for the client it is the same loss.</p>
+
+<h3 id="check-12">12. Access can be handed over and revoked</h3>
+<p>List who holds the keys: server login, database owner, Google Cloud / Microsoft Entra app, domain, API accounts. At handover, the client should own these accounts or at least have admin access, and every secret you used during the build should be rotated. The client should also know how to cut mailbox access in one click (for Google accounts, the third-party connections page of their account; for Microsoft 365, the app's entry in Entra admin center).</p>
+
+<h2 id="prompt">Copy-paste hardening prompt for Claude Code, Lovable or Replit Agent</h2>
+<p>Paste this into your AI tool, or into its project instructions (<code>CLAUDE.md</code> for Claude Code, Knowledge for Lovable, <code>replit.md</code> for Replit Agent). Ask it to report first and change things only after you have read the report.</p>
+<pre><code>This app is a CRM that stores customer personal data and connects to
+the client's mailbox and third-party APIs. Do a security pass.
+First produce a written report, change nothing until I approve.
+
+1. Database: list every table. Each must have Row Level Security
+   enabled, grants limited to what each role needs (anon: nothing
+   unless the data is public), and policies that restrict rows to
+   the owning user / tenant. Flag any view without
+   security_invoker = true.
+2. Secrets: list every API key and token. Anything other than the
+   public anon/publishable key must be read on the server only,
+   from environment variables. Flag any secret in frontend code,
+   in the repo, or in logs.
+3. OAuth (Gmail / Microsoft Graph): list the scopes requested and
+   propose the narrowest set that still works. Store refresh tokens
+   encrypted, server-side only, in a table the browser cannot read.
+   Add a "disconnect mailbox" action that revokes the token.
+4. Access control: every API route and admin page must check the
+   session and the user's role on the server. Every record lookup
+   by ID must also check the record belongs to the caller.
+5. Webhooks: verify the provider's signature on every webhook
+   endpoint and reject unsigned requests.
+6. Server: make sure .env, .git and backup files are never served,
+   and the database is not reachable from the internet.
+7. Backups: describe the current backup, where it is stored, and
+   how to restore it. Propose a daily off-server backup.
+Never disable RLS, widen a policy or print a secret to fix an error.</code></pre>
+
+<h2 id="tell-client">What to tell your client</h2>
+<p>If you sell AI-built CRMs, a one-page security note at handover is a selling point, not a confession. It should say, in plain words:</p>
+<ul>
+<li><strong>What the app stores</strong> (the data list from check 1) and where it is hosted.</li>
+<li><strong>What it can access</strong>: "the app can read and send email from info@yourbusiness.com", which API accounts it uses, and who pays for them.</li>
+<li><strong>How to revoke access</strong>: the mailbox disconnection steps, and who to call to rotate keys.</li>
+<li><strong>Backups</strong>: how often, where, and how long a restore takes.</li>
+<li><strong>Who has access</strong>: your access during maintenance, and how it ends.</li>
+<li><strong>What happens if something goes wrong</strong>: under the GDPR, the controller must notify the supervisory authority "without undue delay and, where feasible, not later than 72 hours" after becoming aware of a breach that risks people's rights, and a processor must notify the controller without undue delay (<a class="link" href="https://gdpr-info.eu/art-33-gdpr/" rel="noopener">Article 33</a>). Agree now on who calls whom.</li>
+</ul>
+<p>Bought a CRM like this? Ask your developer for exactly this note. If they cannot answer the questions above, that tells you something too.</p>
+<p>Simo · Snapforge Lab</p>

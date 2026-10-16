@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Built CRM Security Checklist (Before You Sell It)</title>
+<meta name="description" content="Built a CRM or ERP with Claude Code, Lovable or Replit for a client? 12 read-only security checks: mailbox OAuth, API keys, RLS, admin routes, .env, backups.">
+<link rel="canonical" href="https://snapforgelab.com/guides/ai-built-crm-security-checklist/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/guides/ai-built-crm-security-checklist/">
+<meta property="og:title" content="AI-Built CRM Security Checklist (Before You Sell It)">
+<meta property="og:description" content="Built a CRM or ERP with Claude Code, Lovable or Replit for a client? 12 read-only security checks: mailbox OAuth, API keys, RLS, admin routes, .env, backups.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI-Built CRM Security Checklist (Before You Sell It)">
+<meta name="twitter:description" content="Built a CRM or ERP with Claude Code, Lovable or Replit for a client? 12 read-only security checks: mailbox OAuth, API keys, RLS, admin routes, .env, backups.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "headline": "AI-built CRM security checklist: 12 checks before you sell it (or after you bought one)",
+   "description": "Built a CRM or ERP with Claude Code, Lovable or Replit for a client? 12 read-only security checks: mailbox OAuth, API keys, RLS, admin routes, .env, backups.",
+   "url": "https://snapforgelab.com/guides/ai-built-crm-security-checklist/",
+   "mainEntityOfPage": "https://snapforgelab.com/guides/ai-built-crm-security-checklist/",
+   "datePublished": "2026-10-16",
+   "dateModified": "2026-10-16",
+   "image": "https://snapforgelab.com/og.png?v=2",
+   "inLanguage": "en",
+   "about": {
+    "@type": "SoftwareApplication",
+    "name": "AI-built CRM",
+    "applicationCategory": "DeveloperApplication"
+   },
+   "author": {
+    "@type": "Person",
+    "@id": "https://snapforgelab.com/about/#simo",
+    "name": "Simo",
+    "url": "https://snapforgelab.com/about/",
+    "jobTitle": "Founder, Snapforge Lab",
+    "worksFor": {
+     "@id": "https://snapforgelab.com/#org"
+    },
+    "sameAs": [
+     "https://x.com/Simo_Bc"
+    ],
+    "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
+    "knowsAbout": [
+     "Replit",
+     "Replit Agent",
+     "Web application security",
+     "Deployment",
+     "PostgreSQL"
+    ]
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://snapforgelab.com/#org",
+    "name": "Snapforge Lab",
+    "logo": {
+     "@type": "ImageObject",
+     "url": "https://snapforgelab.com/apple-touch-icon.png"
+    }
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://snapforgelab.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Guides",
+     "item": "https://snapforgelab.com/guides/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AI-built CRM security checklist: 12 checks before you sell it (or after you bought one)",
+     "item": "https://snapforgelab.com/guides/ai-built-crm-security-checklist/"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Is a CRM built with Lovable, Replit or Claude Code less secure than a commercial CRM?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Not by definition. The code an AI tool writes can be secure, but nobody reviews it by default. A commercial CRM has a security team, access control tested across thousands of customers and documented data handling. A custom AI-built CRM has whatever the prompts asked for. The checks in this guide close most of that gap."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What is the biggest risk when a CRM connects to a client's Gmail or Outlook?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The stored OAuth token. With a broad scope such as Gmail's gmail.modify or Microsoft Graph's Mail.ReadWrite plus Mail.Send, anyone who gets that token can read the mailbox and send email as the business. Request the narrowest scope that works, keep tokens encrypted on the server only, and give the client a way to revoke access."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Who is responsible if a CRM I built for a client leaks customer data?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It depends on your contract and the law that applies, so ask a lawyer for your case. Under the GDPR, the business that decides why the data is processed is the controller. If you also host or operate the CRM for it, you are likely a processor, which requires a written contract (Article 28) and means you must tell the client without undue delay if you notice a breach (Article 33)."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I check my own CRM's security without being a developer?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Partly. You can open the admin pages in a private window, search the site's JavaScript in your browser's developer tools for words like secret or service_role, try opening /.env on your domain, and review the third-party apps connected to your Google or Microsoft account. Checking database policies and server configuration needs access to the project, or someone who has it."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does the free audit touch my client's data?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. The free audit is passive and read-only: I look at what any visitor's browser can already see on the live app (public JavaScript, exposed endpoints, headers, public database access). I never log in as your users, never change data and never use a secret I find. You get a private audit page with what is exposed and the fix steps."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / Security · AI-built CRMs</nav>
+  <article class="article">
+    <div class="kicker">Security · AI-built CRMs</div>
+    <h1>AI-built CRM security checklist: 12 checks before you sell it (or after you bought one)</h1>
+    <p class="byline">By <a href="/about/" rel="author">Simo</a>, founder of Snapforge Lab · Updated <time datetime="2026-10-16">Oct 16, 2026</time> · 9 min read</p>
+    <div class="tldr"><p class="tldr-t">Short answer</p><ul><li>A custom CRM built with Claude Code, Lovable or Replit Agent usually holds the riskiest data a small business has: customer records, and often a live connection to its Gmail or Outlook mailbox.</li><li>The usual holes are not exotic: tables readable with the public key (Supabase RLS off), secret keys shipped in the frontend JavaScript, admin routes with no server-side auth check, an exposed <code>.env</code> on the server, and no backups.</li><li>Run the 12 read-only checks below before you hand it over, paste the hardening prompt into your AI tool, and give your client a short written summary of what the app can access and how to revoke it.</li></ul></div>
+    <div class="prose">
+<p>A new kind of software is being sold to small businesses: a custom CRM or ERP built with Claude Code, Lovable or Replit Agent in days instead of months, sold to an agency, a restaurant, a real estate office or a body shop. It manages their customers, quotes and invoices, and it is often wired straight into their Gmail or Outlook inbox, their WhatsApp messages and a handful of API keys, running on a cheap VPS or a hosted backend like Supabase.</p>
+<p>That is a lot of trust placed in code that nobody reviewed. This guide is for two people: the freelancer or agency who builds these CRMs for clients, and the business owner who bought one. It covers why this setup is risky, 12 checks you can run without changing anything, a prompt to paste into your AI tool to harden the app, and what to tell the client.</p>
+
+<h2 id="why-risky">Why an AI-built CRM is a high-stakes app</h2>
+<p>A to-do app with a bug is an annoyance. A CRM with a bug is a data breach, because of what it holds and what it can do:</p>
+<ul>
+<li><strong>Customer personal data.</strong> Names, phone numbers, emails, addresses, sometimes notes about deals, payments or vehicles. For the business, that is regulated personal data.</li>
+<li><strong>Mailbox access.</strong> To log emails or send follow-ups, the CRM asks for an OAuth token on the business's Gmail or Microsoft 365 account. Google classifies <code>gmail.modify</code> ("Read, compose, and send emails from your Gmail account") and <code>https://mail.google.com/</code> as <em>restricted</em> scopes (<a class="link" href="https://developers.google.com/workspace/gmail/api/auth/scopes" rel="noopener">Gmail API scopes</a>). On Microsoft Graph, <code>Mail.ReadWrite</code> lets an app create, read, update and delete mail, and <code>Mail.Send</code> lets it send as the user; with <code>offline_access</code>, the app keeps that access when nobody is using it (<a class="link" href="https://learn.microsoft.com/en-us/graph/permissions-reference" rel="noopener">Microsoft Graph permissions reference</a>). Whoever steals that token can read the inbox and email the business's customers as the business.</li>
+<li><strong>Paid API keys.</strong> OpenAI, WhatsApp, SMS, maps, email-sending keys. If one ends up in the frontend JavaScript, anyone can copy it and spend on the client's account.</li>
+<li><strong>Open database tables.</strong> AI tools love Supabase and Firebase, which let the browser talk to the database directly. That is only safe if access rules are on. Supabase's own docs: "A table in an exposed schema without RLS is readable and writable by any role with a grant on it" (<a class="link" href="https://supabase.com/docs/guides/database/postgres/row-level-security" rel="noopener">Supabase Row Level Security</a>).</li>
+<li><strong>Admin pages protected only by the UI.</strong> The AI hides the "Admin" button for normal users, but the route or API behind it answers anyone. OWASP ranks this class of bug, broken access control, first in its Top 10 (<a class="link" href="https://owasp.org/Top10/2021/A01_2021-Broken_Access_Control/index.html" rel="noopener">OWASP A01:2021</a>).</li>
+<li><strong>A VPS nobody maintains.</strong> A <code>.env</code> file or <code>.git</code> folder served by the web server, a database port open to the internet, no backups.</li>
+<li><strong>Liability for the seller.</strong> Under the GDPR, a business must use only processors "providing sufficient guarantees to implement appropriate technical and organisational measures" (<a class="link" href="https://gdpr-info.eu/art-28-gdpr/" rel="noopener">Article 28</a>). If you build and also host or run the CRM, you are probably one of them. Selling to Swiss clients? The revised Swiss data protection act (nLPD/revFADP) has its own duties. Get proper legal advice for your situation; this guide is about the technical side.</li>
+</ul>
+
+<h2 id="checklist">The 12-point checklist (all read-only)</h2>
+<p>None of these checks change data. Run them on the app you built or own. For the database checks you need access to the project; the others work from any browser.</p>
+
+<h3 id="check-1">1. Write down what the app holds and connects to</h3>
+<p>One list: data tables (customers, deals, invoices, messages), integrations (Gmail, Outlook, WhatsApp, OpenAI, payment, SMS) and where each secret lives. You cannot secure what you have not listed, and your client will need this list anyway (see <a class="link" href="#tell-client">what to tell your client</a>).</p>
+
+<h3 id="check-2">2. No table is readable with the public key</h3>
+<p>On Supabase, run this in the SQL Editor. Any row with <code>rls_enabled = false</code> and <code>anon_can_select = true</code> means anyone holding the public anon key, which ships in your frontend, can read that table:</p>
+<pre><code>select c.relname as table_name,
+       c.relrowsecurity as rls_enabled,
+       has_table_privilege('anon', c.oid, 'select') as anon_can_select
+from pg_class c
+join pg_namespace n on n.oid = c.relnamespace
+where n.nspname = 'public' and c.relkind = 'r'
+order by rls_enabled, table_name;</code></pre>
+<p>On Firebase, open the Firestore and Storage rules and look for anything like <code>allow read, write: if true;</code> or rules that only check <code>request.auth != null</code> on customer data (any signed-up user could read every record).</p>
+
+<h3 id="check-3">3. Policies isolate each client and each user</h3>
+<p>RLS on is not enough: the policy must restrict rows. If one deployment serves several businesses, every customer row needs an owner or tenant column, and every policy must filter on it. Note from Supabase's docs: adding policies does not take back grants, and views bypass RLS by default unless created with <code>security_invoker = true</code>.</p>
+
+<h3 id="check-4">4. No secret key in the frontend JavaScript</h3>
+<p>Open the live app, then your browser's developer tools, Sources (or Debugger), and search all files for <code>service_role</code>, <code>secret</code>, <code>sk-</code>, <code>sk_live</code>, <code>api_key</code> and the names of your providers. A Supabase anon or publishable key is meant to be public. A service role or secret key, an OpenAI key, a WhatsApp or SMS token is not: it must live on the server only. If you find one, rotate it at the provider after moving it server-side; deleting it from the code does not un-leak it. More in <a class="link" href="/guides/replit-secrets-api-keys/">how to keep API keys out of your frontend</a>.</p>
+
+<h3 id="check-5">5. Mailbox access uses the narrowest scope</h3>
+<p>Check exactly which scopes the app requests: they show on the consent screen and in the OAuth code. If the CRM only logs incoming emails, it does not need to send or delete. If it only sends, Gmail's <code>gmail.send</code> is a sensitive scope, not a restricted one. Google's guidance: "choose the most narrowly focused scope possible". Also note that a public app requesting restricted Gmail scopes must go through Google's verification, and storing that data on servers triggers a security assessment, so a narrower scope also saves the seller real work.</p>
+
+<h3 id="check-6">6. OAuth tokens are encrypted and server-side only</h3>
+<p>Find where refresh tokens are stored. They must be in a server-only table or vault, encrypted at rest, never in <code>localStorage</code>, never in a table the browser can query, never written to logs. A refresh token sitting in an open Supabase table is the worst finding a CRM can have: full mailbox access for anyone who reads it.</p>
+
+<h3 id="check-7">7. Every admin route and API checks auth on the server</h3>
+<p>Open a private browser window (logged out) and paste the URLs of admin pages and API endpoints: <code>/admin</code>, <code>/api/users</code>, <code>/api/export</code> and whatever your app has. Then log in as a basic user and try the same. If anything returns data instead of a redirect or a 401/403, the protection only lives in the interface.</p>
+
+<h3 id="check-8">8. Changing an ID in the URL does not show another customer</h3>
+<p>Logged in as one user, open a record (<code>/clients/123</code>) and change the number, or change the ID in an API request. If you see someone else's record, that is an insecure direct object reference, one of the access-control failures listed by OWASP.</p>
+
+<h3 id="check-9">9. The server does not leak files or ports</h3>
+<p>On a VPS, try <code>https://yourapp.com/.env</code>, <code>/.git/config</code> and <code>/backup.sql</code> in a browser. All should return 404 or 403. OWASP's advice: make sure file metadata such as <code>.git</code> and backup files are not in the web root. Then check that the database port (5432 for Postgres, 3306 for MySQL, 27017 for MongoDB) is not open to the internet: the database should only listen locally or behind a firewall.</p>
+
+<h3 id="check-10">10. Webhooks verify their signature</h3>
+<p>WhatsApp, payment and email providers call your app through webhooks. Each provider signs its requests; your endpoint must verify that signature and reject unsigned calls. Otherwise anyone can post fake "message received" or "invoice paid" events into the CRM.</p>
+
+<h3 id="check-11">11. Backups exist, live elsewhere, and restore</h3>
+<p>Ask three questions: is there an automatic backup, is it stored off the server, and has anyone restored it once? A CRM is the business's memory. A deleted table or a wiped VPS without backup is not a security incident on paper, but for the client it is the same loss.</p>
+
+<h3 id="check-12">12. Access can be handed over and revoked</h3>
+<p>List who holds the keys: server login, database owner, Google Cloud / Microsoft Entra app, domain, API accounts. At handover, the client should own these accounts or at least have admin access, and every secret you used during the build should be rotated. The client should also know how to cut mailbox access in one click (for Google accounts, the third-party connections page of their account; for Microsoft 365, the app's entry in Entra admin center).</p>
+
+<h2 id="prompt">Copy-paste hardening prompt for Claude Code, Lovable or Replit Agent</h2>
+<p>Paste this into your AI tool, or into its project instructions (<code>CLAUDE.md</code> for Claude Code, Knowledge for Lovable, <code>replit.md</code> for Replit Agent). Ask it to report first and change things only after you have read the report.</p>
+<pre><code>This app is a CRM that stores customer personal data and connects to
+the client's mailbox and third-party APIs. Do a security pass.
+First produce a written report, change nothing until I approve.
+
+1. Database: list every table. Each must have Row Level Security
+   enabled, grants limited to what each role needs (anon: nothing
+   unless the data is public), and policies that restrict rows to
+   the owning user / tenant. Flag any view without
+   security_invoker = true.
+2. Secrets: list every API key and token. Anything other than the
+   public anon/publishable key must be read on the server only,
+   from environment variables. Flag any secret in frontend code,
+   in the repo, or in logs.
+3. OAuth (Gmail / Microsoft Graph): list the scopes requested and
+   propose the narrowest set that still works. Store refresh tokens
+   encrypted, server-side only, in a table the browser cannot read.
+   Add a "disconnect mailbox" action that revokes the token.
+4. Access control: every API route and admin page must check the
+   session and the user's role on the server. Every record lookup
+   by ID must also check the record belongs to the caller.
+5. Webhooks: verify the provider's signature on every webhook
+   endpoint and reject unsigned requests.
+6. Server: make sure .env, .git and backup files are never served,
+   and the database is not reachable from the internet.
+7. Backups: describe the current backup, where it is stored, and
+   how to restore it. Propose a daily off-server backup.
+Never disable RLS, widen a policy or print a secret to fix an error.</code></pre>
+
+<h2 id="tell-client">What to tell your client</h2>
+<p>If you sell AI-built CRMs, a one-page security note at handover is a selling point, not a confession. It should say, in plain words:</p>
+<ul>
+<li><strong>What the app stores</strong> (the data list from check 1) and where it is hosted.</li>
+<li><strong>What it can access</strong>: "the app can read and send email from info@yourbusiness.com", which API accounts it uses, and who pays for them.</li>
+<li><strong>How to revoke access</strong>: the mailbox disconnection steps, and who to call to rotate keys.</li>
+<li><strong>Backups</strong>: how often, where, and how long a restore takes.</li>
+<li><strong>Who has access</strong>: your access during maintenance, and how it ends.</li>
+<li><strong>What happens if something goes wrong</strong>: under the GDPR, the controller must notify the supervisory authority "without undue delay and, where feasible, not later than 72 hours" after becoming aware of a breach that risks people's rights, and a processor must notify the controller without undue delay (<a class="link" href="https://gdpr-info.eu/art-33-gdpr/" rel="noopener">Article 33</a>). Agree now on who calls whom.</li>
+</ul>
+<p>Bought a CRM like this? Ask your developer for exactly this note. If they cannot answer the questions above, that tells you something too.</p>
+<p>Simo · Snapforge Lab</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Is a CRM built with Lovable, Replit or Claude Code less secure than a commercial CRM?</h3>
+<p>Not by definition. The code an AI tool writes can be secure, but nobody reviews it by default. A commercial CRM has a security team, access control tested across thousands of customers and documented data handling. A custom AI-built CRM has whatever the prompts asked for. The checks in this guide close most of that gap.</p>
+<h3>What is the biggest risk when a CRM connects to a client&#x27;s Gmail or Outlook?</h3>
+<p>The stored OAuth token. With a broad scope such as Gmail's gmail.modify or Microsoft Graph's Mail.ReadWrite plus Mail.Send, anyone who gets that token can read the mailbox and send email as the business. Request the narrowest scope that works, keep tokens encrypted on the server only, and give the client a way to revoke access.</p>
+<h3>Who is responsible if a CRM I built for a client leaks customer data?</h3>
+<p>It depends on your contract and the law that applies, so ask a lawyer for your case. Under the GDPR, the business that decides why the data is processed is the controller. If you also host or operate the CRM for it, you are likely a processor, which requires a written contract (Article 28) and means you must tell the client without undue delay if you notice a breach (Article 33).</p>
+<h3>Can I check my own CRM&#x27;s security without being a developer?</h3>
+<p>Partly. You can open the admin pages in a private window, search the site's JavaScript in your browser's developer tools for words like secret or service_role, try opening /.env on your domain, and review the third-party apps connected to your Google or Microsoft account. Checking database policies and server configuration needs access to the project, or someone who has it.</p>
+<h3>Does the free audit touch my client&#x27;s data?</h3>
+<p>No. The free audit is passive and read-only: I look at what any visitor's browser can already see on the live app (public JavaScript, exposed endpoints, headers, public database access). I never log in as your users, never change data and never use a secret I find. You get a private audit page with what is exposed and the fix steps.</p>
+    </div>
+    <aside class="author-box" aria-label="About the author">
+  <div class="avatar" aria-hidden="true">S</div>
+  <div>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
+    <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
+  </div>
+</aside>
+    <aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free security audit · 24h</p>
+    <p class="cta-title">Not sure which of your tables are open? Get a free read-only audit</p>
+    <p class="cta-text">Send me your live app URL (Lovable, Bolt, Replit or any Supabase app). Within 24 hours you get a private audit page: what is exposed and exact fix steps you can paste into your AI tool. Want the full check? The $199 Ship-Ready Security Review covers RLS, grants, secrets, auth and webhooks in 48 hours. One blocker to fix now? The $49 Deploy Fix, or a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/replit-app-to-production/#book" class="btn g">$199 Security Review</a>
+    <a href="https://paypal.me/mbsimo/49USD" class="btn g" rel="noopener">$49 Deploy Fix</a>
+  </div>
+</aside>
+  </article>
+</div>
+<section class="related" aria-labelledby="rel-title"><div class="wrap narrow"><h2 id="rel-title">Keep reading</h2><div class="rel-grid"><a class="rel" href="/guides/supabase-october-30-grants-change/"><span class="rel-k">Security · Supabase</span><span class="rel-t">Supabase&#x27;s October 30 grants change: what breaks, and the prompt that fixes it</span></a><a class="rel" href="/guides/replit-agent-security-checklist/"><span class="rel-k">Security</span><span class="rel-t">Replit Agent security checklist: 15 checks before you launch</span></a><a class="rel" href="/guides/replit-secrets-api-keys/"><span class="rel-k">Security</span><span class="rel-t">Replit Secrets: how to store API keys safely</span></a></div></div></section>
+</main>
+<div class="m-cta"><a href="/free-audit" class="btn p lg">Get a free audit</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>
