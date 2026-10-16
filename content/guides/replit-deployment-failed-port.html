@@ -1,0 +1,106 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 20,
+ "cta": "fix",
+ "title": "Replit Deployment Failed? Fix Port and 0.0.0.0 Errors",
+ "h1": "Replit deployment failed: fix the port and 0.0.0.0 errors",
+ "kicker": "Deployment",
+ "description": "Publishing fails at the promote step, or the live app says it failed to respond? Fix the host, PORT and .replit port settings that break Replit deployments.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Your server must listen on 0.0.0.0, not localhost or 127.0.0.1, and should use the PORT environment variable.",
+  "If .replit has a [[ports]] section, automatic port detection is off: map your server's localPort to externalPort 80, and expose only one external port.",
+  "Replit checks your homepage before the app goes live. If / takes more than about five seconds to answer, publishing can fail at the last step."
+ ],
+ "steps": [
+  [
+   "Bind to 0.0.0.0 and read PORT",
+   "Replit's own docs are explicit: a published app must listen on 0.0.0.0. Read the port from the environment and keep a fallback for the workspace."
+  ],
+  [
+   "Check the [[ports]] section in .replit",
+   "If .replit lists ports, Replit stops detecting the port for you. You need exactly one entry with externalPort = 80, and its localPort must be the port your server really uses. Delete the externalPort lines of any other port (a second dev server, a debugger, a websocket helper). Extra exposed ports are a common reason Autoscale publishing fails."
+  ],
+  [
+   "Make the homepage answer fast",
+   "Before marking the app live, Replit sends an HTTP request to your homepage. If it takes longer than about five seconds, publishing can fail. Start listening first, then do slow work: run migrations in the build step, load caches lazily, and never seed data inside the request for /."
+  ],
+  [
+   "Confirm the run command",
+   "Open the publishing settings and read the run command. It should start the production server (for example npm run start or node dist/index.js) after the build command (npm run build). A dev command such as npm run dev can start a dev server on a different port. A command that exits after running a script leaves nothing to answer the health check."
+  ],
+  [
+   "Read the deployment logs, then republish",
+   "Open the failed deployment's logs from the Publishing pane and find the first error line. A crash during startup (a missing secret, a failed import) looks exactly like a port problem from the outside. Fix it, then publish again."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does my Replit app work in Preview but fail to publish?",
+   "Preview runs inside your workspace, where a server on localhost is reachable. A published app runs on separate infrastructure that needs the server on 0.0.0.0, a single external port mapped to 80, and a homepage that answers the health check quickly."
+  ],
+  [
+   "What port should a Replit app use?",
+   "Use the PORT environment variable with a fallback such as 5000 or 3000. If your .replit file has a [[ports]] section, the localPort must match that port and the externalPort must be 80."
+  ],
+  [
+   "What does \"healthcheck failed: context deadline exceeded\" mean?",
+   "Replit's check of your homepage did not get an answer in time. Either the server never started listening on the right host and port, or startup work made the first response too slow."
+  ]
+ ],
+ "related": [
+  "replit-works-in-preview-not-deployed",
+  "replit-deployment-build-failed",
+  "replit-502-bad-gateway"
+ ]
+}
+-->
+<p>Your app runs fine in the Replit preview, you hit Publish, and the build succeeds. Then it fails at the very last step, or the live URL says <em>Application failed to respond</em>. In most cases the code is fine. The problem is how the server is bound to its host and port, and how fast it answers Replit's health check. This guide walks through the checks in the order that fixes the most apps.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Publishing fails during the <strong>promote</strong> step, after the build has finished.</li><li>Deployment logs show <code>healthcheck failed</code> or <code>context deadline exceeded</code>.</li><li>The live URL shows <em>Application failed to respond</em> or a blank error page, while the preview works.</li><li>A warning in the publishing settings about multiple ports, or about a port bound to localhost.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The server listens on <code>localhost</code> or <code>127.0.0.1</code>. That works in the workspace but not in a published app.</li><li>The port is hard-coded to a value that does not match the <code>[[ports]]</code> mapping in <code>.replit</code>.</li><li><code>.replit</code> exposes several external ports. Autoscale and Reserved VM deployments support a single external port.</li><li>The homepage is slow at startup (database seeding, cache warm-up, big imports) and misses the health check window.</li><li>The run command starts a dev server or a one-shot script instead of a long-running production server.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Bind to 0.0.0.0 and read PORT</h3>
+<p>Replit's own docs are explicit: a published app must listen on <code>0.0.0.0</code>. Read the port from the environment and keep a fallback for the workspace.</p><pre><code>// Node.js / Express
+const PORT = Number(process.env.PORT) || 5000;
+app.listen(PORT, "0.0.0.0", () =&gt; console.log(`listening on ${PORT}`));</code></pre><pre><code># Python
+uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+gunicorn --bind 0.0.0.0:${PORT:-8000} app:app</code></pre>
+
+<h3 id="step-2">2. Check the [[ports]] section in .replit</h3>
+<p>If <code>.replit</code> lists ports, Replit stops detecting the port for you. You need exactly one entry with <code>externalPort = 80</code>, and its <code>localPort</code> must be the port your server really uses.</p><pre><code>[[ports]]
+localPort = 5000
+externalPort = 80</code></pre><p>Delete the <code>externalPort</code> lines of any other port (a second dev server, a debugger, a websocket helper). Extra exposed ports are a common reason Autoscale publishing fails.</p>
+
+<h3 id="step-3">3. Make the homepage answer fast</h3>
+<p>Before marking the app live, Replit sends an HTTP request to your homepage. If it takes longer than about five seconds, publishing can fail. Start listening first, then do slow work: run migrations in the build step, load caches lazily, and never seed data inside the request for <code>/</code>.</p>
+
+<h3 id="step-4">4. Confirm the run command</h3>
+<p>Open the publishing settings and read the run command. It should start the production server (for example <code>npm run start</code> or <code>node dist/index.js</code>) after the build command (<code>npm run build</code>). A dev command such as <code>npm run dev</code> can start a dev server on a different port. A command that exits after running a script leaves nothing to answer the health check.</p>
+
+<h3 id="step-5">5. Read the deployment logs, then republish</h3>
+<p>Open the failed deployment's logs from the Publishing pane and find the first error line. A crash during startup (a missing secret, a failed import) looks exactly like a port problem from the outside. Fix it, then publish again.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit app works in Preview but publishing fails (promote step / health check / "Application failed to respond").
+Please check the publishing setup only, without changing app features:
+1. Make the server listen on 0.0.0.0 and use process.env.PORT with a fallback.
+2. Open .replit and keep exactly one [[ports]] entry with externalPort = 80 whose localPort matches the port the server uses. Remove externalPort from any other entry.
+3. Make sure the deployment run command starts the production server (not a dev server) and that the build command builds the app.
+4. Make GET / respond in under 2 seconds at startup: move seeding, migrations and heavy work out of the startup path.
+Show me the diff of .replit and the server entry file before you publish.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Publishing completes and the deployment shows as live.</li><li><code>curl -I https://your-app.replit.app/</code> returns <code>200</code> (or a redirect) in well under five seconds.</li><li>The deployment logs show your own <em>listening on</em> line with the expected port.</li><li>Republishing a second time also succeeds, so the fix is stable.</li></ul>
+
+<p>If the app now goes live but behaves differently from the preview, continue with <a href="/guides/replit-works-in-preview-not-deployed/">Replit app works in preview but not after deploy</a>. To pick the right deployment type in the first place, see <a href="/guides/replit-deployment-types/">Autoscale vs Reserved VM vs Static vs Scheduled</a>.</p>

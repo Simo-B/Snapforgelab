@@ -1,0 +1,107 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 46,
+ "cta": "fix",
+ "title": "Replit App Not Indexed by Google? Fix Your SEO",
+ "h1": "Replit app not indexed by Google? How to fix it",
+ "kicker": "SEO",
+ "description": "Google ignores your Replit app, robots.txt or sitemap.xml returns HTML, or every page has the same title. Fix the technical SEO basics of a Replit Agent app.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Check robots.txt and sitemap.xml first: in many SPAs they return index.html, so Google cannot read them.",
+  "A client-rendered React app sends the same empty HTML and title for every URL. Give each page its own title, description and content in the HTML.",
+  "Pick one domain as canonical and redirect the other (.replit.app or www) to it."
+ ],
+ "steps": [
+  [
+   "Test robots.txt and sitemap.xml",
+   "If they return HTML, serve them as real files before the SPA fallback (see SPA routing on Replit). robots.txt should allow crawling and link to the sitemap."
+  ],
+  [
+   "Give every page its own head",
+   "Each public page needs a unique <title>, meta description and canonical URL. In React, react-helmet-async sets them per route. For pages you want to rank (home, pricing, features, articles), the content should also be in the HTML the server sends: prerender those routes at build time or render them on the server."
+  ],
+  [
+   "Choose one canonical domain",
+   "Add <link rel=\"canonical\" href=\"https://yourdomain.com/page\"> on every page, and redirect other hosts with a 301."
+  ],
+  [
+   "Return real 404s",
+   "Unknown URLs should return status 404, not 200 with the app shell. Keep a list of valid routes on the server, or return 404 from the fallback for paths your router does not know."
+  ],
+  [
+   "Submit and request indexing",
+   "Verify the domain in Google Search Console, submit the sitemap, and use URL Inspection on your key pages. Indexing can take days to weeks after the fixes."
+  ]
+ ],
+ "faq": [
+  [
+   "Does Replit block Google from indexing my app?",
+   "No, a public Replit deployment can be indexed. Problems usually come from the app: robots.txt or the sitemap returning HTML, client-only rendering, duplicate domains or soft 404s. A private deployment cannot be crawled."
+  ],
+  [
+   "Why does my sitemap.xml return HTML?",
+   "The single-page app fallback answers every unknown path with index.html. Serve sitemap.xml and robots.txt as real files before the fallback."
+  ],
+  [
+   "Should I keep my .replit.app URL indexed?",
+   "Pick one canonical domain, usually your custom domain, and 301-redirect the .replit.app URL to it so Google does not see two copies of every page."
+  ]
+ ],
+ "related": [
+  "replit-404-on-page-refresh",
+  "replit-custom-domain-not-working",
+  "deploy-replit-app-to-production"
+ ]
+}
+-->
+<p>Weeks after launch, a search for your product finds nothing, and Search Console says <em>Discovered – currently not indexed</em> or <em>Sitemap could not be read</em>. Replit itself does not block Google. The usual causes are in the app: the way Agent sets up a single-page React app makes every URL look like the same empty page. Here is the checklist we run in every audit.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><code>site:yourdomain.com</code> in Google shows nothing, or only the homepage.</li><li>Search Console reports the sitemap as HTML or unreadable.</li><li>Every page in search results shows the same title and description.</li><li>Pages are indexed under the <code>.replit.app</code> domain instead of your own.</li><li>Search Console shows <em>Soft 404</em> or <em>Duplicate without user-selected canonical</em>.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The SPA fallback serves <code>index.html</code> for <code>/robots.txt</code> and <code>/sitemap.xml</code>.</li><li>No sitemap, or a sitemap listing URLs that redirect or 404.</li><li>Pages render only in JavaScript, with one shared title and no text in the initial HTML.</li><li>Both <code>.replit.app</code> and the custom domain serve the same pages, with no canonical.</li><li>Missing pages return 200 with the app shell, which Google treats as soft 404s.</li><li>A leftover <code>noindex</code> tag or a private deployment.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Test robots.txt and sitemap.xml</h3>
+<pre><code>curl -sI https://yourdomain.com/robots.txt   # expect content-type: text/plain
+curl -sI https://yourdomain.com/sitemap.xml  # expect application/xml or text/xml
+curl -s  https://yourdomain.com/robots.txt   # should NOT start with &lt;!doctype html&gt;</code></pre><p>If they return HTML, serve them as real files before the SPA fallback (see <a href="/guides/replit-404-on-page-refresh/">SPA routing on Replit</a>). robots.txt should allow crawling and link to the sitemap.</p>
+
+<h3 id="step-2">2. Give every page its own head</h3>
+<p>Each public page needs a unique <code>&lt;title&gt;</code>, meta description and canonical URL. In React, <code>react-helmet-async</code> sets them per route. For pages you want to rank (home, pricing, features, articles), the content should also be in the HTML the server sends: prerender those routes at build time or render them on the server.</p>
+
+<h3 id="step-3">3. Choose one canonical domain</h3>
+<p>Add <code>&lt;link rel="canonical" href="https://yourdomain.com/page"&gt;</code> on every page, and redirect other hosts with a 301.</p><pre><code>app.use((req, res, next) =&gt; {
+  if (req.hostname.endsWith(".replit.app")) {
+    return res.redirect(301, `https://yourdomain.com${req.originalUrl}`);
+  }
+  next();
+});</code></pre>
+
+<h3 id="step-4">4. Return real 404s</h3>
+<p>Unknown URLs should return status 404, not 200 with the app shell. Keep a list of valid routes on the server, or return 404 from the fallback for paths your router does not know.</p>
+
+<h3 id="step-5">5. Submit and request indexing</h3>
+<p>Verify the domain in Google Search Console, submit the sitemap, and use URL Inspection on your key pages. Indexing can take days to weeks after the fixes.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit app is not indexed by Google. Please fix technical SEO without changing the design:
+1. Make /robots.txt (allow all, with a Sitemap: line) and /sitemap.xml real files served before the SPA fallback, with correct content types.
+2. Generate sitemap.xml at build time from the public routes, with absolute URLs on https://yourdomain.com.
+3. Add per-route title, meta description, canonical and Open Graph tags (react-helmet-async or equivalent).
+4. Prerender the public marketing pages at build time so their text is in the initial HTML.
+5. 301-redirect *.replit.app requests to https://yourdomain.com and return a real 404 status for unknown paths.
+Remove any noindex tags on public pages.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li><code>curl -s https://yourdomain.com/pricing | grep -i '&lt;title&gt;'</code> shows the pricing page's own title.</li><li>robots.txt is plain text and sitemap.xml is XML, both with status 200.</li><li><code>curl -sI https://yourapp.replit.app/</code> returns a 301 to your domain.</li><li>Search Console's URL Inspection shows the page as indexable, and the sitemap as read successfully.</li></ul>
+
+<p>robots.txt, sitemap, titles and soft 404s are part of what the free audit checks on your live app.</p>

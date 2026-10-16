@@ -1,0 +1,107 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 43,
+ "cta": "fix",
+ "title": "CORS Error on Replit Deployment: How to Fix It",
+ "h1": "CORS error on your Replit deployment? How to fix it",
+ "kicker": "Troubleshooting",
+ "description": "Blocked by CORS policy after publishing on Replit? Use relative API URLs, allow only your real origins, handle credentials, and spot crashes posing as CORS.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "If the frontend and API are the same Replit app, call /api/... with relative URLs and CORS disappears.",
+  "If they are separate, allow your exact frontend origins. With cookies, you cannot use a * origin.",
+  "A CORS error can hide a crash: a 500 or 502 response often has no CORS headers."
+ ],
+ "steps": [
+  [
+   "Check if it is really CORS",
+   "In DevTools → Network, click the failing request. If its status is 500 or 502, fix the server error first (see 502 and 500 errors on Replit). If the request went to a URL you did not expect, it is a URL problem."
+  ],
+  [
+   "Same app: use relative URLs",
+   "Replace absolute API URLs in the frontend with paths. The request then stays on the same origin and needs no CORS at all."
+  ],
+  [
+   "Separate apps: allow exact origins",
+   "Keep the list in a deployment secret so dev and production can differ."
+  ],
+  [
+   "Do not open CORS to everyone with cookies",
+   "Reflecting any origin while allowing credentials lets any website call your API as your logged-in users. Only allow the domains you own."
+  ],
+  [
+   "Republish and clear caches",
+   "Publish again, then test in a private window. A cached old bundle may still call the old URL."
+  ]
+ ],
+ "faq": [
+  [
+   "Why do I get a CORS error only after deploying on Replit?",
+   "The frontend usually still calls the dev URL, or the API's allowlist only contains the dev origin. Use relative URLs when frontend and API are the same app."
+  ],
+  [
+   "Is app.use(cors()) safe?",
+   "Without credentials it allows any site to read your public API responses. With credentials and a reflected origin it is dangerous. Allow only your own domains."
+  ],
+  [
+   "Can a server error look like a CORS error?",
+   "Yes. When the server crashes, the error response often lacks CORS headers, so the browser reports CORS. Check the status code in the Network tab first."
+  ]
+ ],
+ "related": [
+  "replit-login-not-working-after-deploy",
+  "replit-502-bad-gateway",
+  "replit-agent-security-checklist"
+ ]
+}
+-->
+<p>The browser console says <em>has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present</em>, and only on the published app. CORS is the browser protecting users: it blocks a page on one origin from reading responses from another origin unless that server allows it. Replit's help center gives the first fix: if frontend and backend are part of the same app, use relative URLs.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><code>blocked by CORS policy</code> in the browser console on the live app.</li><li>Requests work in Postman or curl but fail in the browser.</li><li>The preflight <code>OPTIONS</code> request fails.</li><li><code>The value of the 'Access-Control-Allow-Origin' header must not be the wildcard '*' when the request's credentials mode is 'include'</code>.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The frontend calls a hard-coded dev URL (<code>replit.dev</code>, <code>localhost</code>) instead of its own domain.</li><li>The API allowlist contains the dev origin but not the production or custom domain.</li><li>Cookies are sent (<code>credentials: "include"</code>) while the server answers with <code>*</code>.</li><li>The server does not answer <code>OPTIONS</code> preflight requests.</li><li>The API crashed and the error response has no CORS headers.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Check if it is really CORS</h3>
+<p>In DevTools → Network, click the failing request. If its status is 500 or 502, fix the server error first (see <a href="/guides/replit-502-bad-gateway/">502 and 500 errors on Replit</a>). If the request went to a URL you did not expect, it is a URL problem.</p>
+
+<h3 id="step-2">2. Same app: use relative URLs</h3>
+<p>Replace absolute API URLs in the frontend with paths. The request then stays on the same origin and needs no CORS at all.</p><pre><code>// before
+fetch("https://abc123.replit.dev/api/orders")
+// after
+fetch("/api/orders", { credentials: "same-origin" })</code></pre>
+
+<h3 id="step-3">3. Separate apps: allow exact origins</h3>
+<pre><code>import cors from "cors";
+const allowed = (process.env.CORS_ORIGINS || "").split(",");   // https://app.example.com,https://example.com
+app.use(cors({
+  origin: (origin, cb) =&gt; cb(null, !origin || allowed.includes(origin)),
+  credentials: true,
+}));</code></pre><p>Keep the list in a deployment secret so dev and production can differ.</p>
+
+<h3 id="step-4">4. Do not open CORS to everyone with cookies</h3>
+<p>Reflecting any origin while allowing credentials lets any website call your API as your logged-in users. Only allow the domains you own.</p>
+
+<h3 id="step-5">5. Republish and clear caches</h3>
+<p>Publish again, then test in a private window. A cached old bundle may still call the old URL.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My published Replit app shows "blocked by CORS policy" errors. Here is the console error and the failing request URL: [paste].
+Please:
+1. Find every absolute API URL in the frontend (replit.dev, localhost, http://) and replace same-app calls with relative /api paths.
+2. If a separate API origin is really needed, configure cors with an allowlist read from a CORS_ORIGINS environment variable and credentials: true. Never use origin "*" or reflect any origin with credentials.
+3. Make sure OPTIONS preflight requests are answered.
+4. Check whether the failing endpoint actually returns a 500 and fix that first if so.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The console on the live URL has no CORS errors during a full user journey.</li><li><code>curl -I -H "Origin: https://evil.example" https://your-app/api/me</code> does not return that origin in <code>Access-Control-Allow-Origin</code>.</li><li>Login and logged-in API calls still work.</li></ul>
+
+<p>Open CORS with credentials is one of the issues the free audit checks on live Replit apps, along with the rest of the <a href="/guides/replit-agent-security-checklist/">security checklist</a>.</p>

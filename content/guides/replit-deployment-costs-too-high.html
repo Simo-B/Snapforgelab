@@ -1,0 +1,107 @@
+<!--meta
+{
+ "topic": "Costs",
+ "order": 48,
+ "cta": "fix",
+ "title": "Replit Deployment Costs Too High? How to Cut Them",
+ "h1": "Replit deployment costs too high? How to find and cut them",
+ "kicker": "Costs",
+ "description": "Your Replit hosting bill is higher than expected. Find what drives it, then fix timers, keep-alive pingers, machine size, max machines and heavy files.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Autoscale bills compute units (CPU and RAM time while instances run) plus requests. Anything that keeps instances busy costs money.",
+  "The usual culprits: timers or polling inside the server, keep-alive pingers, oversized machines, a high max-machines limit, bots, and large unoptimized files.",
+  "Check Usage first, then fix the biggest line. A Reserved VM is cheaper only when the app is busy most of the time."
+ ],
+ "steps": [
+  [
+   "Read the Usage page",
+   "Open Usage in your Replit settings and see which deployment and which line (compute units, requests, data transfer, Reserved VM) dominates. Shut down deployments you no longer need from the Publishing pane: shutting down stops charges without deleting code or data."
+  ],
+  [
+   "Let Autoscale scale to zero",
+   "Remove timers and polling from the web server and move periodic work to a Scheduled deployment (see cron jobs on Replit). Turn off keep-warm pings unless you have a strong reason."
+  ],
+  [
+   "Right-size the machine",
+   "In the publishing settings, lower CPU and RAM to the smallest configuration that keeps response times acceptable. Test with a realistic load before and after."
+  ],
+  [
+   "Cap max machines",
+   "The max machines setting caps how far Autoscale can scale out, which also caps your maximum cost. Set it to what your real traffic needs, and add rate limiting so bots and abusive clients cannot scale you up."
+  ],
+  [
+   "Cut heavy responses",
+   "Compress images and serve them at the size shown, enable gzip or brotli, cache static assets, and paginate large API responses. Move big media to App Storage."
+  ],
+  [
+   "Compare with a Reserved VM",
+   "If the app is busy most hours of the day (or must be always on), a Reserved VM's fixed monthly price can be cheaper and more predictable than Autoscale. Use Replit's current pricing page for the numbers, since rates change: Replit lowered several deployment prices from August 1, 2026."
+  ]
+ ],
+ "faq": [
+  [
+   "How is Replit Autoscale billed?",
+   "Replit's billing docs describe compute units based on RAM and CPU time while instances run, plus a charge for requests and outbound data transfer beyond your plan's allowance. Check Replit's pricing page for current rates."
+  ],
+  [
+   "Why does my idle Replit app still cost money?",
+   "Something keeps an instance running: a timer, polling, an open connection or an external ping. Remove it so Autoscale can scale to zero."
+  ],
+  [
+   "Is Reserved VM cheaper than Autoscale?",
+   "Only when the app is busy most of the time or must be always on. For bursty business apps, Autoscale with scale-to-zero is usually cheaper."
+  ]
+ ],
+ "related": [
+  "replit-agent-costs",
+  "replit-deployment-types",
+  "replit-cron-jobs-not-running"
+ ]
+}
+-->
+<p>The app is small, traffic is modest, and the hosting bill keeps growing. Replit deployment pricing is usage-based, and a few common patterns in Agent-built apps keep machines running far longer than needed. Before you move hosts, find what you are actually paying for. Most savings come from one or two fixes.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Deployment charges grow month after month without matching user growth.</li><li>Usage shows Autoscale compute even at night when nobody uses the app.</li><li>Costs jumped right after adding a feature (a timer, websockets, AI processing).</li><li>Outbound data transfer is a large line on the bill.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>A <code>setInterval</code>, polling loop or open connection keeps instances busy and stops scale-to-zero.</li><li>An uptime monitor or keep-warm ping hits the app every minute.</li><li>Machine size (CPU and RAM) is larger than the app needs: Replit counts RAM and CPU time separately, and CPU time weighs more.</li><li>The maximum number of machines is high, so traffic spikes or bots scale you out.</li><li>Large images, videos or downloads served from the app instead of being compressed or moved to storage.</li><li>A Reserved VM that sits mostly idle, or old deployments that are still running.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Read the Usage page</h3>
+<p>Open <a href="https://replit.com/settings/usage" rel="noopener">Usage</a> in your Replit settings and see which deployment and which line (compute units, requests, data transfer, Reserved VM) dominates. Shut down deployments you no longer need from the Publishing pane: shutting down stops charges without deleting code or data.</p>
+
+<h3 id="step-2">2. Let Autoscale scale to zero</h3>
+<p>Remove timers and polling from the web server and move periodic work to a Scheduled deployment (see <a href="/guides/replit-cron-jobs-not-running/">cron jobs on Replit</a>). Turn off keep-warm pings unless you have a strong reason.</p>
+
+<h3 id="step-3">3. Right-size the machine</h3>
+<p>In the publishing settings, lower CPU and RAM to the smallest configuration that keeps response times acceptable. Test with a realistic load before and after.</p>
+
+<h3 id="step-4">4. Cap max machines</h3>
+<p>The max machines setting caps how far Autoscale can scale out, which also caps your maximum cost. Set it to what your real traffic needs, and add rate limiting so bots and abusive clients cannot scale you up.</p>
+
+<h3 id="step-5">5. Cut heavy responses</h3>
+<p>Compress images and serve them at the size shown, enable gzip or brotli, cache static assets, and paginate large API responses. Move big media to App Storage.</p>
+
+<h3 id="step-6">6. Compare with a Reserved VM</h3>
+<p>If the app is busy most hours of the day (or must be always on), a Reserved VM's fixed monthly price can be cheaper and more predictable than Autoscale. Use Replit's current pricing page for the numbers, since rates change: Replit lowered several deployment prices from August 1, 2026.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit deployment costs are higher than expected. Please audit the app for cost drivers without changing features:
+1. Find timers, polling loops, intervals and long-lived connections in the server code and list them.
+2. Find endpoints that return large payloads or unoptimized images.
+3. Check for missing rate limiting on public endpoints.
+4. Propose which work should move to a Scheduled deployment.
+5. Suggest a smaller machine configuration if the app's memory use allows it, and tell me how to measure it.
+Give me the list ordered by expected impact before changing anything.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Usage shows Autoscale compute dropping to near zero during quiet hours.</li><li>The next billing period's deployment line is lower, with the same traffic.</li><li>Response times stay acceptable after right-sizing.</li></ul>
+
+<p>Agent usage is billed separately from hosting. To cut that side, read <a href="/guides/replit-agent-costs/">Replit Agent costs: 12 ways to cut your bill</a>, and to choose a deployment type, <a href="/guides/replit-deployment-types/">Autoscale vs Reserved VM vs Static vs Scheduled</a>.</p>

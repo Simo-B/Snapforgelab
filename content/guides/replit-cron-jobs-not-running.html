@@ -1,0 +1,107 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 27,
+ "cta": "fix",
+ "title": "Replit Cron Jobs Not Running? Use Scheduled Deployments",
+ "h1": "Replit cron jobs not running in production? Here is why",
+ "kicker": "Deployment",
+ "description": "Your setInterval or node-cron job works in the preview but not on Replit Autoscale. Move it to a Scheduled deployment or a protected endpoint on a schedule.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "A timer inside your web app only runs while an instance is alive. Autoscale scales to zero when idle, so the job silently stops.",
+  "Use a Scheduled deployment (a cron expression and time zone) for periodic work, or a Reserved VM for continuous background work.",
+  "Make every job safe to run twice, and log each run so you can see gaps."
+ ],
+ "steps": [
+  [
+   "Pull the job out of the web server",
+   "Move the job's logic into its own script, such as scripts/daily-digest.ts, that does the work once and exits. Remove the timer from the server code."
+  ],
+  [
+   "Option A: Scheduled deployment",
+   "Replit's Scheduled deployments run a command on a cron schedule (for example 0 9 * * 1-5 for weekdays at 9am) in a time zone you choose, then stop. They have a job timeout, alert you when a run fails, and have no public URL. Set the run command to your script and give it the same database and secrets. A simple setup is a separate small Replit App for the job that uses the same production database."
+  ],
+  [
+   "Option B: a protected endpoint on a schedule",
+   "Expose the job as POST /api/cron/daily-digest, require a secret header, and have a scheduler call it. A request wakes an Autoscale app, so this works without changing deployment type."
+  ],
+  [
+   "Option C: Reserved VM for continuous work",
+   "Queue consumers, bots and anything that must run all the time need an always-on machine. A Reserved VM never sleeps and has a fixed monthly cost."
+  ],
+  [
+   "Make runs idempotent and visible",
+   "Store each run in a table (job name, started, finished, status). Before sending, check whether today's run already happened, so a retry or a double trigger does not email users twice."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does my cron job only run when someone visits the app?",
+   "On Autoscale, your server runs only while it handles traffic. A visit starts an instance, which restarts the timer, and when traffic stops the instance and the timer stop too."
+  ],
+  [
+   "What is a Replit Scheduled deployment?",
+   "A deployment type that runs a command on a schedule you set with a cron expression and time zone, then stops until the next run. It suits backups, notifications and reports, not web apps."
+  ],
+  [
+   "Why did my job run twice?",
+   "Autoscale can run more than one instance under load, and each instance runs its own timer. Moving the job out of the web server and making it idempotent fixes this."
+  ]
+ ],
+ "related": [
+  "replit-deployment-types",
+  "replit-autoscale-cold-start",
+  "replit-deployment-costs-too-high"
+ ]
+}
+-->
+<p>Daily emails stop going out. The nightly sync ran Monday, skipped Tuesday, ran twice Wednesday. In the preview it worked perfectly. If the job is a <code>setInterval</code>, <code>node-cron</code> or APScheduler task inside your web server, the deployment type is the problem: Autoscale runs your server only while there is traffic.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Scheduled emails, reports or syncs run on some days and not others.</li><li>The job runs only after someone visits the app.</li><li>Jobs run twice when two instances are up at the same time.</li><li>Autoscale costs go up after you add a background timer.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>Autoscale scales to zero when idle, which stops any timer inside the process.</li><li>Under load, Autoscale can run several instances, and each one runs its own copy of the timer.</li><li>A busy timer keeps an instance alive longer, which costs compute.</li><li>The job relies on in-memory state that is lost when the instance stops.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Pull the job out of the web server</h3>
+<p>Move the job's logic into its own script, such as <code>scripts/daily-digest.ts</code>, that does the work once and exits. Remove the timer from the server code.</p><pre><code>// scripts/daily-digest.ts
+import { sendDigests } from "../server/digest";
+await sendDigests();      // do the work once
+process.exit(0);</code></pre>
+
+<h3 id="step-2">2. Option A: Scheduled deployment</h3>
+<p>Replit's Scheduled deployments run a command on a cron schedule (for example <code>0 9 * * 1-5</code> for weekdays at 9am) in a time zone you choose, then stop. They have a job timeout, alert you when a run fails, and have no public URL. Set the run command to your script and give it the same database and secrets. A simple setup is a separate small Replit App for the job that uses the same production database.</p>
+
+<h3 id="step-3">3. Option B: a protected endpoint on a schedule</h3>
+<p>Expose the job as <code>POST /api/cron/daily-digest</code>, require a secret header, and have a scheduler call it. A request wakes an Autoscale app, so this works without changing deployment type.</p><pre><code>app.post("/api/cron/daily-digest", async (req, res) =&gt; {
+  if (req.get("x-cron-secret") !== process.env.CRON_SECRET) return res.sendStatus(401);
+  await sendDigests();
+  res.json({ ok: true });
+});</code></pre>
+
+<h3 id="step-4">4. Option C: Reserved VM for continuous work</h3>
+<p>Queue consumers, bots and anything that must run all the time need an always-on machine. A Reserved VM never sleeps and has a fixed monthly cost.</p>
+
+<h3 id="step-5">5. Make runs idempotent and visible</h3>
+<p>Store each run in a table (job name, started, finished, status). Before sending, check whether today's run already happened, so a retry or a double trigger does not email users twice.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My background job (setInterval/node-cron) is inside the web server and does not run reliably on Replit Autoscale.
+Please:
+1. Move the job logic into a standalone script that runs once and exits, and remove the timer from the server.
+2. Also expose it as POST /api/cron/&lt;job-name&gt;, protected by a CRON_SECRET header, returning JSON.
+3. Add a job_runs table and make the job idempotent: skip if a successful run already exists for the current period.
+4. Log start, end and the number of items processed.
+Tell me what to configure for a Replit Scheduled deployment (run command, cron expression, time zone) as the next step.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The <code>job_runs</code> table has exactly one successful row per scheduled period over several days.</li><li>Calling the endpoint without the secret returns 401.</li><li>Triggering the job twice in a row does not send duplicates.</li><li>Scheduled deployment logs show each run and its exit status.</li></ul>
+
+<p>To compare the four deployment types side by side, read <a href="/guides/replit-deployment-types/">Autoscale vs Reserved VM vs Static vs Scheduled</a>.</p>

@@ -1,0 +1,108 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 44,
+ "cta": "fix",
+ "title": "Replit 502 Bad Gateway or 500 Error After Publishing",
+ "h1": "Replit 502 Bad Gateway or 500 error after publishing: how to fix it",
+ "kicker": "Troubleshooting",
+ "description": "Your published Replit app returns 502 Bad Gateway, a 500 error or Application failed to respond. Find the crash in the logs, fix it, or roll back fast.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "A 502 usually means the app process crashed or is not listening. A 500 means your code threw an error while handling the request.",
+  "The deployment logs show the error just before the 502s start. Log uncaught errors so crashes are never silent.",
+  "If users are blocked, redeploy the last working version from Publishing → History, then fix calmly."
+ ],
+ "steps": [
+  [
+   "Get users back first",
+   "If the app is down for real users, open Publishing → History, find the last version that worked and redeploy it. Then debug without pressure."
+  ],
+  [
+   "Find the first error in the logs",
+   "Open the deployment logs and scroll to just before the first 502. SIGTERM on Autoscale is normal (Replit stops idle instances). Exit code 1 means a crash, and the lines right above it say why."
+  ],
+  [
+   "Make crashes visible",
+   "Wrap async route handlers so errors reach this handler instead of crashing the process."
+  ],
+  [
+   "Fix the root cause",
+   "For startup errors, check secrets and the database (see secrets in deployment). For memory errors, stream files instead of loading them whole, and check the machine size in the publishing settings. For timeouts, move long work to a background job and return early."
+  ],
+  [
+   "Republish and watch the logs",
+   "Publish the fix and keep the logs open while you repeat the action that failed."
+  ]
+ ],
+ "faq": [
+  [
+   "What does 502 Bad Gateway mean on Replit?",
+   "Replit's proxy could not get a valid response from your app, usually because the process crashed or is not listening on the expected port. The deployment logs show the crash just before the 502s."
+  ],
+  [
+   "Is SIGTERM in my Replit logs an error?",
+   "No. Replit's help center explains that Autoscale deployments restart regularly by design and SIGTERM means a graceful stop. Exit code 1 is the one that signals a crash."
+  ],
+  [
+   "How do I roll back a broken Replit deployment?",
+   "Open Publishing → History, choose the last working version and redeploy it. Then fix the bug and publish again."
+  ]
+ ],
+ "related": [
+  "replit-deployment-failed-port",
+  "replit-works-in-preview-not-deployed",
+  "replit-agent-keeps-breaking-app"
+ ]
+}
+-->
+<p>Publishing succeeded, and now the live app answers <em>502 Bad Gateway</em>, <em>Internal Server Error</em> or <em>Application failed to respond</em>. Replit's help center is clear that when publishing succeeds and the app returns errors, the cause is in the app code, not in Replit's infrastructure. Here is how to find it quickly, and how to get users back online while you fix it.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Some or all pages return 502, 500 or <em>Application failed to respond</em>.</li><li>The app works for a while, then fails until it restarts.</li><li>Logs show <code>Exit code 1</code>, <code>UnhandledPromiseRejection</code>, <code>JavaScript heap out of memory</code> or a Python traceback.</li><li>Only one feature fails (upload, export, AI call) with a 500.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>An unhandled exception or promise rejection crashes the Node.js process.</li><li>A missing secret or database error at startup, so the server never listens.</li><li>Out of memory: large files loaded in memory, a leak, or a machine too small for the work.</li><li>A slow request (AI call, big export) that times out.</li><li>A bug that only shows with production data, such as a null field that never existed in dev.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Get users back first</h3>
+<p>If the app is down for real users, open <strong>Publishing → History</strong>, find the last version that worked and redeploy it. Then debug without pressure.</p>
+
+<h3 id="step-2">2. Find the first error in the logs</h3>
+<p>Open the deployment logs and scroll to just before the first 502. <code>SIGTERM</code> on Autoscale is normal (Replit stops idle instances). <code>Exit code 1</code> means a crash, and the lines right above it say why.</p>
+
+<h3 id="step-3">3. Make crashes visible</h3>
+<pre><code>process.on("unhandledRejection", (err) =&gt; console.error("Unhandled rejection:", err));
+process.on("uncaughtException", (err) =&gt; { console.error("Uncaught exception:", err); process.exit(1); });
+
+// Express: one error handler, registered last
+app.use((err, req, res, next) =&gt; {
+  console.error(req.method, req.path, err);
+  res.status(500).json({ error: "Something went wrong" });
+});</code></pre><p>Wrap async route handlers so errors reach this handler instead of crashing the process.</p>
+
+<h3 id="step-4">4. Fix the root cause</h3>
+<p>For startup errors, check secrets and the database (see <a href="/guides/replit-secrets-not-working-deployment/">secrets in deployment</a>). For memory errors, stream files instead of loading them whole, and check the machine size in the publishing settings. For timeouts, move long work to a background job and return early.</p>
+
+<h3 id="step-5">5. Republish and watch the logs</h3>
+<p>Publish the fix and keep the logs open while you repeat the action that failed.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My published Replit app returns 502 / 500 / "Application failed to respond". Here are the deployment log lines just before the errors start:
+[paste ~20 lines]
+Please:
+1. Explain the root cause in one sentence.
+2. Add process-level handlers that log unhandledRejection and uncaughtException.
+3. Add a final Express error handler that logs the error with method and path and returns a JSON 500, and make sure async route errors reach it.
+4. Fix the root cause without removing the feature.
+5. If memory is the problem, stream large files instead of reading them fully into memory.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Repeat the failing action on the live URL: it succeeds, or shows a clean error message without a crash.</li><li>Logs show no <code>Exit code 1</code> over the next day of normal use.</li><li>Monitoring in the Publishing pane shows the app healthy.</li></ul>
+
+<p>If Agent keeps fixing one crash and creating another, read <a href="/guides/replit-agent-keeps-breaking-app/">how to stop the Replit Agent fix loop</a>.</p>

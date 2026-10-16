@@ -1,0 +1,116 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 42,
+ "cta": "fix",
+ "title": "Replit Login Not Working After Deploy: Session Fix",
+ "h1": "Login not working after deploy on Replit? Fix sessions and cookies",
+ "kicker": "Auth",
+ "description": "Users log in on your Replit app, then get logged out on the next click or loop back to login. Fix trust proxy, secure cookies, session secret and store.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Behind Replit's HTTPS proxy, Express needs app.set(\"trust proxy\", 1), or secure session cookies are never sent.",
+  "Set a fixed SESSION_SECRET in the deployment, and store sessions in Postgres, not in memory.",
+  "Do not hard-code a cookie domain from development. Test login on each domain users can reach."
+ ],
+ "steps": [
+  [
+   "Trust the proxy",
+   "Add this before your session middleware. It tells Express to trust the X-Forwarded-Proto header from Replit's proxy."
+  ],
+  [
+   "Configure the session cookie for production",
+   "Leave domain unset unless you really share cookies across subdomains."
+  ],
+  [
+   "Set SESSION_SECRET once",
+   "Generate a long random value and save it in the deployment secrets. Never generate it at startup, and never reuse the development value in production."
+  ],
+  [
+   "Pick one canonical domain",
+   "A cookie set on yourapp.replit.app is not sent to yourdomain.com. Redirect secondary domains to the main one so users always log in on the same host."
+  ],
+  [
+   "Check frontend requests",
+   "If the frontend calls the API on the same domain with relative URLs, cookies are sent automatically. If it calls another origin, it needs credentials: \"include\" and a matching CORS setup. See CORS errors on Replit."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does my Replit app log users out after every deploy?",
+   "Sessions are probably stored in memory, or the session secret changes at startup. Store sessions in the database and use a fixed SESSION_SECRET from the deployment secrets."
+  ],
+  [
+   "Why is my session cookie not set in production?",
+   "With secure cookies, Express only sets the cookie when it believes the request is HTTPS. Behind Replit's proxy, that requires app.set(\"trust proxy\", 1)."
+  ],
+  [
+   "Does Autoscale break in-memory sessions?",
+   "Yes. Autoscale can run several instances and restarts them, and memory is not shared or kept. Use a database-backed session store."
+  ]
+ ],
+ "related": [
+  "replit-google-oauth-redirect-uri-mismatch",
+  "replit-cors-error",
+  "replit-secrets-not-working-deployment"
+ ]
+}
+-->
+<p>Login succeeds, the dashboard flashes, and the next click sends users back to the login page. Or they get logged out every time the app restarts. In the preview everything was fine. Session problems after deploy come from a short list of settings that only matter in production. Here they are.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Login redirects back to the login page in a loop.</li><li>Users are logged out after a few minutes, or after each deploy.</li><li>No <code>Set-Cookie</code> header in the login response, or the cookie is never sent back.</li><li>Logged in on one domain, logged out on the other.</li><li><em>403 Forbidden</em> on a published app with many cookies.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li><code>cookie.secure</code> is true but Express does not trust the proxy, so it thinks the request is HTTP and refuses to set the cookie.</li><li><code>SESSION_SECRET</code> is missing in production or random at startup, so every restart invalidates sessions.</li><li>Sessions are stored in memory: lost on restart, and not shared between Autoscale instances.</li><li>A cookie <code>domain</code> or <code>sameSite</code> value copied from development.</li><li>Oversized headers from too many cookies, which Replit's help center lists as a cause of 403 errors.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Trust the proxy</h3>
+<p>Add this before your session middleware. It tells Express to trust the <code>X-Forwarded-Proto</code> header from Replit's proxy.</p><pre><code>app.set("trust proxy", 1);</code></pre>
+
+<h3 id="step-2">2. Configure the session cookie for production</h3>
+<pre><code>import session from "express-session";
+import connectPg from "connect-pg-simple";
+const PgStore = connectPg(session);
+
+app.use(session({
+  store: new PgStore({ conString: process.env.DATABASE_URL, createTableIfMissing: true }),
+  secret: process.env.SESSION_SECRET,          // fixed value from deployment secrets
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+}));</code></pre><p>Leave <code>domain</code> unset unless you really share cookies across subdomains.</p>
+
+<h3 id="step-3">3. Set SESSION_SECRET once</h3>
+<p>Generate a long random value and save it in the deployment secrets. Never generate it at startup, and never reuse the development value in production.</p>
+
+<h3 id="step-4">4. Pick one canonical domain</h3>
+<p>A cookie set on <code>yourapp.replit.app</code> is not sent to <code>yourdomain.com</code>. Redirect secondary domains to the main one so users always log in on the same host.</p>
+
+<h3 id="step-5">5. Check frontend requests</h3>
+<p>If the frontend calls the API on the same domain with relative URLs, cookies are sent automatically. If it calls another origin, it needs <code>credentials: "include"</code> and a matching CORS setup. See <a href="/guides/replit-cors-error/">CORS errors on Replit</a>.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>Login works in the Replit preview, but in the published app users are logged out right away or loop back to the login page.
+Please fix session handling for production:
+1. Add app.set("trust proxy", 1) before the session middleware.
+2. Store sessions in Postgres (connect-pg-simple) instead of memory.
+3. Read SESSION_SECRET from the environment and fail at startup if it is missing; do not generate it at runtime.
+4. Cookie: secure in production, httpOnly, sameSite "lax", no hard-coded domain.
+5. Make sure frontend API calls use relative URLs on the same domain.
+Show me the session config diff. Do not change the user table.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>In DevTools → Network, the login response has a <code>Set-Cookie</code> header with <code>Secure; HttpOnly</code>.</li><li>After login, refresh three times and open a new tab: you stay logged in.</li><li>Republish the app: you are still logged in afterwards.</li><li>The sessions table in production has a row for your session.</li></ul>
+
+<p>Session settings are also security settings. Review them with the <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a>.</p>

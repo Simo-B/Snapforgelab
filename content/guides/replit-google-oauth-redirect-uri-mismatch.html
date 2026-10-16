@@ -1,0 +1,101 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 41,
+ "cta": "fix",
+ "title": "Replit Google OAuth redirect_uri_mismatch: Fix",
+ "h1": "Google sign-in fails on Replit with redirect_uri_mismatch: fix it",
+ "kicker": "Auth",
+ "description": "Google login works in the preview but fails on your published Replit app with Error 400 redirect_uri_mismatch. Register the right URLs and fix the callback.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Google compares the redirect URI your app sends, character by character, with the list in Google Cloud Console.",
+  "Add the exact production callback for your .replit.app domain and your custom domain, with https.",
+  "Build the callback from one APP_URL setting, not from the request host or the first entry of REPLIT_DOMAINS."
+ ],
+ "steps": [
+  [
+   "Read the URI Google received",
+   "On the error page, open the error details. Copy the redirect_uri value. That is exactly what your app sent."
+  ],
+  [
+   "Set one APP_URL",
+   "Add a deployment secret APP_URL=https://yourdomain.com and build every absolute URL from it, including the OAuth callback. In Express, also set app.set(\"trust proxy\", 1) so the app knows the original request was HTTPS."
+  ],
+  [
+   "Register every real callback",
+   "In Google Cloud Console, open your OAuth client and add each callback you use under Authorized redirect URIs: the custom domain, the .replit.app domain if users can reach it, and your dev URL if you test in the preview. Add the matching origins under Authorized JavaScript origins. Save and wait a few minutes."
+  ],
+  [
+   "Publish the consent screen",
+   "If only some accounts can sign in, the OAuth app may still be in testing mode. Move it to production in the consent screen settings. Google may require domain verification for some scopes."
+  ],
+  [
+   "Consider Replit Auth",
+   "If you only need sign-in and not Google API access, Replit Auth handles development, .replit.app and custom domains for you. With Replit-managed Clerk auth, use the exact values shown in the Auth pane."
+  ]
+ ],
+ "faq": [
+  [
+   "What causes redirect_uri_mismatch on Replit?",
+   "The callback URL your app sends to Google is not exactly one of the Authorized redirect URIs in Google Cloud Console. On Replit this is usually the dev URL, http instead of https, or a different domain than the one you registered."
+  ],
+  [
+   "Can I add replit.dev URLs to Google OAuth?",
+   "You can add a specific dev callback URL as a redirect URI for testing. Dev URLs can change, so production should use your published domain."
+  ],
+  [
+   "Do I need trust proxy for OAuth on Replit?",
+   "In Express, yes. The app sits behind Replit's HTTPS proxy, and trust proxy lets it see the original https protocol for redirects and secure cookies."
+  ]
+ ],
+ "related": [
+  "replit-login-not-working-after-deploy",
+  "replit-custom-domain-not-working",
+  "replit-works-in-preview-not-deployed"
+ ]
+}
+-->
+<p>Sign in with Google works in the preview. On the live app, users get <em>Error 400: redirect_uri_mismatch</em>. Google is strict: the redirect URI your app sends must exactly match one of the URIs you registered. The fix is to make your app send a predictable URL, and register it.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><em>Error 400: redirect_uri_mismatch</em> after clicking Sign in with Google.</li><li>The error details show a <code>replit.dev</code>, <code>http://</code> or unexpected domain in <code>redirect_uri</code>.</li><li>Login works on <code>.replit.app</code> but not on the custom domain, or the reverse.</li><li>After login, users land on the preview URL instead of production.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>Only the development callback is registered in Google Cloud Console.</li><li>The app builds the callback with <code>http://</code> because it sits behind Replit's HTTPS proxy.</li><li>The callback is built from the first domain in <code>REPLIT_DOMAINS</code> or from the request host, which can change.</li><li>A trailing slash or path difference (<code>/auth/google/callback</code> vs <code>/api/auth/google/callback</code>).</li><li>The OAuth consent screen is still in testing mode, so only test users can sign in.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Read the URI Google received</h3>
+<p>On the error page, open the error details. Copy the <code>redirect_uri</code> value. That is exactly what your app sent.</p>
+
+<h3 id="step-2">2. Set one APP_URL</h3>
+<p>Add a deployment secret <code>APP_URL=https://yourdomain.com</code> and build every absolute URL from it, including the OAuth callback.</p><pre><code>const callbackURL = `${process.env.APP_URL}/api/auth/google/callback`;
+passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, verify));</code></pre><p>In Express, also set <code>app.set("trust proxy", 1)</code> so the app knows the original request was HTTPS.</p>
+
+<h3 id="step-3">3. Register every real callback</h3>
+<p>In Google Cloud Console, open your OAuth client and add each callback you use under <strong>Authorized redirect URIs</strong>: the custom domain, the <code>.replit.app</code> domain if users can reach it, and your dev URL if you test in the preview. Add the matching origins under <strong>Authorized JavaScript origins</strong>. Save and wait a few minutes.</p>
+
+<h3 id="step-4">4. Publish the consent screen</h3>
+<p>If only some accounts can sign in, the OAuth app may still be in testing mode. Move it to production in the consent screen settings. Google may require domain verification for some scopes.</p>
+
+<h3 id="step-5">5. Consider Replit Auth</h3>
+<p>If you only need sign-in and not Google API access, Replit Auth handles development, <code>.replit.app</code> and custom domains for you. With Replit-managed Clerk auth, use the exact values shown in the Auth pane.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>Google sign-in on my published Replit app fails with redirect_uri_mismatch. The redirect_uri in Google's error is: [paste].
+Please:
+1. Build the OAuth callback URL from an APP_URL environment variable instead of the request host or REPLIT_DOMAINS.
+2. Set app.set("trust proxy", 1) so redirects and cookies use https behind Replit's proxy.
+3. After login, redirect to a path relative to APP_URL, never to the dev domain.
+4. Print the exact list of Authorized redirect URIs and JavaScript origins I must add in Google Cloud Console for production and development.
+Do not change the user model or session logic.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Sign in with Google on the live custom domain in a private window, with an account that is not a test user.</li><li>After login you land on the production domain, and the session persists after a refresh.</li><li>The <code>.replit.app</code> URL either works too or redirects to the custom domain.</li></ul>
+
+<p>If login succeeds but users are logged out right away, read <a href="/guides/replit-login-not-working-after-deploy/">why login breaks after deploy</a>.</p>

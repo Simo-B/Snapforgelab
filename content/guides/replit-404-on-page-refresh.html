@@ -1,0 +1,107 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 24,
+ "cta": "fix",
+ "title": "Replit App 404 on Page Refresh: Fix SPA Routing",
+ "h1": "Replit app shows 404 on page refresh? Fix SPA routing",
+ "kicker": "Deployment",
+ "description": "Your React app on Replit works from the homepage, but deep links and refresh return 404. Add the right fallback route or rewrite without breaking APIs.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Single-page apps route in the browser. The server must answer unknown page paths with index.html.",
+  "On an Express server, add a fallback after your API and static routes. On a Static deployment, add a rewrite in .replit.",
+  "Keep real files (robots.txt, sitemap.xml) and /api routes out of the fallback."
+ ],
+ "steps": [
+  [
+   "Find which server serves the app",
+   "Most Agent apps are an Express server that serves the built React files in production. A few are published as Static deployments. Open the publishing settings: the deployment type tells you which fix applies."
+  ],
+  [
+   "Express: add the fallback last",
+   "Order matters: API routes first, then static files, then the fallback for everything else that is a page request. The last line keeps unknown API paths as honest JSON 404s instead of returning your HTML page."
+  ],
+  [
+   "Static deployment: add a rewrite",
+   "Replit's static deployments support rewrites in .replit. Existing files are still served as themselves."
+  ],
+  [
+   "Check the build path",
+   "Confirm the folder your server serves (dist, dist/public, build) is the one your build command writes to. A mismatch gives 404 on every page, including the homepage."
+  ],
+  [
+   "Republish and test deep links",
+   "Publish again and open three deep links directly in a private window."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does refreshing a React page give 404 on Replit?",
+   "The browser asks the server for /dashboard, and the server has no such file. Client-side routing only works once index.html has loaded, so the server must answer page routes with index.html."
+  ],
+  [
+   "Will a catch-all route break my API?",
+   "It can if it is registered before your API routes or if it also catches /api paths. Register it last and exclude /api so missing endpoints still return 404."
+  ],
+  [
+   "Can Agent apps use a Static deployment?",
+   "Replit's docs say Static deployments are not compatible with Agent apps that need a backend server. Use Autoscale or Reserved VM for those."
+  ]
+ ],
+ "related": [
+  "replit-app-not-indexed-google",
+  "replit-changes-not-showing-after-deploy",
+  "replit-deployment-types"
+ ]
+}
+-->
+<p>Clicking around your app works. But refresh on <code>/dashboard</code>, or open a shared link, and you get <em>Not Found</em> or <em>Cannot GET /dashboard</em>. This is a classic single-page app (SPA) problem: the React router lives in the browser, and the server has no file called <code>/dashboard</code>. The fix is one fallback rule, placed in the right spot.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Refreshing any page except the homepage returns 404, <em>Not Found</em> or <code>Cannot GET /path</code>.</li><li>Links shared by email or social media land on an error page.</li><li>It worked in the preview (dev server) but not after publishing.</li><li>Search Console reports 404s for pages that exist in your app.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The production server serves the built files but has no fallback to <code>index.html</code> for app routes.</li><li>The fallback is registered before the static or API routes, or is missing in the production branch of the server code.</li><li>A Static deployment has no rewrite rule.</li><li>The build output folder in the server code does not match where the build writes files.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Find which server serves the app</h3>
+<p>Most Agent apps are an Express server that serves the built React files in production. A few are published as Static deployments. Open the publishing settings: the deployment type tells you which fix applies.</p>
+
+<h3 id="step-2">2. Express: add the fallback last</h3>
+<p>Order matters: API routes first, then static files, then the fallback for everything else that is a page request.</p><pre><code>app.use("/api", apiRouter);                 // 1. API
+app.use(express.static(distPath));          // 2. real files: JS, CSS, robots.txt
+app.get(/^(?!\/api\/).*/, (req, res) =&gt; {   // 3. app routes -&gt; index.html
+  res.sendFile(path.join(distPath, "index.html"));
+});
+app.use("/api", (req, res) =&gt; res.status(404).json({ error: "Not found" }));</code></pre><p>The last line keeps unknown API paths as honest JSON 404s instead of returning your HTML page.</p>
+
+<h3 id="step-3">3. Static deployment: add a rewrite</h3>
+<p>Replit's static deployments support rewrites in <code>.replit</code>. Existing files are still served as themselves.</p><pre><code>[[deployment.rewrites]]
+from = "/*"
+to = "/index.html"</code></pre>
+
+<h3 id="step-4">4. Check the build path</h3>
+<p>Confirm the folder your server serves (<code>dist</code>, <code>dist/public</code>, <code>build</code>) is the one your build command writes to. A mismatch gives 404 on every page, including the homepage.</p>
+
+<h3 id="step-5">5. Republish and test deep links</h3>
+<p>Publish again and open three deep links directly in a private window.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My published Replit app returns 404 / "Cannot GET" when I refresh or open a deep link like /dashboard. The homepage works.
+Please fix routing in production only:
+1. In the production server, register API routes first, then express.static for the build folder, then a fallback that sends index.html for any non-API GET request.
+2. Make unknown /api/* paths return a JSON 404, not index.html.
+3. Make sure robots.txt, sitemap.xml and other real files are still served as files with the correct content type.
+4. Confirm the static folder path matches the build output.
+Do not change the client-side routes or the dev server setup.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li><code>curl -I https://your-app/dashboard</code> returns <code>200</code> with <code>content-type: text/html</code>.</li><li><code>curl -I https://your-app/api/does-not-exist</code> returns <code>404</code> with JSON.</li><li><code>curl -I https://your-app/robots.txt</code> returns <code>text/plain</code>, not HTML.</li><li>Refreshing any page in the browser keeps you on that page.</li></ul>
+
+<p>Serving index.html for every URL fixes refresh, but search engines still see the same empty page everywhere. For SEO, read <a href="/guides/replit-app-not-indexed-google/">why your Replit app is not indexed by Google</a>.</p>

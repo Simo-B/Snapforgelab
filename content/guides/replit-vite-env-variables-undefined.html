@@ -1,0 +1,102 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 45,
+ "cta": "fix",
+ "title": "Vite Env Variables Undefined on Replit: Fix",
+ "h1": "Vite environment variables undefined on Replit? Here is why",
+ "kicker": "Troubleshooting",
+ "description": "import.meta.env values are undefined in your Replit React app, or process is not defined in the browser. Fix the VITE_ prefix and build-time values safely.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Vite only exposes variables that start with VITE_, through import.meta.env, not process.env.",
+  "Values are inlined when the frontend is built. They must exist at build time in the deployment, and you must rebuild after changing them.",
+  "Everything in a VITE_ variable is public. Never put a secret key in one: call the API from your backend."
+ ],
+ "steps": [
+  [
+   "Sort variables into public and secret",
+   "Public values are safe for anyone to see: a Stripe publishable key (pk_…), a public analytics ID, your API base path. Secret values are not: sk_… keys, OpenAI keys, database URLs. Only public values may go to the browser."
+  ],
+  [
+   "Name public ones VITE_ and read them correctly",
+   ""
+  ],
+  [
+   "Make them available at build time",
+   "Vite replaces import.meta.env.VITE_… with the actual value during vite build. Add the variable to the deployment secrets so it exists when Replit runs your build command, then publish again. In the workspace, restart the dev server after adding a variable."
+  ],
+  [
+   "Move secrets to the backend",
+   "If the frontend needs a secret, it needs an API route instead. The browser calls /api/…, the server uses the secret from process.env. See Replit Secrets: how to store API keys safely."
+  ],
+  [
+   "Remove process.env from browser code",
+   "Replace process.env.X in frontend files with import.meta.env.VITE_X, or pass the value from the server through an API call."
+  ]
+ ],
+ "faq": [
+  [
+   "Why is import.meta.env undefined on my Replit app?",
+   "Vite only exposes variables prefixed with VITE_, and only those that existed when the frontend was built. Rename the variable, add it to the deployment secrets and publish again."
+  ],
+  [
+   "Can I use process.env in React with Vite?",
+   "Not in browser code. process.env exists on the server only. Use import.meta.env.VITE_ variables for public values."
+  ],
+  [
+   "Are VITE_ variables secret?",
+   "No. They are written into the JavaScript bundle that every visitor downloads. Keep secret keys on the server."
+  ]
+ ],
+ "related": [
+  "replit-secrets-not-working-deployment",
+  "replit-secrets-api-keys",
+  "replit-changes-not-showing-after-deploy"
+ ]
+}
+-->
+<p>Your React frontend reads <code>import.meta.env.VITE_API_URL</code> or a public key, and it is <code>undefined</code> on the live site. Or the console says <code>process is not defined</code>. Most Replit Agent apps use Vite for the frontend, and Vite handles environment variables differently from your server. Once you know the two rules, this takes five minutes to fix.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><code>import.meta.env.MY_KEY</code> is <code>undefined</code> in the browser.</li><li><code>ReferenceError: process is not defined</code> in the console.</li><li>The value works in the preview but is empty or old in the published app.</li><li>A third-party widget (maps, analytics, Stripe.js) fails to load for lack of a public key.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The variable does not start with <code>VITE_</code>, so Vite does not expose it.</li><li>Browser code uses <code>process.env</code>, which only exists on the server.</li><li>The value was not present when the deployment built the frontend.</li><li>The value changed but the app was not rebuilt and republished.</li><li>A secret was placed in a <code>VITE_</code> variable, then removed when someone noticed, which broke the feature.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Sort variables into public and secret</h3>
+<p>Public values are safe for anyone to see: a Stripe publishable key (<code>pk_…</code>), a public analytics ID, your API base path. Secret values are not: <code>sk_…</code> keys, OpenAI keys, database URLs. Only public values may go to the browser.</p>
+
+<h3 id="step-2">2. Name public ones VITE_ and read them correctly</h3>
+<pre><code>// .env or Secrets: VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+if (!stripeKey) console.error("VITE_STRIPE_PUBLISHABLE_KEY missing at build time");</code></pre>
+
+<h3 id="step-3">3. Make them available at build time</h3>
+<p>Vite replaces <code>import.meta.env.VITE_…</code> with the actual value during <code>vite build</code>. Add the variable to the deployment secrets so it exists when Replit runs your build command, then publish again. In the workspace, restart the dev server after adding a variable.</p>
+
+<h3 id="step-4">4. Move secrets to the backend</h3>
+<p>If the frontend needs a secret, it needs an API route instead. The browser calls <code>/api/…</code>, the server uses the secret from <code>process.env</code>. See <a href="/guides/replit-secrets-api-keys/">Replit Secrets: how to store API keys safely</a>.</p>
+
+<h3 id="step-5">5. Remove process.env from browser code</h3>
+<p>Replace <code>process.env.X</code> in frontend files with <code>import.meta.env.VITE_X</code>, or pass the value from the server through an API call.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>Environment variables are undefined in the browser in my Replit app (Vite + React).
+Please:
+1. List every environment variable used in frontend code (import.meta.env or process.env) and classify each as public or secret.
+2. For public values, rename them with the VITE_ prefix and read them with import.meta.env.
+3. For secret values, move the logic to a backend /api route that reads process.env, and remove the secret from the frontend.
+4. Remove any process.env usage from browser code.
+5. Tell me which VITE_ variables must exist in the deployment secrets before the build.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The live site works after republishing, with no <code>undefined</code> config errors in the console.</li><li>Searching the JavaScript bundle in DevTools (Sources) finds your public key, and none of your secret keys.</li><li>Changing a VITE_ value and republishing changes it on the live site.</li></ul>
+
+<p>For server-side variables that go missing after publishing, see <a href="/guides/replit-secrets-not-working-deployment/">Replit secrets not working in deployment</a>.</p>

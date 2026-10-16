@@ -1,0 +1,112 @@
+<!--meta
+{
+ "topic": "Data",
+ "order": 31,
+ "cta": "fix",
+ "title": "Replit Uploaded Files Disappear After Deploy: Fix",
+ "h1": "Uploaded files disappear after you redeploy on Replit? Fix it",
+ "kicker": "Data",
+ "description": "User uploads, avatars or generated PDFs vanish after a Replit republish or restart. The published filesystem is not persistent: move files to App Storage.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "The filesystem of a published Replit app is not persistent and resets every time you publish.",
+  "Store files in App Storage (Replit's object storage) or another bucket, and keep only the file key and metadata in your database.",
+  "Files already lost to a redeploy cannot be recovered from the app. Fix the storage first, then ask users to re-upload."
+ ],
+ "steps": [
+  [
+   "Find every write to disk",
+   "Search the code for multer, diskStorage, writeFile, createWriteStream, uploads/ and .sqlite. Files written only to /tmp during a single request are fine; everything else needs to move."
+  ],
+  [
+   "Create an App Storage bucket",
+   "Open the App Storage tool in your workspace. Agent can provision a bucket and the client library for you. The same bucket is available to the published app."
+  ],
+  [
+   "Upload to the bucket, store the key",
+   "Keep the file in memory or in /tmp, upload it to the bucket, and save only a key such as avatars/USER_ID/FILE_ID.jpg plus metadata (owner, type, size) in your database."
+  ],
+  [
+   "Serve files through a route",
+   "Add a route like GET /files/:key that checks the user may see the file, then streams it from storage. This also keeps private documents private."
+  ],
+  [
+   "Replace local databases",
+   "If data lives in SQLite or JSON files, move it to the Postgres database. See Replit dev vs production database."
+  ],
+  [
+   "Clean up old references",
+   "List database rows that point to local paths. Mark them as missing so the UI asks for a new upload instead of showing broken images."
+  ]
+ ],
+ "faq": [
+  [
+   "Is the Replit deployment filesystem persistent?",
+   "No. Replit's docs state that the file system in published apps is not persistent and resets every time you publish. Use a database for data and App Storage for files."
+  ],
+  [
+   "Can I recover files lost after a Replit redeploy?",
+   "Not from the published app, because its disk was replaced. If copies exist in the development workspace or with your users, upload them again to App Storage."
+  ],
+  [
+   "Should I store images in the database instead?",
+   "Store the file itself in object storage and keep the key and metadata in the database. Large binary data in Postgres makes backups and queries slower."
+  ]
+ ],
+ "related": [
+  "replit-production-database",
+  "replit-works-in-preview-not-deployed",
+  "replit-agent-security-checklist"
+ ]
+}
+-->
+<p>Users upload profile photos or documents, everything works, and after your next publish the images are broken links. Nothing errored. This is how Replit deployments work: Replit's troubleshooting docs say the file system in published apps is not persistent and resets every time you publish. Autoscale instances also start and stop with traffic, so files on one instance's disk are not shared with the others. Anything that must last belongs in storage built for it.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Uploaded images show as broken after a republish.</li><li>Generated files (PDF invoices, exports) are missing a day later.</li><li>Some users see a file and others get 404, depending on which instance answers.</li><li>A local SQLite or JSON file used as a database loses data.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>Uploads are written to a local folder with <code>multer</code>, <code>fs.writeFile</code> or Python <code>open()</code>.</li><li>The app uses a local SQLite or JSON file for data.</li><li>Several Autoscale instances each have their own disk.</li><li>The database stores a local file path that no longer exists.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Find every write to disk</h3>
+<p>Search the code for <code>multer</code>, <code>diskStorage</code>, <code>writeFile</code>, <code>createWriteStream</code>, <code>uploads/</code> and <code>.sqlite</code>. Files written only to <code>/tmp</code> during a single request are fine; everything else needs to move.</p>
+
+<h3 id="step-2">2. Create an App Storage bucket</h3>
+<p>Open the App Storage tool in your workspace. Agent can provision a bucket and the client library for you. The same bucket is available to the published app.</p>
+
+<h3 id="step-3">3. Upload to the bucket, store the key</h3>
+<p>Keep the file in memory or in <code>/tmp</code>, upload it to the bucket, and save only a key such as <code>avatars/USER_ID/FILE_ID.jpg</code> plus metadata (owner, type, size) in your database.</p><pre><code># Python, Replit App Storage SDK
+from replit.object_storage import Client
+storage = Client()
+storage.upload_from_bytes(f"avatars/{user_id}/{file_id}.jpg", data)
+# later
+data = storage.download_as_bytes(f"avatars/{user_id}/{file_id}.jpg")</code></pre>
+
+<h3 id="step-4">4. Serve files through a route</h3>
+<p>Add a route like <code>GET /files/:key</code> that checks the user may see the file, then streams it from storage. This also keeps private documents private.</p>
+
+<h3 id="step-5">5. Replace local databases</h3>
+<p>If data lives in SQLite or JSON files, move it to the Postgres database. See <a href="/guides/replit-production-database/">Replit dev vs production database</a>.</p>
+
+<h3 id="step-6">6. Clean up old references</h3>
+<p>List database rows that point to local paths. Mark them as missing so the UI asks for a new upload instead of showing broken images.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>Files uploaded in my published Replit app disappear after I republish. Please move file storage to Replit App Storage:
+1. Find every place the code writes files to local disk (multer diskStorage, fs.writeFile, uploads/ folder, SQLite or JSON data files) and list them.
+2. Set up an App Storage bucket and change uploads to store files there under keys like &lt;type&gt;/&lt;userId&gt;/&lt;fileId&gt;.&lt;ext&gt;.
+3. Store only the key, owner, content type and size in the database.
+4. Add a GET route that checks permissions and streams the file from storage.
+5. Validate file type and size on upload.
+Do not delete existing database rows; mark rows that point to missing local files instead.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Upload a file on the live URL, republish, and confirm the file still loads.</li><li>The App Storage pane shows the uploaded object under the expected key.</li><li>A logged-out user, or another user, cannot open a private file's URL.</li></ul>
+
+<p>Uploads are also a common security gap. Check the file-related items in the <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a>.</p>

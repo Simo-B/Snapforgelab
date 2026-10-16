@@ -20,7 +20,7 @@
   ["Do I need to re-check security after every Agent change?", "Yes, for anything that touches authentication, data access, payments or file uploads. Agent can rewrite a route and silently remove a check. A quick re-test of the authorization and admin checks after each major change catches most regressions."],
   ["What is the most common security bug in AI-built apps?", "Missing authorization, often called IDOR. The app checks that you are logged in but not that the record you ask for belongs to you, so changing an ID in the URL or API call exposes other users' data."]
  ],
- "related": ["replit-secrets-api-keys", "deploy-replit-app-to-production", "replit-production-database"]
+ "related": ["replit-secrets-api-keys", "deploy-replit-app-to-production", "replit-production-database", "replit-cors-error", "stripe-webhook-not-working-replit"]
 }
 -->
 <p>Replit Agent can take an idea to a working app in an afternoon. What it can't do reliably is think like an attacker. The same handful of gaps show up again and again in AI-built apps, and none of them are visible when you click around your own app as the only user.</p>

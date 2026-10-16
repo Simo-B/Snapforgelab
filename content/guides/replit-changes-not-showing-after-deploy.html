@@ -1,0 +1,113 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 28,
+ "cta": "fix",
+ "title": "Replit Changes Not Showing After Deploy? Fix It",
+ "h1": "Replit changes not showing after deploy? 5 reasons and fixes",
+ "kicker": "Deployment",
+ "description": "You published, but the live Replit app still shows the old version. Republish, fix index.html caching and service workers, and check the data source.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "A deployment is a snapshot. Changes in the workspace reach the live app only after you select Publish again.",
+  "If you did republish, the old version usually comes from a cached index.html or a service worker.",
+  "Content stored in the database is different in production: editing dev data does not change the live site."
+ ],
+ "steps": [
+  [
+   "Confirm what is live",
+   "Open Publishing → History and check the time of the latest successful deployment. If it is older than your change, or the last attempt failed, publish again and read the log."
+  ],
+  [
+   "Test without cache",
+   "Open the live URL in a private window, or on your phone with Wi-Fi off. If the new version shows there, the problem is caching on your device."
+  ],
+  [
+   "Stop caching index.html",
+   "Vite and similar tools put a hash in JS and CSS file names, so those can be cached for a long time. The HTML that points to them must not be. Send a no-cache header for HTML responses."
+  ],
+  [
+   "Check for a service worker",
+   "In DevTools, open Application → Service Workers. If one is registered and you do not need offline mode, unregister it in code and remove the plugin. If you need it, make it update on new deploys."
+  ],
+  [
+   "Check the data source",
+   "If the text or images come from the database, they must be changed in production data. Use the app's admin on the live URL, or the Production view of the Database pane."
+  ],
+  [
+   "Check the domain",
+   "Compare the .replit.app URL and your custom domain. If only the domain is old, it may be attached to another app. Check Publishing → Domains."
+  ]
+ ],
+ "faq": [
+  [
+   "Does Replit update my live app automatically when I change code?",
+   "No. Your published app runs the snapshot from your last publish. Select Publish again to deploy new changes."
+  ],
+  [
+   "Why do my users still see the old version after I republish?",
+   "Their browser or a service worker is serving a cached index.html. Send no-cache headers for HTML and remove or update the service worker."
+  ],
+  [
+   "Why is content I changed in the preview missing live?",
+   "The preview uses the development database and the published app uses the production database. Content stored as data must be changed in production."
+  ]
+ ],
+ "related": [
+  "replit-works-in-preview-not-deployed",
+  "replit-404-on-page-refresh",
+  "replit-database-migration-production"
+ ]
+}
+-->
+<p>Agent made the change, the preview shows it, you published, and the live app looks exactly the same. It is one of the most viewed questions on the Replit forum. Before asking Agent to redo the work, check these five causes. Each takes a minute.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>The live URL shows an old layout or old text after publishing.</li><li>You see the new version, but a client or a phone still sees the old one.</li><li>Some pages are updated and others are not.</li><li>Content you edited in the app's admin area in the preview does not appear live.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The change was made after the last publish, or the publish failed and the previous deployment is still live.</li><li>The browser or an intermediate cache keeps an old <code>index.html</code> that points to old JavaScript files.</li><li>A service worker (PWA) serves cached files until it updates.</li><li>The content lives in the database, and you edited development data, not production.</li><li>The custom domain points to another Replit App or an old deployment.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Confirm what is live</h3>
+<p>Open <strong>Publishing → History</strong> and check the time of the latest successful deployment. If it is older than your change, or the last attempt failed, publish again and read the log.</p>
+
+<h3 id="step-2">2. Test without cache</h3>
+<p>Open the live URL in a private window, or on your phone with Wi-Fi off. If the new version shows there, the problem is caching on your device.</p>
+
+<h3 id="step-3">3. Stop caching index.html</h3>
+<p>Vite and similar tools put a hash in JS and CSS file names, so those can be cached for a long time. The HTML that points to them must not be. Send a no-cache header for HTML responses.</p><pre><code>app.use(express.static(distPath, {
+  setHeaders(res, filePath) {
+    if (filePath.endsWith(".html")) res.setHeader("Cache-Control", "no-cache");
+  },
+}));
+// and in the SPA fallback:
+res.setHeader("Cache-Control", "no-cache");
+res.sendFile(path.join(distPath, "index.html"));</code></pre>
+
+<h3 id="step-4">4. Check for a service worker</h3>
+<p>In DevTools, open Application → Service Workers. If one is registered and you do not need offline mode, unregister it in code and remove the plugin. If you need it, make it update on new deploys.</p>
+
+<h3 id="step-5">5. Check the data source</h3>
+<p>If the text or images come from the database, they must be changed in production data. Use the app's admin on the live URL, or the Production view of the Database pane.</p>
+
+<h3 id="step-6">6. Check the domain</h3>
+<p>Compare the <code>.replit.app</code> URL and your custom domain. If only the domain is old, it may be attached to another app. Check <strong>Publishing → Domains</strong>.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>After publishing, my live Replit app still shows an old version, even though the preview is up to date.
+Please:
+1. Add Cache-Control: no-cache for HTML responses (static index.html and the SPA fallback), and long caching only for hashed assets.
+2. Check whether a service worker is registered; if offline mode is not needed, remove it and add code that unregisters existing ones.
+3. Add GET /api/version that returns the build time, set at build, so I can check which version is live.
+Do not change app features.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li><code>/api/version</code> on the live URL shows the time of your latest publish.</li><li><code>curl -I https://your-app/</code> shows <code>cache-control: no-cache</code> on the HTML.</li><li>A private window and a phone both show the new version right after the next publish.</li></ul>
+
+<p>If the live app is not only old but broken, go to <a href="/guides/replit-works-in-preview-not-deployed/">Replit app works in preview but not after deploy</a>.</p>

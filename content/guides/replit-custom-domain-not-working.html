@@ -1,0 +1,106 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 23,
+ "cta": "fix",
+ "title": "Replit Custom Domain or SSL Not Working: Fix",
+ "h1": "Replit custom domain or SSL not working? Fix the DNS",
+ "kicker": "Deployment",
+ "description": "Custom domain stuck on Verifying, SSL errors, or \"deployment could not be reached\" on Replit? Fix the A and TXT records, Cloudflare proxy, AAAA and CAA issues.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Replit needs one A record and one TXT record per hostname. Root domains cannot use a CNAME.",
+  "On Cloudflare, set the record to DNS only (grey cloud). Remove AAAA records on the same name and old A records.",
+  "Keep the replit-verify TXT record forever: Replit uses it to renew your certificate."
+ ],
+ "steps": [
+  [
+   "Copy the records exactly",
+   "In Publishing → Domains, open the domain and copy the A record (IP address) and the TXT record (replit-verify=…). At your registrar, use @ for the root domain (or the domain name if @ is not accepted) and the subdomain name for anything else. Watch for registrars that append the domain automatically, which creates www.example.com.example.com."
+  ],
+  [
+   "Clean up conflicting records",
+   "Keep only one A record on the hostname, the one pointing to Replit. Delete AAAA records on the same name, old A records from a previous host, and any CNAME on the root domain."
+  ],
+  [
+   "Turn off the Cloudflare proxy",
+   "If your DNS is on Cloudflare, click the orange cloud on the A record so it becomes grey (DNS only). Replit cannot issue or renew certificates for proxied records."
+  ],
+  [
+   "Check CAA records",
+   "If your DNS has CAA records, one must allow letsencrypt.org. Otherwise no certificate can be issued."
+  ],
+  [
+   "Add each subdomain separately",
+   "To serve both example.com and www.example.com, connect both in Replit and add the records Replit shows for each. Each subdomain has its own TXT record."
+  ],
+  [
+   "Wait, then reconnect",
+   "DNS can take minutes to 48 hours to propagate. Check with a public lookup tool. If the records are right everywhere and SSL still fails, disconnect and reconnect the domain in Publishing → Domains → Manage to force a fresh certificate."
+  ]
+ ],
+ "faq": [
+  [
+   "Can I use a CNAME for my root domain on Replit?",
+   "No. Replit's docs say apex (root) CNAMEs are not supported. Use the A record Replit gives you for the root domain."
+  ],
+  [
+   "Can I keep Cloudflare's proxy on with Replit?",
+   "Replit's docs ask you to set the record to DNS only, because proxied records block certificate setup and automatic renewal."
+  ],
+  [
+   "Can I delete the TXT record after verification?",
+   "No. Replit renews your certificate through DNS validation, so the replit-verify TXT record must stay for as long as you use the domain. Removing it makes the next renewal fail."
+  ]
+ ],
+ "related": [
+  "replit-google-oauth-redirect-uri-mismatch",
+  "replit-app-not-indexed-google",
+  "deploy-replit-app-to-production"
+ ]
+}
+-->
+<p>You connected your domain in Replit, added the records, and it is still <em>Verifying</em>. Or the domain loads with a certificate warning, or shows <em>The deployment could not be reached</em>. Almost every case comes down to a handful of DNS details that Replit documents but that are easy to miss. Work through them in this order.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>The domain stays on <em>Verifying</em> for hours in Publishing → Domains.</li><li>Browsers show <code>NET::ERR_CERT_COMMON_NAME_INVALID</code> or another SSL warning.</li><li>The <code>.replit.app</code> URL works but the custom domain shows an error or another site.</li><li><code>www</code> works and the root domain does not, or the reverse.</li><li>It worked for months, then the certificate expired.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The A or TXT record is missing, has a typo, or sits on the wrong host name.</li><li>Cloudflare proxy (orange cloud) is on, which blocks Replit's certificate setup and renewal.</li><li>An AAAA (IPv6) record or a second A record on the same name points somewhere else.</li><li>A CAA record does not allow Let's Encrypt, which Replit uses to issue certificates.</li><li>The TXT record was deleted after the first verification, so renewal failed.</li><li>Each subdomain (including <code>www</code>) needs its own records, and wildcards are not supported.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Copy the records exactly</h3>
+<p>In <strong>Publishing → Domains</strong>, open the domain and copy the A record (IP address) and the TXT record (<code>replit-verify=…</code>). At your registrar, use <code>@</code> for the root domain (or the domain name if <code>@</code> is not accepted) and the subdomain name for anything else. Watch for registrars that append the domain automatically, which creates <code>www.example.com.example.com</code>.</p>
+
+<h3 id="step-2">2. Clean up conflicting records</h3>
+<p>Keep only one A record on the hostname, the one pointing to Replit. Delete AAAA records on the same name, old A records from a previous host, and any CNAME on the root domain.</p>
+
+<h3 id="step-3">3. Turn off the Cloudflare proxy</h3>
+<p>If your DNS is on Cloudflare, click the orange cloud on the A record so it becomes grey (<strong>DNS only</strong>). Replit cannot issue or renew certificates for proxied records.</p>
+
+<h3 id="step-4">4. Check CAA records</h3>
+<p>If your DNS has CAA records, one must allow <code>letsencrypt.org</code>. Otherwise no certificate can be issued.</p>
+
+<h3 id="step-5">5. Add each subdomain separately</h3>
+<p>To serve both <code>example.com</code> and <code>www.example.com</code>, connect both in Replit and add the records Replit shows for each. Each subdomain has its own TXT record.</p>
+
+<h3 id="step-6">6. Wait, then reconnect</h3>
+<p>DNS can take minutes to 48 hours to propagate. Check with a public lookup tool. If the records are right everywhere and SSL still fails, disconnect and reconnect the domain in <strong>Publishing → Domains → Manage</strong> to force a fresh certificate.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit custom domain is not working (stuck verifying / SSL error / deployment could not be reached).
+I do not want code changes. Please:
+1. Tell me exactly which DNS records Replit expects for example.com and www.example.com, using the values shown in Publishing &gt; Domains.
+2. Give me a checklist to compare with my registrar: one A record per hostname, the replit-verify TXT record kept permanently, no AAAA records on the same name, no CNAME on the root, Cloudflare set to DNS only, CAA allowing letsencrypt.org.
+3. After the domain works, make sure the app builds absolute URLs (emails, OAuth callbacks, Stripe redirects) from an APP_URL secret set to https://example.com.
+Here is my current DNS export: [paste records, no secrets]</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li><code>dig +short A example.com</code> returns only Replit's IP, and <code>dig +short AAAA example.com</code> returns nothing.</li><li><code>dig +short TXT example.com</code> shows the <code>replit-verify=</code> value.</li><li><code>curl -I https://example.com</code> answers without certificate errors, for the root and for <code>www</code>.</li><li>Publishing → Domains shows the domain as verified.</li></ul>
+
+<p>Once the domain works, update OAuth redirect URIs and Stripe URLs to it, then check <a href="/guides/replit-app-not-indexed-google/">that Google indexes the right domain</a>.</p>

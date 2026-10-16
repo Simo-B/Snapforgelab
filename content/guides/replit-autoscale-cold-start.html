@@ -1,0 +1,103 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 26,
+ "cta": "fix",
+ "title": "Replit Autoscale Cold Starts: Why Your App Is Slow",
+ "h1": "Replit Autoscale cold starts: why the first load is slow",
+ "kicker": "Deployment",
+ "description": "Your Replit app takes seconds to load after a quiet period? That is an Autoscale cold start. Shorten startup, or choose Reserved VM when it really matters.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Autoscale scales to zero when idle. The next visitor waits while a new instance starts: Replit calls this a normal cold start.",
+  "Make startup fast: listen first, then connect and warm caches. Avoid heavy imports and work at boot.",
+  "If every first request must be instant (webhooks with short timeouts, bots, demos), a Reserved VM stays on for a fixed monthly price."
+ ],
+ "steps": [
+  [
+   "Measure startup time",
+   "Log a timestamp at the top of your entry file and another when the server starts listening. Look at both in the deployment logs after a quiet period. This tells you whether boot or the first request is the slow part."
+  ],
+  [
+   "Listen first, warm up later",
+   "Start the HTTP server as early as possible. Run database migrations in the build step, not at boot. Load caches lazily on first use, and import heavy libraries (PDF, image, AI SDKs) inside the route that needs them."
+  ],
+  [
+   "Make the first page cheap",
+   "Serve the homepage and static assets without database calls where you can. Add indexes for the queries the first screen runs."
+  ],
+  [
+   "Decide if Reserved VM is worth it",
+   "A Reserved VM runs one machine all the time for a fixed monthly cost, so there is no cold start. It suits bots, websockets, background work and apps that need every request fast. For a typical business app with bursts of traffic, a short cold start on Autoscale is usually the cheaper trade-off. Compare in Autoscale vs Reserved VM."
+  ],
+  [
+   "Be careful with keep-warm pings",
+   "Pinging the app every few minutes keeps an instance alive, but you pay compute for that time, which removes the main advantage of Autoscale. If you need it always on, a Reserved VM is more predictable."
+  ]
+ ],
+ "faq": [
+  [
+   "Is a slow first load on Replit a bug?",
+   "No. Replit's docs state that on Autoscale deployments the first request after a quiet period can take a few seconds, which is a normal cold start."
+  ],
+  [
+   "How do I avoid cold starts on Replit?",
+   "Use a Reserved VM deployment, which never sleeps. On Autoscale you can only make startup shorter."
+  ],
+  [
+   "Do cold starts break Stripe webhooks?",
+   "Usually not, because Stripe retries failed deliveries. Keep webhook handlers fast and idempotent so a retry does not create duplicates."
+  ]
+ ],
+ "related": [
+  "replit-deployment-types",
+  "replit-cron-jobs-not-running",
+  "replit-deployment-costs-too-high"
+ ]
+}
+-->
+<p>Your app is fast once it is warm, but the first visit of the morning hangs for several seconds. Users think it is broken. On an Autoscale deployment this is expected behavior: when nobody uses the app, Replit scales it down to zero instances so you do not pay for idle time. The next request has to wait for an instance to start. You cannot remove cold starts on Autoscale, but you can make them short, or switch type when they are unacceptable.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>The first request after a quiet period takes several seconds, then everything is fast.</li><li>Webhooks or uptime checks sometimes time out, then succeed on retry.</li><li>Logs show the app starting up right before a slow request.</li><li><code>SIGTERM</code> lines in the logs when traffic stops (normal on Autoscale).</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>Autoscale scaled to zero during a quiet period, so a new instance has to boot.</li><li>Startup does slow work: connecting to many services, running migrations, loading large libraries or data files.</li><li>The machine is small for a heavy app (large AI or PDF libraries).</li><li>The first request itself is slow (unindexed database queries), which adds to the boot time.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Measure startup time</h3>
+<p>Log a timestamp at the top of your entry file and another when the server starts listening. Look at both in the deployment logs after a quiet period. This tells you whether boot or the first request is the slow part.</p>
+
+<h3 id="step-2">2. Listen first, warm up later</h3>
+<p>Start the HTTP server as early as possible. Run database migrations in the build step, not at boot. Load caches lazily on first use, and import heavy libraries (PDF, image, AI SDKs) inside the route that needs them.</p><pre><code>// Heavy library loaded only when the route is used
+app.post("/api/report", async (req, res) =&gt; {
+  const { default: PDFDocument } = await import("pdfkit");
+  // ...
+});</code></pre>
+
+<h3 id="step-3">3. Make the first page cheap</h3>
+<p>Serve the homepage and static assets without database calls where you can. Add indexes for the queries the first screen runs.</p>
+
+<h3 id="step-4">4. Decide if Reserved VM is worth it</h3>
+<p>A Reserved VM runs one machine all the time for a fixed monthly cost, so there is no cold start. It suits bots, websockets, background work and apps that need every request fast. For a typical business app with bursts of traffic, a short cold start on Autoscale is usually the cheaper trade-off. Compare in <a href="/guides/replit-deployment-types/">Autoscale vs Reserved VM</a>.</p>
+
+<h3 id="step-5">5. Be careful with keep-warm pings</h3>
+<p>Pinging the app every few minutes keeps an instance alive, but you pay compute for that time, which removes the main advantage of Autoscale. If you need it always on, a Reserved VM is more predictable.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My Replit Autoscale app is slow on the first request after idle (cold start). Please reduce startup time without changing features:
+1. Log the time from process start to "server listening" so I can see it in deployment logs.
+2. Start listening before any slow work. Move migrations to the build step and load caches lazily.
+3. Lazy-load heavy libraries inside the routes that use them.
+4. Check the queries run by the homepage and first API call and add indexes if needed.
+Tell me the startup time before and after.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>After 30+ minutes without traffic, the first load is noticeably faster than before.</li><li>The startup log shows the server listening within a couple of seconds of the process start.</li><li>Webhooks from Stripe or other services succeed on the first attempt (check their delivery logs).</li></ul>
+
+<p>Cold starts also affect costs and background jobs. See <a href="/guides/replit-cron-jobs-not-running/">why cron jobs do not run on Autoscale</a> and <a href="/guides/replit-deployment-costs-too-high/">how to lower Replit deployment costs</a>.</p>

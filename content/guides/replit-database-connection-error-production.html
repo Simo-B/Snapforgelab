@@ -1,0 +1,113 @@
+<!--meta
+{
+ "topic": "Data",
+ "order": 30,
+ "cta": "fix",
+ "title": "Replit Database Connection Error in Production: Fix",
+ "h1": "Replit database connection errors in production: how to fix them",
+ "kicker": "Data",
+ "description": "DATABASE_URL not set, endpoint disabled, SSL required or pool exhausted in your published Replit app? Diagnose the error and fix the Postgres connection.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Read the exact error first: \"not set\", \"endpoint has been disabled\", \"SSL\", \"too many connections\" and \"relation does not exist\" have different fixes.",
+  "A paused database is unpaused from the Database pane, for Development and Production. A conflicting DATABASE_URL secret can hide that button.",
+  "Use one shared connection pool per process, and run migrations against production before you publish."
+ ],
+ "steps": [
+  [
+   "Copy the exact error",
+   "Open the deployment logs and copy the first database error with its stack trace. Match it to the steps below instead of trying every fix at once."
+  ],
+  [
+   "\"Not set\": check DATABASE_URL",
+   "In the Database pane, confirm a production database exists. Then check the deployment secrets: the published app must get the production connection string. If you also defined your own DATABASE_URL secret, compare it with the value in the Database pane. A stale one overrides the right one."
+  ],
+  [
+   "\"Endpoint disabled\": unpause",
+   "Replit's help center gives the steps: open the Database pane, select Development and click Unpause database if shown, then switch to Production and do the same. If the button is missing, a conflicting DATABASE_URL secret is the usual reason. Fix or remove it, refresh and check again. Pay any open invoice so it does not recur."
+  ],
+  [
+   "SSL errors: enable SSL for external Postgres",
+   "Hosted Postgres providers usually require encrypted connections. Use the connection string they give you (often with sslmode=require) and do not turn certificate checks off globally to make an error disappear."
+  ],
+  [
+   "Pool errors: share one pool",
+   "Create the pool once when the server starts and import it everywhere. Close any client you check out manually."
+  ],
+  [
+   "\"Relation does not exist\": run migrations on production",
+   "Apply your schema to the production database before or during publish, for example by running drizzle-kit migrate in the build step. See database migrations in production."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does my Replit app say DATABASE_URL is not set only after publishing?",
+   "The published app reads the deployment's environment, not your workspace. Check that a production database exists and that the deployment gets its connection string, without a stale DATABASE_URL secret overriding it."
+  ],
+  [
+   "What does \"endpoint has been disabled\" mean on Replit?",
+   "Replit's help center explains that the database compute endpoint was paused. Unpause it from the Database pane for Development and Production; if the button is missing, check for a conflicting DATABASE_URL secret."
+  ],
+  [
+   "How many database connections should my app use?",
+   "Use one shared pool per process with a modest maximum. Opening a new connection per request is the most common cause of pool exhausted errors."
+  ]
+ ],
+ "related": [
+  "replit-production-database",
+  "replit-database-migration-production",
+  "replit-works-in-preview-not-deployed"
+ ]
+}
+-->
+<p>The published app loads, then every page that touches data fails. Or publishing itself stops with <code>DATABASE_URL environment variable is not set</code>. Database errors in production look alike from the outside, but the message in the logs tells you which of five problems you have. Here is each one with its fix.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><code>DATABASE_URL environment variable is not set</code> at publish or startup.</li><li><code>The endpoint has been disabled</code> or a frozen database.</li><li><code>connection requires SSL</code>, <code>self-signed certificate</code> or <code>ECONNREFUSED</code>.</li><li><code>remaining connection slots are reserved</code>, <code>too many connections</code> or <code>connection pool exhausted</code> under load.</li><li><code>relation "users" does not exist</code> only in production.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The deployment has no <code>DATABASE_URL</code>, or it points to the development database.</li><li>The database compute endpoint was paused (Replit's help center names an unpaid invoice or a transient pause during publishing).</li><li>An external Postgres (Neon, Supabase and others) requires SSL and the connection string or client does not use it.</li><li>The code opens a new connection or pool per request instead of sharing one.</li><li>Tables were created in development but migrations never ran on production.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Copy the exact error</h3>
+<p>Open the deployment logs and copy the first database error with its stack trace. Match it to the steps below instead of trying every fix at once.</p>
+
+<h3 id="step-2">2. "Not set": check DATABASE_URL</h3>
+<p>In the Database pane, confirm a production database exists. Then check the deployment secrets: the published app must get the production connection string. If you also defined your own <code>DATABASE_URL</code> secret, compare it with the value in the Database pane. A stale one overrides the right one.</p>
+
+<h3 id="step-3">3. "Endpoint disabled": unpause</h3>
+<p>Replit's help center gives the steps: open the Database pane, select <strong>Development</strong> and click <strong>Unpause database</strong> if shown, then switch to <strong>Production</strong> and do the same. If the button is missing, a conflicting <code>DATABASE_URL</code> secret is the usual reason. Fix or remove it, refresh and check again. Pay any open invoice so it does not recur.</p>
+
+<h3 id="step-4">4. SSL errors: enable SSL for external Postgres</h3>
+<p>Hosted Postgres providers usually require encrypted connections. Use the connection string they give you (often with <code>sslmode=require</code>) and do not turn certificate checks off globally to make an error disappear.</p>
+
+<h3 id="step-5">5. Pool errors: share one pool</h3>
+<p>Create the pool once when the server starts and import it everywhere. Close any client you check out manually.</p><pre><code>// db.ts: created once per process
+import { Pool } from "pg";
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 10 });
+
+// in a route: use the shared pool, never `new Pool()` here
+const { rows } = await pool.query("select * from orders where user_id = $1", [userId]);</code></pre>
+
+<h3 id="step-6">6. "Relation does not exist": run migrations on production</h3>
+<p>Apply your schema to the production database before or during publish, for example by running <code>drizzle-kit migrate</code> in the build step. See <a href="/guides/replit-database-migration-production/">database migrations in production</a>.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My published Replit app fails to connect to the database. Here is the exact error from the deployment logs:
+[paste error and stack trace]
+Please:
+1. Tell me which case it is: missing DATABASE_URL, paused endpoint, SSL, connection pool, or missing tables.
+2. Make sure the app creates a single shared database pool per process and never opens a pool per request.
+3. Make the app fail at startup with a clear message if DATABASE_URL is missing (log only whether it is present, never the value).
+4. If tables are missing in production, set up a migration command that runs against the production database during publish, and show me the SQL before it runs.
+Do not delete or reset any data.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Deployment logs show a successful database connection at startup and no errors during a full user journey.</li><li>The Production view of the Database pane shows the expected tables and new rows created from the live app.</li><li>A quick load test (a few dozen parallel requests) does not produce pool or connection-limit errors.</li></ul>
+
+<p>For how Replit separates development and production data, read <a href="/guides/replit-production-database/">Replit dev vs production database</a>.</p>

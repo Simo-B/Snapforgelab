@@ -1,0 +1,118 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 40,
+ "cta": "fix",
+ "title": "Stripe Webhook Not Working on Replit: Fix It",
+ "h1": "Stripe webhook not working on Replit? How to fix it",
+ "kicker": "Payments",
+ "description": "Payments succeed but your Replit app never updates? Fix the webhook URL, signing secret, raw body, test vs live mode and middleware that block Stripe.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Check the webhook endpoint's delivery log in the Stripe Dashboard first: it shows the HTTP status your app returned.",
+  "Signature errors almost always mean the wrong signing secret or a parsed (not raw) request body.",
+  "The endpoint URL must be your published domain, and test and live mode each have their own keys, endpoints and secrets."
+ ],
+ "steps": [
+  [
+   "Read Stripe's delivery log",
+   "In the Stripe Dashboard, open your webhook endpoint and look at recent events. The status code and response body tell you which step below applies. 404 is the URL, 400 the signature, 401/403 middleware, 500 your handler."
+  ],
+  [
+   "Point the endpoint at production",
+   "Set the endpoint to https://yourdomain.com/api/stripe/webhook, your custom domain or .replit.app URL, never the preview. Make sure the path matches your route exactly."
+  ],
+  [
+   "Use the matching signing secret",
+   "Each endpoint has its own signing secret (whsec_…), and the Stripe CLI uses a different one. Copy the secret of this endpoint, in this mode, into the deployment secrets as STRIPE_WEBHOOK_SECRET, then publish again."
+  ],
+  [
+   "Verify the raw body",
+   "Register the webhook route with a raw body parser, before the global JSON parser."
+  ],
+  [
+   "Exempt the route from auth and CSRF",
+   "Stripe is not a logged-in user. The signature check is the authentication. Make sure session, CSRF and rate-limit middleware skip this one path."
+  ],
+  [
+   "Make the handler idempotent",
+   "Stripe retries failed deliveries, so the same event can arrive more than once. Store processed event IDs and skip repeats. Use one Stripe method per environment: Replit's docs warn that mixing the Replit connector and your own keys in the same environment causes conflicts."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does Stripe say no signatures found matching the expected signature?",
+   "Either the signing secret does not belong to this endpoint and mode, or the request body was parsed as JSON before verification. Use the endpoint's own whsec_ secret and a raw body parser on the webhook route."
+  ],
+  [
+   "Can I use my replit.dev preview URL for Stripe webhooks?",
+   "Use it only for quick tests. Live webhooks should point to your published domain, which is stable and runs the deployed code."
+  ],
+  [
+   "Does Stripe retry failed webhooks?",
+   "Yes, Stripe retries failed deliveries automatically over a period of time. That is why your handler must ignore events it has already processed."
+  ]
+ ],
+ "related": [
+  "replit-secrets-not-working-deployment",
+  "replit-works-in-preview-not-deployed",
+  "replit-agent-security-checklist"
+ ]
+}
+-->
+<p>The customer pays, Stripe shows the payment, and your app still says <em>Free plan</em>. Webhooks are how Stripe tells your app a payment happened, and they fail quietly. The good news: Stripe records every delivery attempt with the response your app returned, so you can see exactly what broke.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>Payments succeed in Stripe, but orders or subscriptions are not updated in your app.</li><li>Stripe shows webhook deliveries failing with 400, 401, 403, 404 or 500.</li><li>Logs show <code>No signatures found matching the expected signature for payload</code>.</li><li>It worked with the Stripe CLI or in the preview, and fails live.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The endpoint URL points to the <code>replit.dev</code> preview URL, an old domain, or a wrong path.</li><li><code>STRIPE_WEBHOOK_SECRET</code> is from another endpoint, from the Stripe CLI, or from the other mode (test vs live).</li><li><code>express.json()</code> parsed the body before signature verification, which needs the raw bytes.</li><li>Auth, CSRF or rate-limit middleware rejects Stripe's request (a 401 or 403).</li><li>The handler throws or takes too long, so Stripe sees a 500 or a timeout.</li><li>Replit's Stripe connector and your own keys are mixed in the same environment.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Read Stripe's delivery log</h3>
+<p>In the Stripe Dashboard, open your webhook endpoint and look at recent events. The status code and response body tell you which step below applies. 404 is the URL, 400 the signature, 401/403 middleware, 500 your handler.</p>
+
+<h3 id="step-2">2. Point the endpoint at production</h3>
+<p>Set the endpoint to <code>https://yourdomain.com/api/stripe/webhook</code>, your custom domain or <code>.replit.app</code> URL, never the preview. Make sure the path matches your route exactly.</p>
+
+<h3 id="step-3">3. Use the matching signing secret</h3>
+<p>Each endpoint has its own signing secret (<code>whsec_…</code>), and the Stripe CLI uses a different one. Copy the secret of this endpoint, in this mode, into the deployment secrets as <code>STRIPE_WEBHOOK_SECRET</code>, then publish again.</p>
+
+<h3 id="step-4">4. Verify the raw body</h3>
+<p>Register the webhook route with a raw body parser, before the global JSON parser.</p><pre><code>app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) =&gt; {
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, req.get("stripe-signature"), process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+  res.sendStatus(200);          // answer fast
+  await handleEvent(event);     // then process (idempotently)
+});
+app.use(express.json());        // global JSON parser AFTER the webhook route</code></pre>
+
+<h3 id="step-5">5. Exempt the route from auth and CSRF</h3>
+<p>Stripe is not a logged-in user. The signature check is the authentication. Make sure session, CSRF and rate-limit middleware skip this one path.</p>
+
+<h3 id="step-6">6. Make the handler idempotent</h3>
+<p>Stripe retries failed deliveries, so the same event can arrive more than once. Store processed event IDs and skip repeats. Use one Stripe method per environment: Replit's docs warn that mixing the Replit connector and your own keys in the same environment causes conflicts.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>Stripe webhooks are failing in my published Replit app. Stripe's delivery log shows: [status code + response body].
+Please:
+1. Make POST /api/stripe/webhook use express.raw({ type: "application/json" }) and register it before express.json().
+2. Verify the signature with stripe.webhooks.constructEvent and STRIPE_WEBHOOK_SECRET; return 400 on failure.
+3. Exclude this route from auth, CSRF and rate-limit middleware.
+4. Return 200 quickly, then process the event; store processed event IDs so duplicates are ignored.
+5. Handle checkout.session.completed, customer.subscription.updated and customer.subscription.deleted.
+Do not put any key in the code. Tell me which secrets must exist in the deployment.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Use <strong>Send test event</strong> on the endpoint in the Stripe Dashboard (test mode) and get a 200.</li><li>Make a real test-mode checkout on the live URL and see the order or plan update in the app.</li><li>Resend the same event from Stripe and confirm nothing is duplicated.</li><li>After switching to live mode, check the live endpoint's first deliveries.</li></ul>
+
+<p>Payment flows deserve a full check before launch. They are part of the <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a>.</p>

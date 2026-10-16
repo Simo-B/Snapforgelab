@@ -19,7 +19,7 @@
   ["Can I run background jobs on Autoscale?", "Not reliably. Autoscale instances exist to serve requests and can be stopped when traffic drops. Use a Scheduled deployment for recurring jobs, or a Reserved VM for continuous workers and queues."],
   ["Can I switch deployment types later?", "Yes. You can change the deployment type from the publishing settings and republish. Test afterwards, because run commands and assumptions about always-on processes may need to change."]
  ],
- "related": ["deploy-replit-app-to-production", "is-replit-production-ready", "replit-agent-security-checklist"]
+ "related": ["deploy-replit-app-to-production", "is-replit-production-ready", "replit-agent-security-checklist", "replit-autoscale-cold-start", "replit-cron-jobs-not-running"]
 }
 -->
 <p>Replit gives you <a href="https://docs.replit.com/features/publishing/deployment-types" rel="noopener">several ways to publish an app</a>, and picking the wrong one is one of the most common reasons a Replit app feels slow, flaky or expensive in production. Here is how to choose.</p>

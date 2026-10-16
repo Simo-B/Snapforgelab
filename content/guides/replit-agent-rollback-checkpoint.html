@@ -1,0 +1,106 @@
+<!--meta
+{
+ "topic": "Troubleshooting",
+ "order": 47,
+ "cta": "fix",
+ "title": "Replit Agent Rollback: Undo Changes Without Data Loss",
+ "h1": "How to roll back Replit Agent changes (and what happens to your data)",
+ "kicker": "Replit Agent",
+ "description": "Agent broke your app? How Replit checkpoints and rollbacks work, why the database is not restored by default, and how to update the live app afterwards.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Agent creates checkpoints as it works. Rolling back restores code, files and Agent's context to that point.",
+  "By default a rollback does not change your database. Select Database under Additional rollback options to restore the development database too.",
+  "Production data is never rolled back this way: use point-in-time restore. And publish again so the live app gets the rolled-back code."
+ ],
+ "steps": [
+  [
+   "Pick the right checkpoint",
+   "Scroll the Agent chat to the checkpoints. Choose the last one where the app worked, and note its description. Test the current state first so you know what you will lose: rolling back removes every change made after that point."
+  ],
+  [
+   "Decide about the database",
+   "If Agent changed the schema after that checkpoint, restore the development database with the code: choose Rollback to here, then select Database under Additional rollback options. If you only want the code back and the schema did not change, leave it unselected."
+  ],
+  [
+   "Test in the preview",
+   "Run the app and go through the flows that were broken. If the app errors with schema mismatches, you probably needed the database option, or a migration to match the code."
+  ],
+  [
+   "Publish to update the live app",
+   "Replit's help center explains that to revert a published app, you roll back the project, then publish again. Until then, users still see the version you last published. Alternatively, redeploy an older version from Publishing → History."
+  ],
+  [
+   "Handle production data separately",
+   "If bad code wrote bad data in production, use point-in-time restore on the production database (up to 7 days of history on Core and up to 28 on Pro, per Replit's docs). Restoring the database does not restore code, and the reverse."
+  ],
+  [
+   "Add a second safety net",
+   "Connect the project to GitHub and commit when things work. A Git history does not depend on chat sessions."
+  ]
+ ],
+ "faq": [
+  [
+   "Does a Replit rollback restore my database?",
+   "Not by default. Replit's docs state rollbacks do not change your database unless you select Database under Additional rollback options, and that restores the development database only."
+  ],
+  [
+   "Will rolling back change my published app?",
+   "No. The live app keeps the last published version. Publish again after the rollback, or redeploy an older version from Publishing → History."
+  ],
+  [
+   "Can I undo a rollback?",
+   "Replit's checkpoints work in both directions, so you can roll forward to a later checkpoint. Test before deleting anything."
+  ]
+ ],
+ "related": [
+  "replit-agent-keeps-breaking-app",
+  "replit-database-migration-production",
+  "replit-production-database"
+ ]
+}
+-->
+<p>Agent tried to fix one thing and broke five others. You want yesterday's version back. Replit's checkpoints make that possible, but rollbacks surprise many people: the code goes back and the database does not, unless you ask. And the published app stays as it was until you publish again. Here is how to roll back without creating a second problem.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>The app got worse after a series of Agent changes and you want an earlier state.</li><li>After a rollback, the app errors with <code>column does not exist</code> or shows unexpected data.</li><li>You rolled back, but the live app still has the bug.</li><li>The rollback option is missing for an old chat session.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>Code was rolled back but the database kept the newer schema, so code and data no longer match.</li><li>The development database was restored, but production data never changes through a workspace rollback.</li><li>The rolled-back code was not published.</li><li>Work spread across several chat sessions, which makes older checkpoints harder to restore from the UI.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Pick the right checkpoint</h3>
+<p>Scroll the Agent chat to the checkpoints. Choose the last one where the app worked, and note its description. Test the current state first so you know what you will lose: rolling back removes every change made after that point.</p>
+
+<h3 id="step-2">2. Decide about the database</h3>
+<p>If Agent changed the schema after that checkpoint, restore the development database with the code: choose <strong>Rollback to here</strong>, then select <strong>Database</strong> under <strong>Additional rollback options</strong>. If you only want the code back and the schema did not change, leave it unselected.</p>
+
+<h3 id="step-3">3. Test in the preview</h3>
+<p>Run the app and go through the flows that were broken. If the app errors with schema mismatches, you probably needed the database option, or a migration to match the code.</p>
+
+<h3 id="step-4">4. Publish to update the live app</h3>
+<p>Replit's help center explains that to revert a published app, you roll back the project, then publish again. Until then, users still see the version you last published. Alternatively, redeploy an older version from <strong>Publishing → History</strong>.</p>
+
+<h3 id="step-5">5. Handle production data separately</h3>
+<p>If bad code wrote bad data in production, use point-in-time restore on the production database (up to 7 days of history on Core and up to 28 on Pro, per Replit's docs). Restoring the database does not restore code, and the reverse.</p>
+
+<h3 id="step-6">6. Add a second safety net</h3>
+<p>Connect the project to GitHub and commit when things work. A Git history does not depend on chat sessions.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>I rolled my Replit project back to an earlier checkpoint. Before I publish, please:
+1. Compare the current database schema with the schema the code expects and list any mismatch (missing or extra tables and columns).
+2. Do not change the schema yourself; tell me whether I should roll back the database too or apply a migration.
+3. Run the main flows (sign up, log in, create, edit, delete) and report what fails.
+4. Make a short list of the features that were removed by the rollback so I can re-add them one at a time.
+Make one change per message from now on so each checkpoint is easy to return to.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The preview runs without schema errors and the broken flows work again.</li><li>After publishing, <strong>Publishing → History</strong> shows a new deployment and the live app behaves like the preview.</li><li>Production data is intact (compare row counts of key tables before and after).</li></ul>
+
+<p>To avoid needing rollbacks in the first place, follow <a href="/guides/replit-agent-keeps-breaking-app/">how to stop Replit Agent from breaking your app</a>.</p>

@@ -1,0 +1,101 @@
+<!--meta
+{
+ "topic": "Data",
+ "order": 32,
+ "cta": "fix",
+ "title": "Replit Database Migrations in Production, Safely",
+ "h1": "How to run database migrations on Replit production safely",
+ "kicker": "Data",
+ "description": "Schema changes work in dev but break the published Replit app, or publishing warns about data loss. Apply migrations to production without dropping data.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Replit keeps development and production databases separate. Schema changes made in dev must be applied to production.",
+  "Run a reviewed migration (for example drizzle-kit migrate) as part of each deploy, and read the SQL before it touches live data.",
+  "Renames often show up as drop plus add, which deletes data. Back up first: production has point-in-time restore."
+ ],
+ "steps": [
+  [
+   "Back up before anything",
+   "Replit's production databases support point-in-time restore: up to 7 days of history on Core and up to 28 days on Pro, according to Replit's docs. Note the current time before you migrate so you know which moment to restore if something goes wrong. For extra safety, export the key tables."
+  ],
+  [
+   "Generate migration files, then read them",
+   "Prefer versioned migration files over pushing the schema directly. With Drizzle: drizzle-kit generate creates a SQL file you can read and commit."
+  ],
+  [
+   "Rewrite destructive changes",
+   "A rename should be ALTER TABLE … RENAME COLUMN, not drop plus add. A new required column needs a default or a backfill before NOT NULL. Deleting a column is a separate, later deploy once no code reads it."
+  ],
+  [
+   "Run migrations on every deploy",
+   "Replit's help center suggests adding the migration command to your deployment's build or pre-deploy step, so production is migrated each time you publish, for example npm run build && npx drizzle-kit migrate. If publishing shows schema changes to apply, read them as carefully as your own files."
+  ],
+  [
+   "Seed what production needs",
+   "Reference data (plans, roles, settings) must exist in production too. Use an idempotent seed script that inserts only missing rows."
+  ]
+ ],
+ "faq": [
+  [
+   "Does Replit migrate my production database automatically?",
+   "Development and production are separate databases. Replit may show schema changes to apply when you publish, and its help center recommends running your migration command in the build or pre-deploy step so it happens on each deploy."
+  ],
+  [
+   "Why did my migration delete a column's data?",
+   "Schema-diff tools often cannot tell a rename from a drop plus a new column. Read generated SQL and write renames explicitly."
+  ],
+  [
+   "How do I undo a bad migration in production?",
+   "Use point-in-time restore on the production database to a moment before the migration. Replit's docs list up to 7 days of history on Core and up to 28 days on Pro."
+  ]
+ ],
+ "related": [
+  "replit-production-database",
+  "replit-database-connection-error-production",
+  "replit-agent-rollback-checkpoint"
+ ]
+}
+-->
+<p>Agent added a column, the preview works, and the published app now throws <code>column "plan" does not exist</code>. Or publishing shows a list of schema changes with scary <code>DROP</code> statements. Database migrations are where AI-built apps lose real data. Here is a safe routine that takes a few minutes per deploy.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li><code>column … does not exist</code> or <code>relation … does not exist</code> only in production.</li><li>Publishing fails with a migration error, or shows schema changes to approve.</li><li>A tool warns that a change will cause data loss.</li><li>After a deploy, a column's values are empty.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li>The schema changed in development and was never applied to production.</li><li>Changes were pushed with a tool that diffs schemas directly, which can turn a rename into a drop and an add.</li><li>Development and production schemas drifted after manual edits.</li><li>An extension or type exists in one database and not the other.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Back up before anything</h3>
+<p>Replit's production databases support point-in-time restore: up to 7 days of history on Core and up to 28 days on Pro, according to Replit's docs. Note the current time before you migrate so you know which moment to restore if something goes wrong. For extra safety, export the key tables.</p>
+
+<h3 id="step-2">2. Generate migration files, then read them</h3>
+<p>Prefer versioned migration files over pushing the schema directly. With Drizzle: <code>drizzle-kit generate</code> creates a SQL file you can read and commit.</p><pre><code>npx drizzle-kit generate   # writes SQL into ./drizzle (or your migrations folder)
+# open the new .sql file and look for DROP COLUMN, DROP TABLE, or a type change</code></pre>
+
+<h3 id="step-3">3. Rewrite destructive changes</h3>
+<p>A rename should be <code>ALTER TABLE … RENAME COLUMN</code>, not drop plus add. A new required column needs a default or a backfill before <code>NOT NULL</code>. Deleting a column is a separate, later deploy once no code reads it.</p>
+
+<h3 id="step-4">4. Run migrations on every deploy</h3>
+<p>Replit's help center suggests adding the migration command to your deployment's build or pre-deploy step, so production is migrated each time you publish, for example <code>npm run build &amp;&amp; npx drizzle-kit migrate</code>. If publishing shows schema changes to apply, read them as carefully as your own files.</p>
+
+<h3 id="step-5">5. Seed what production needs</h3>
+<p>Reference data (plans, roles, settings) must exist in production too. Use an idempotent seed script that inserts only missing rows.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>I need to apply my latest schema changes to the production database of my Replit app without losing data.
+1. Generate versioned migration files (e.g. drizzle-kit generate) instead of pushing the schema directly.
+2. Show me the SQL. Flag every DROP TABLE, DROP COLUMN, type change or NOT NULL without default.
+3. Rewrite renames as RENAME COLUMN and add defaults/backfills for new required columns.
+4. Add the migrate command to the deployment build step so it runs on each publish.
+5. Write an idempotent seed script for reference data that only inserts missing rows.
+Do not run anything against production until I confirm the SQL.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>The Production view of the Database pane shows the new columns, with existing rows intact.</li><li>Row counts of key tables are the same before and after the deploy.</li><li>The pages that failed now work on the live URL.</li><li>The migrations table in production lists the new migration.</li></ul>
+
+<p>Rollbacks in the workspace do not restore production data. Read <a href="/guides/replit-agent-rollback-checkpoint/">how Replit rollbacks treat your database</a> before you rely on them.</p>

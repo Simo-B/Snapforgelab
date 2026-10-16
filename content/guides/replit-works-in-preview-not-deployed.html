@@ -1,0 +1,107 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 21,
+ "cta": "fix",
+ "title": "Replit App Works in Preview but Not After Deploy",
+ "h1": "Replit app works in preview but not after deploy",
+ "kicker": "Deployment",
+ "description": "Your Replit Agent app works in the preview but breaks once published: missing data, failed API calls, login or payments. The checklist that finds the cause.",
+ "published": "2026-10-16",
+ "minutes": 4,
+ "tldr": [
+  "Preview and the published app are different environments: different secrets, a different database and a different URL.",
+  "Most breakages come from missing production secrets, an empty production database, hard-coded dev URLs, or callback URLs still set to the dev domain.",
+  "Read the deployment logs first. The first error line usually names the missing piece."
+ ],
+ "steps": [
+  [
+   "Read the deployment logs",
+   "Open Publishing, then the logs of the live deployment, and reproduce the bug while you watch. Look for undefined, not set, ECONNREFUSED, relation does not exist or stack traces. Paste the first error into Agent rather than describing the symptom."
+  ],
+  [
+   "Compare secrets, key by key",
+   "List the secrets your code reads (search for process.env. or os.environ) and check each one in the Secrets section of the Publishing pane. Look for keys that are missing, unsynced, or still set to test values. A secret change only reaches the live app after you publish again. Details in Replit secrets not working in deployment."
+  ],
+  [
+   "Check the production database",
+   "Open the Database pane and switch to Production. If tables are missing or empty, that explains the missing data: development rows are not copied over. Apply schema changes to production and seed the data the app needs to start (an admin user, settings, plans). See running database migrations in production."
+  ],
+  [
+   "Remove hard-coded URLs",
+   "Search the code for localhost, 127.0.0.1, replit.dev and http://. Calls from your frontend to your own backend should use relative paths like /api/orders. Absolute URLs your server needs (emails, redirects) should come from one secret such as APP_URL."
+  ],
+  [
+   "Update third-party callback URLs",
+   "Add the production domain to every external service: Google or GitHub OAuth redirect URIs, Stripe webhook endpoints and success URLs, email links, CORS origins. Each one has its own guide below."
+  ],
+  [
+   "Check the deployment type and republish",
+   "Agent apps with a backend need an Autoscale or Reserved VM deployment, not Static. Then publish again and test in a private window so you do not see a cached old version."
+  ]
+ ],
+ "faq": [
+  [
+   "Does publishing copy my development database?",
+   "No. Replit keeps development and production databases separate so test changes do not hit live data. Schema changes need to be applied to production, and data you created in development does not appear there."
+  ],
+  [
+   "Why do I see an old version of my app after publishing?",
+   "Either the latest changes were not published yet, or your browser or a cache is serving the old files. Publish again, then test in a private window. See the guide on changes not showing after deploy."
+  ],
+  [
+   "Is it a Replit bug when the deployed app behaves differently?",
+   "Sometimes, and the Replit status page lists known incidents. But in most cases the cause is configuration: secrets, database, URLs or callback settings. Check those first."
+  ]
+ ],
+ "related": [
+  "replit-secrets-not-working-deployment",
+  "replit-database-connection-error-production",
+  "replit-changes-not-showing-after-deploy"
+ ]
+}
+-->
+<p>This is the most common complaint on the Replit forum: the app is perfect in the preview and broken at its public URL. Data is missing, API calls fail, login loops, or the page is blank. Replit's documentation sums it up well: it is almost always a configuration difference between environments. Here is how to find which one, in order.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<ul><li>The published app shows no data, or says <em>No users found</em>, while the preview has everything.</li><li>API calls return 401, 404 or 500 only on the <code>.replit.app</code> URL or your custom domain.</li><li>Login, Stripe checkout or webhooks work in the preview but not live.</li><li>The published page is blank or shows an old version.</li></ul>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li><strong>Secrets differ.</strong> A key is missing, unsynced or set to a different value for the published app.</li><li><strong>Different database.</strong> The published app uses the production database, which starts empty and may lack recent schema changes.</li><li><strong>Hard-coded URLs.</strong> Code calls <code>localhost</code>, <code>127.0.0.1</code> or the <code>replit.dev</code> preview URL.</li><li><strong>Third-party settings still point to dev.</strong> OAuth redirect URIs, Stripe webhook endpoints and CORS allowlists.</li><li><strong>Local files.</strong> Uploads or generated files were saved to disk, which resets on every publish.</li><li><strong>Wrong deployment type.</strong> A full-stack Agent app published as a Static deployment has no server running.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+
+<h3 id="step-1">1. Read the deployment logs</h3>
+<p>Open <strong>Publishing</strong>, then the logs of the live deployment, and reproduce the bug while you watch. Look for <code>undefined</code>, <code>not set</code>, <code>ECONNREFUSED</code>, <code>relation does not exist</code> or stack traces. Paste the first error into Agent rather than describing the symptom.</p>
+
+<h3 id="step-2">2. Compare secrets, key by key</h3>
+<p>List the secrets your code reads (search for <code>process.env.</code> or <code>os.environ</code>) and check each one in the Secrets section of the Publishing pane. Look for keys that are missing, unsynced, or still set to test values. A secret change only reaches the live app after you publish again. Details in <a href="/guides/replit-secrets-not-working-deployment/">Replit secrets not working in deployment</a>.</p>
+
+<h3 id="step-3">3. Check the production database</h3>
+<p>Open the Database pane and switch to <strong>Production</strong>. If tables are missing or empty, that explains the missing data: development rows are not copied over. Apply schema changes to production and seed the data the app needs to start (an admin user, settings, plans). See <a href="/guides/replit-database-migration-production/">running database migrations in production</a>.</p>
+
+<h3 id="step-4">4. Remove hard-coded URLs</h3>
+<p>Search the code for <code>localhost</code>, <code>127.0.0.1</code>, <code>replit.dev</code> and <code>http://</code>. Calls from your frontend to your own backend should use relative paths like <code>/api/orders</code>. Absolute URLs your server needs (emails, redirects) should come from one secret such as <code>APP_URL</code>.</p>
+
+<h3 id="step-5">5. Update third-party callback URLs</h3>
+<p>Add the production domain to every external service: Google or GitHub OAuth redirect URIs, Stripe webhook endpoints and success URLs, email links, CORS origins. Each one has its own guide below.</p>
+
+<h3 id="step-6">6. Check the deployment type and republish</h3>
+<p>Agent apps with a backend need an Autoscale or Reserved VM deployment, not Static. Then publish again and test in a private window so you do not see a cached old version.</p>
+
+<h2 id="agent-prompt">Copy-paste prompt for Replit Agent</h2>
+<p>Open a new Agent chat (a fresh chat keeps old attempts out of its context) and paste this:</p>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My app works in the Replit preview but not at its published URL. Help me find the environment difference, without rewriting features.
+1. List every environment variable the code reads and tell me which ones must exist in the deployment secrets.
+2. Find hard-coded localhost, 127.0.0.1, replit.dev or http:// URLs and replace frontend calls with relative paths and server-side absolute URLs with an APP_URL secret.
+3. Check whether the production database has all tables and the seed data the app needs; list what is missing.
+4. Find any file writes to the local disk (uploads, generated files) and tell me which ones need App Storage instead.
+5. List every external callback URL (OAuth, Stripe, email links) that must be updated to the production domain.
+Here are the deployment logs: [paste the first error lines]</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Run the full user journey on the live URL in a private window: sign up, log in, create a record, pay, log out.</li><li>Deployment logs stay free of errors during that journey.</li><li>Production data survives a republish.</li><li>Repeat the test on your custom domain if you have one.</li></ul>
+
+<p>Before real users arrive, also run through the <a href="/guides/deploy-replit-app-to-production/">full production checklist</a>.</p>

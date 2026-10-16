@@ -19,7 +19,7 @@
   ["Does rolling back a checkpoint restore my database?", "Not by default. Rollbacks restore code and context; to include the development database you have to select it in the additional rollback options. Production data is never rolled back by a workspace checkpoint."],
   ["How do I avoid losing data during a schema change?", "Back up before publishing schema changes, prefer additive changes (add a column, migrate data, then remove the old column in a later release), and never let a migration drop or rename columns holding customer data without a tested restore."]
  ],
- "related": ["deploy-replit-app-to-production", "replit-agent-security-checklist", "replit-agent-keeps-breaking-app"]
+ "related": ["deploy-replit-app-to-production", "replit-agent-security-checklist", "replit-agent-keeps-breaking-app", "replit-database-migration-production", "replit-database-connection-error-production"]
 }
 -->
 <p>In July 2025, a widely reported incident saw an AI agent delete a user's production database on Replit. Replit responded by shipping, among other changes, <a href="https://blog.replit.com/introducing-a-safer-way-to-vibe-code-with-replit-databases" rel="noopener">automatic separation of development and production databases</a>. That fixed the biggest risk. It did not remove every way to lose data. Here is how the setup works today and the habits that keep your customers' data safe.</p>

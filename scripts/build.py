@@ -174,6 +174,22 @@ DEPLOY_CTA_BOX = """<aside class="cta-box">
 </aside>"""
 
 
+# Problem/fix guides ("cta": "fix" in meta): the reader is blocked now, so lead with the free
+# audit and offer the $49 Deploy Fix next to it.
+FREE_AUDIT_CTA = ("Get a free audit", "/free-audit")
+FIX_CTA_BOX = """<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-title">Still stuck? Get a free audit in 24h</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
+    <a href="/free-audit" class="btn p">Get my free audit</a>
+    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+  </div>
+</aside>"""
+
+
 def build_guide(g, by_slug):
     faq = g.get("faq", [])
     related = [by_slug[s] for s in g.get("related", []) if s in by_slug]
@@ -202,14 +218,20 @@ def build_guide(g, by_slug):
             ],
         },
     ]
+    steps = g.get("steps", [])
+    if steps:
+        graph.append({"@type": "HowTo", "name": g["h1"], "description": g["description"], "url": g["url"],
+                      "step": [{"@type": "HowToStep", "position": i + 1, "name": n, "text": t,
+                                "url": f'{g["url"]}#step-{i + 1}'} for i, (n, t) in enumerate(steps)]})
     if faq:
         graph.append({"@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", a)}}
             for q, a in faq]})
     ld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, indent=1) + "\n</script>\n"
 
+    fix = g.get("cta") == "fix"
     deploy = g.get("topic") in DEPLOY_TOPICS
-    box = DEPLOY_CTA_BOX if deploy else CTA_BOX
+    box = FIX_CTA_BOX if fix else DEPLOY_CTA_BOX if deploy else CTA_BOX
     body = g["body"].replace("<!--cta-->", box)
     tldr = "".join(f"<li>{t}</li>" for t in g.get("tldr", []))
     faq_html = ""
@@ -242,7 +264,7 @@ def build_guide(g, by_slug):
 {rel_html}
 </main>
 """
-    out += footer(cta_link=DEPLOY_CTA if deploy else REVIEW_CTA)
+    out += footer(cta_link=FREE_AUDIT_CTA if fix else DEPLOY_CTA if deploy else REVIEW_CTA)
     dest = PUBLIC / "guides" / g["slug"] / "index.html"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(out)
@@ -292,7 +314,7 @@ def build_hub(guides):
             for g in groups[topic])
         sections += f'<div class="topic"><h2 class="topic-h">{esc(topic)}</h2><div class="cards guides-grid">{cards}</div></div>'
     out = head("Replit Guides: Ship Your Replit Agent App to Production",
-               "Practical, no-fluff guides to ship Replit and Replit Agent apps to production: security, deployment, databases, costs and fixing broken apps.",
+               "Step-by-step fixes for Replit and Replit Agent apps: failed deployments, secrets, databases, custom domains, Stripe, login and costs.",
                url, og_type="website", extra=extra)
     out += f"""
 <main id="main">
@@ -300,8 +322,8 @@ def build_hub(guides):
   <div class="wrap">
     <div class="kicker">Replit guides</div>
     <h1>Take your Replit app from prototype to production</h1>
-    <p class="lede">Practical guides to shipping Replit Agent apps: what breaks with real users, and how to fix it.</p>
-    <div class="cta"><a href="/tools/replit-readiness-score/" class="btn p lg">Get your readiness score, free <span class="arrow" aria-hidden="true">→</span></a></div>
+    <p class="lede">Practical guides to shipping Replit Agent apps: what breaks after you publish, and how to fix it step by step, with a copy-paste prompt for Agent in every fix.</p>
+    <div class="cta"><a href="/free-audit" class="btn p lg">Get a free audit in 24h <span class="arrow" aria-hidden="true">→</span></a><a href="/tools/replit-readiness-score/" class="btn g lg">Get your readiness score</a></div>
   </div>
 </section>
 <section style="padding-top:40px">
