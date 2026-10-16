@@ -39,3 +39,16 @@ Techniquement, le site est excellent et n'est pas ce qui bloque la vente. Les ma
 
 ## À ne pas toucher
 La performance, la structure SEO, les en-têtes, les conditions et la confidentialité (sous-traitants déclarés, section Deploy Fix), la cohérence des prix entre pages, le JSON-LD et `llms.txt`.
+
+## Corrections appliquées (16 octobre)
+- **Page `/deploy-fix/`** : page de vente du Deploy Fix à 49 $ (indexée, dans le sitemap et `llms.txt`), avec étapes, remboursement, FAQ et JSON-LD. Lighthouse mobile : 100 / 100 / 100 / 100.
+- **Après le clic PayPal** (point 3) : chaque bouton PayPal s'ouvre dans un nouvel onglet, et le site affiche les étapes suivantes avec un e-mail pré-rempli (Deploy Fix, review, review fondateur).
+- **Guides** (point 4) : les 4 guides Déploiement, Données et Dépannage proposent le Deploy Fix à 49 $ (encadré et bouton collant mobile). Les 5 autres gardent la review, avec un bouton mobile cohérent vers `#book`.
+- **Accueil** (point 7) : une ligne Deploy Fix sous les deux portes du hero, et un lien « How the Deploy Fix works → » dans la carte de prix (aussi sur la page de l'offre).
+- **À propos** (point 6) : lien vers @Simo_Bc et `sameAs` dans le JSON-LD (page À propos et auteur des guides). Titre ramené à 51 caractères.
+- **Petits correctifs** : lien d'auteur souligné, meta descriptions ≤ 160 caractères, `?v=2` sur les images des guides, description de l'offre à la première personne, bouton mobile masqué tant qu'un appel à l'action est déjà à l'écran.
+
+## Reste à faire (hors code)
+- Activer Cloudflare Web Analytics (point 2).
+- Premier témoignage et rapport anonymisé (point 5).
+- Plus tard : boutons PayPal Business avec page de retour.

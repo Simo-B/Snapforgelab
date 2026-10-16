@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "19"
+ASSET_V = "20"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
@@ -27,6 +27,7 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 STATIC_PAGES = [
     ("/", "1.0"),
     ("/replit-app-to-production/", "0.9"),
+    ("/deploy-fix/", "0.9"),
     ("/hire-replit-developer/", "0.9"),
     ("/about/", "0.6"),
     ("/replit-app-to-production/example-report/", "0.7"),
@@ -110,8 +111,12 @@ def head(title, description, canonical, og_type="article", extra="", image=None)
 """
 
 
-def footer(mobile_cta=True):
-    cta = ('<div class="m-cta"><a href="/replit-app-to-production/" class="btn p lg">Get a $199 ship-ready review</a></div>\n'
+REVIEW_CTA = ("Book the $199 review", "/replit-app-to-production/#book")
+DEPLOY_CTA = ("Fix my deploy for $49", "/deploy-fix/")
+
+
+def footer(mobile_cta=True, cta_link=REVIEW_CTA):
+    cta = (f'<div class="m-cta"><a href="{cta_link[1]}" class="btn p lg">{cta_link[0]}</a></div>\n'
            if mobile_cta else "")
     return f"""{cta}
 <footer>
@@ -133,14 +138,14 @@ def footer(mobile_cta=True):
 
 
 AUTHOR_LD = {"@type": "Person", "@id": f"{SITE}/about/#simo", "name": "Simo", "url": f"{SITE}/about/",
-             "jobTitle": "Founder, Snapforge Lab", "worksFor": {"@id": f"{SITE}/#org"},
+             "jobTitle": "Founder, Snapforge Lab", "worksFor": {"@id": f"{SITE}/#org"}, "sameAs": ["https://x.com/Simo_Bc"],
              "description": "Ranked in the top 1% of Replit Agent users. Builds and ships production apps on Replit.",
              "knowsAbout": ["Replit", "Replit Agent", "Web application security", "Deployment", "PostgreSQL"]}
 
 AUTHOR_BOX = """<aside class="author-box" aria-label="About the author">
   <div class="avatar" aria-hidden="true">S</div>
   <div>
-    <p class="author-name">Written by <a href="/about/" rel="author">Simo</a></p>
+    <p class="author-name">Written by <a class="link" href="/about/" rel="author">Simo</a></p>
     <p class="author-bio">Founder of Snapforge Lab, ranked in the top 1% of Replit Agent users. Simo builds, reviews and ships production apps on Replit, and writes these guides from that daily work.</p>
   </div>
 </aside>"""
@@ -152,6 +157,18 @@ CTA_BOX = """<aside class="cta-box">
     <p class="cta-text">Security, auth, data, costs and deployment. Prioritized fix list and a video walkthrough in 48 hours. Fewer than 3 real issues found? Full refund.</p>
   </div>
   <a href="/replit-app-to-production/" class="btn p">See the $199 review</a>
+</aside>"""
+
+# Readers of deployment, data and troubleshooting guides are usually blocked right now:
+# offer the $49 Deploy Fix first instead of the full review.
+DEPLOY_TOPICS = {"Deployment", "Data", "Troubleshooting"}
+DEPLOY_CTA_BOX = """<aside class="cta-box">
+  <div>
+    <p class="cta-kicker">Replit Deploy Fix · $49 · 48h</p>
+    <p class="cta-title">Stuck on a deploy error right now?</p>
+    <p class="cta-text">Send me the error. I fix one deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) within 48 hours of access, or you get a full refund.</p>
+  </div>
+  <a href="/deploy-fix/" class="btn p">Fix my deploy for $49</a>
 </aside>"""
 
 
@@ -189,7 +206,9 @@ def build_guide(g, by_slug):
             for q, a in faq]})
     ld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, indent=1) + "\n</script>\n"
 
-    body = g["body"].replace("<!--cta-->", CTA_BOX)
+    deploy = g.get("topic") in DEPLOY_TOPICS
+    box = DEPLOY_CTA_BOX if deploy else CTA_BOX
+    body = g["body"].replace("<!--cta-->", box)
     tldr = "".join(f"<li>{t}</li>" for t in g.get("tldr", []))
     faq_html = ""
     if faq:
@@ -215,13 +234,13 @@ def build_guide(g, by_slug):
 {faq_html}
     </div>
     {AUTHOR_BOX}
-    {CTA_BOX}
+    {box}
   </article>
 </div>
 {rel_html}
 </main>
 """
-    out += footer()
+    out += footer(cta_link=DEPLOY_CTA if deploy else REVIEW_CTA)
     dest = PUBLIC / "guides" / g["slug"] / "index.html"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(out)
@@ -235,7 +254,7 @@ def full_title(t):
 def og_image(g):
     """Per-guide social image (made by scripts/og.js) with the site image as fallback."""
     if (PUBLIC / "og" / f"{g['slug']}.png").exists():
-        return f"{SITE}/og/{g['slug']}.png"
+        return f"{SITE}/og/{g['slug']}.png?v=2"
     return f"{SITE}/og.png?v=2"
 
 
@@ -312,7 +331,7 @@ def build_llms(guides):
         "and build custom business apps (dashboards, CRMs, client portals, AI assistants) on Replit at fixed prices, for clients worldwide.",
         "",
         "## Services",
-        f"- [Replit Deploy Fix]({SITE}/replit-app-to-production/#pricing): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Review if booked within 30 days).",
+        f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Review if booked within 30 days).",
         f"- [Ship-Ready Review]({SITE}/replit-app-to-production/): $199 production-readiness audit of a Replit Agent app, delivered in 48 hours, full refund if fewer than 3 real issues are found.",
         f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited).",
         f"- [Starter Build]({SITE}/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.",

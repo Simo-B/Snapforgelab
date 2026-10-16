@@ -214,6 +214,37 @@ Glad it was useful. Could you write 2-3 sentences about the review that I can qu
 4. Propose le Sprint : « ta review de 99 $ est déduite des 990 $ ».
 5. Dis-moi « première vente » : je remplace l'exemple fictif par le rapport anonymisé et j'ajoute le témoignage sur le site.
 
+## 7. Vendre le Deploy Fix (49 $) : le « oui » le plus facile
+
+Les gens dont le déploiement casse ont un problème **urgent** et visible. 49 $ avec remboursement est une décision facile.
+Page à envoyer : `https://snapforgelab.com/deploy-fix/` (indexée, paiement PayPal, étapes et remboursement expliqués).
+
+**Où les trouver aujourd'hui**
+- X, en direct : https://x.com/search?q=replit%20(deploy%20OR%20deployment%20OR%20publish%20OR%20published)%20(failed%20OR%20fails%20OR%20error%20OR%20broken%20OR%20stuck)%20lang%3Aen&f=live
+- Forum Replit, catégorie Deployments : https://replit.discourse.group/latest (titres du type « works in dev, not in deployed mode », « production database empty », « DATABASE_URL »)
+- Reddit : https://www.reddit.com/r/replit/new/
+
+**Réponse publique (aide d'abord, pas de lien sur Reddit et le forum)**
+```
+That error usually means [cause probable en une phrase]. First thing I'd check: [une vérification concrète : logs de déploiement, secret manquant en production, mauvaise base de données].
+If it still fails after that, paste the deployment log and I'll take a look.
+```
+
+**Message privé, s'ils répondent ou si c'est toujours bloqué**
+```
+Still stuck? I can fix it for you: one deployment blocker, $49, done within 48 hours of access, full refund if I can't. Details: https://snapforgelab.com/deploy-fix/
+```
+
+**Après un « oui »**
+```
+Great. Pay here: https://paypal.me/mbsimo/49USD then email hello@snapforgelab.com with your Repl link and the error, and invite that address to your Repl with edit access (create a checkpoint first). Fixed within 48h of access.
+```
+
+**Après la réparation (la porte vers 199 $)**
+```
+Fixed: [ce qui n'allait pas] → [ce que j'ai changé]. While I was in, I noticed [1 ou 2 risques réels]. If you want the full production check before more users arrive, your $49 is credited toward the $199 review within 30 days.
+```
+
 ## 6. Suivi du jour
 
 Teste les canaux **un par un** et garde celui qui marche : ce soir, compte les réponses obtenues par canal (réseau, X, Reddit, forum, LinkedIn). Demain, mets 70 % de ton temps sur le meilleur.

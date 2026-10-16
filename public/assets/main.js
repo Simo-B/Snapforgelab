@@ -19,6 +19,28 @@
     else location.replace('/replit-app-to-production/#book');
   }
 
+  // PayPal opens in a new tab and never sends buyers back, so keep the next
+  // steps on screen in this tab, with a pre-filled email.
+  const mail = (subject, body) => `mailto:hello@snapforgelab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const NEXT = {
+    'deploy-fix': `<strong>PayPal is open in a new tab.</strong> Once you have paid, <a href="${mail('Deploy Fix (paid)', 'Repl link:\nError (copy it or attach a screenshot):\n')}">email me your Repl link and the error</a>, then invite hello@snapforgelab.com to your Repl with edit access. Fixed within 48 hours of access, or you get a full refund.`,
+    review: `<strong>PayPal is open in a new tab.</strong> Once you have paid, <a href="${mail('Ship-Ready Review (paid)', 'Repl link:\nWho uses the app and what data it stores:\n')}">email me your Repl link</a> and invite hello@snapforgelab.com to your Repl (read access is enough). Your report and video arrive within 48 hours of access.`,
+    founding: `<strong>PayPal is open in a new tab.</strong> Once you have paid, <a href="${mail('Founding review (paid)', 'Repl link:\nWho uses the app and what data it stores:\n')}">email me your Repl link</a> and invite hello@snapforgelab.com to your Repl (read access is enough). Your report and video arrive within 48 hours of access.`,
+  };
+  d.querySelectorAll('a[data-buy]').forEach((a) => a.addEventListener('click', () => {
+    const html = NEXT[a.dataset.buy];
+    if (!html || !a.href.includes('paypal.')) return;
+    let n = a.parentElement.querySelector('.buy-next');
+    if (!n) {
+      n = d.createElement('p');
+      n.className = 'book-note buy-next';
+      n.setAttribute('role', 'status');
+      n.style.marginTop = '12px';
+      a.after(n);
+    }
+    n.innerHTML = html;
+  }));
+
   // Reveal on scroll
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => {
@@ -87,8 +109,9 @@
   }));
 
   // Sticky mobile CTA: only when no other primary action is on screen
+  // (hero, the in-page CTA row of offer pages, the booking box or the form)
   const mcta = d.querySelector('.m-cta');
-  const zones = ['.hero', '#book', '#contact'].map((sel) => d.querySelector(sel)).filter(Boolean);
+  const zones = ['.hero', '.article .cta', '#book', '#contact'].map((sel) => d.querySelector(sel)).filter(Boolean);
   if (mcta && zones.length && 'IntersectionObserver' in window) {
     const seen = new Set();
     mcta.classList.add('hide');
