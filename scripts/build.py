@@ -351,12 +351,14 @@ def build_llms(guides):
     lines = [
         "# Snapforge Lab",
         "",
-        "> Snapforge Lab is an independent Replit specialist studio. We review, fix and deploy Replit and Replit Agent apps, "
-        "and build custom business apps (dashboards, CRMs, client portals, AI assistants) on Replit at fixed prices, for clients worldwide.",
+        "> Snapforge Lab is an independent Replit specialist studio focused on the security of AI-built apps (Replit, Lovable, Bolt, Supabase): "
+        "a free read-only security audit in 24h (exposed Supabase tables with Row Level Security off, secrets in the JS bundle, open CORS with credentials, unverified Stripe webhooks, auth redirects to preview domains), "
+        "then fixed-price fixes and reviews. It also builds custom business apps on Replit at fixed prices, for clients worldwide.",
         "",
         "## Services",
-        f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Review if booked within 30 days).",
-        f"- [Ship-Ready Review]({SITE}/replit-app-to-production/): $199 production-readiness audit of a Replit Agent app, delivered in 48 hours, full refund if fewer than 3 real issues are found.",
+        f"- [Free security audit]({SITE}/free-audit): free, read-only security check of a live Replit, Lovable or Bolt app, private audit page with exact fix steps within 24 hours. Lovable & Bolt version: {SITE}/lovable-bolt-audit\n"
+        f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Security Review if booked within 30 days).",
+        f"- [Ship-Ready Security Review]({SITE}/replit-app-to-production/): $199 security and production-readiness audit of an AI-built app (Row Level Security, secrets, CORS, Stripe webhooks, access control), delivered in 48 hours, full refund if fewer than 3 real issues are found.",
         f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited).",
         f"- [Starter Build]({SITE}/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.",
         f"- [Care]({SITE}/#pricing): $249/month hosting, monitoring and improvements.",
