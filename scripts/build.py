@@ -36,6 +36,7 @@ STATIC_PAGES = [
     ("/tools/replit-readiness-score/", "0.8"),
     ("/free-audit", "0.9"),
     ("/lovable-bolt-audit", "0.9"),
+    ("/case-studies/cors-credentials-hobby-app/", "0.7"),
 ]
 
 def logo(gid):
