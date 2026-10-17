@@ -1,0 +1,22 @@
+# Snapforge Ship-Ready Check — MCP Worker. FREE plan only, no paid features.
+# This folder is self-contained; it does not touch the static site build in /public.
+name = "snapforge-mcp"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+# Per-IP rate limit store (KV free tier). Create the namespace, then paste its id:
+#   npx wrangler kv namespace create RATE_KV
+# and put the returned id below.
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# OPENAI_APPS_CHALLENGE is set from the dashboard or the CLI, not committed here
+# (see README.md). The /.well-known/openai-apps-challenge route returns its value
+# as plain text.
+
+# The custom domain mcp.snapforgelab.com is attached from the dashboard
+# (Workers & Pages -> this Worker -> Settings -> Domains & Routes -> Add Custom Domain),
+# or by uncommenting the line below once the snapforgelab.com zone is on this account:
+# routes = [ { pattern = "mcp.snapforgelab.com", custom_domain = true } ]

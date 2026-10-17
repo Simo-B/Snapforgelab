@@ -1,0 +1,14 @@
+{
+  "name": "snapforge-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Snapforge Ship-Ready Check — passive read-only MCP server (Cloudflare Worker).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3"
+  }
+}
