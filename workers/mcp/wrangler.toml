@@ -1,6 +1,6 @@
 # Snapforge Ship-Ready Check — MCP Worker. FREE plan only, no paid features.
 # This folder is self-contained; it does not touch the static site build in /public.
-name = "snapforge-mcp"
+name = "snapforgelab"
 main = "worker.js"
 compatibility_date = "2026-09-01"
 workers_dev = false
