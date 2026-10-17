@@ -1,2 +1,5 @@
 # Local deploy bundles
 *.zip
+
+# SEO strategy notes: local only, never pushed to the public repo
+seo/
