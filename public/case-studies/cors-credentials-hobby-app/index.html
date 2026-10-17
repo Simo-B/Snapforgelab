@@ -42,7 +42,7 @@
 
       <h2>The problem</h2>
       <p>The API answered every website the same way: whatever site asked, the server echoed that site back in <code>Access-Control-Allow-Origin</code> and added <code>Access-Control-Allow-Credentials: true</code>. In plain words: "any website is welcome, and it may bring the visitor's login cookies."</p>
-      <p>Here is what a request from an unrelated site got back, including on the endpoint that holds each user's collection:</p>
+      <p>Here is what a request from an unrelated site got back from the endpoint that holds each user's collection:</p>
 <pre><code>$ curl -I -H "Origin: https://attacker.example" https://[app]/api/[resource]
 access-control-allow-origin: https://attacker.example
 access-control-allow-credentials: true</code></pre>
@@ -64,9 +64,9 @@ existing origin checks. Don't change anything else.</code></pre>
 HTTP/2 403
 {"error":"origin not allowed"}</code></pre>
 
-      <h2>Result so far</h2>
+      <h2>Result</h2>
       <ul>
-        <li><strong>Collection endpoint: fixed.</strong> When we re-checked in October 2026, the endpoint holding user collections rejected outside origins and only answered the app's own domains (the output above is from that check, anonymized).</li>
+        <li><strong>User data protected.</strong> When we re-checked in October 2026, the endpoint holding user collections rejected outside origins and only answered the app's own domains (the output above is from that check, anonymized).</li>
         <li><strong>Cost to the owner: $0.</strong> One outside check, one email, one prompt.</li>
       </ul>
 
