@@ -320,9 +320,20 @@ export default {
       return new Response(env.OPENAI_APPS_CHALLENGE || "", { status: 200, headers: { "content-type": "text/plain; charset=utf-8" } });
 
     if (url.pathname === MCP_PATH) {
-      if (request.method === "GET")
-        // No server-initiated streaming in this stateless build.
+      if (request.method === "GET") {
+        // No server-initiated streaming in this stateless build. Status stays 405 so MCP
+        // clients behave; humans who open the URL in a browser get a short explanation.
+        if ((request.headers.get("accept") || "").includes("text/html"))
+          return new Response(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snapforge Ship-Ready Check MCP server</title></head>' +
+            '<body style="font-family:system-ui,sans-serif;max-width:560px;margin:15vh auto;padding:0 20px;line-height:1.5;background:#050506;color:#eee">' +
+            '<h1 style="font-size:22px">This address is for ChatGPT, not your browser</h1>' +
+            '<p>https://mcp.snapforgelab.com/mcp is the server URL of the free Snapforge Ship-Ready Check. Paste it into ChatGPT when you create the app.</p>' +
+            '<p><a style="color:#8ab4ff" href="https://snapforgelab.com/chatgpt-demo/">See the 2-minute setup steps &rarr;</a></p></body></html>',
+            { status: 405, headers: { ...CORS, Allow: "POST, OPTIONS", "content-type": "text/html; charset=utf-8" } }
+          );
         return new Response("Method Not Allowed", { status: 405, headers: { ...CORS, Allow: "POST, OPTIONS" } });
+      }
       if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: { ...CORS, Allow: "POST, OPTIONS" } });
 
       let body;
