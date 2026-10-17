@@ -38,7 +38,7 @@ STATIC_PAGES = [
     ("/lovable-bolt-audit", "0.9"),
     ("/case-studies/cors-credentials-hobby-app/", "0.7"),
     ("/support/", "0.4"),
-    ("/chatgpt-demo/", "0.4"),
+    ("/chatgpt-demo/", "0.4", "2026-10-17"),
 ]
 
 def logo(gid):
@@ -356,7 +356,7 @@ def build_hub(guides):
 
 
 def build_sitemap(guides):
-    rows = [(f"{SITE}{p}", pr, None) for p, pr in STATIC_PAGES]
+    rows = [(f"{SITE}{p[0]}", p[1], p[2] if len(p) > 2 else None) for p in STATIC_PAGES]
     rows.append((f"{SITE}/guides/", "0.8", None))
     rows += [(g["url"], "0.7", g.get("updated", g["published"])) for g in guides]
     items = "\n".join(
