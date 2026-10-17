@@ -26,17 +26,17 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
     ("/", "1.0"),
-    ("/replit-app-to-production/", "0.9"),
-    ("/deploy-fix/", "0.9"),
+    ("/replit-app-to-production/", "0.9", "2026-10-17"),
+    ("/deploy-fix/", "0.9", "2026-10-17"),
     ("/hire-replit-developer/", "0.9"),
     ("/about/", "0.6"),
     ("/replit-app-to-production/example-report/", "0.7"),
     ("/privacy/", "0.2"),
     ("/terms/", "0.2"),
     ("/tools/replit-readiness-score/", "0.8"),
-    ("/free-audit", "0.9"),
-    ("/lovable-bolt-audit", "0.9"),
-    ("/case-studies/cors-credentials-hobby-app/", "0.7"),
+    ("/free-audit", "0.9", "2026-10-17"),
+    ("/lovable-bolt-audit", "0.9", "2026-10-17"),
+    ("/case-studies/cors-credentials-hobby-app/", "0.7", "2026-10-17"),
     ("/support/", "0.4"),
     ("/chatgpt-demo/", "0.4", "2026-10-17"),
 ]
