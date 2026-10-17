@@ -33,17 +33,17 @@
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Case studies / CORS credentials</nav>
   <article class="article">
     <p class="example-banner"><strong>Real case, anonymized.</strong> A live app built with Replit Agent, found during a free outside check. The app and its owner are not named.</p>
-    <h1>A hobby Pokémon GO collection app let any website use its visitors' logins. The fix is one Agent prompt.</h1>
-    <p class="byline">Hobby project · Built with Replit Agent · Express API · Checked by Simo, Snapforge Lab · October 2026</p>
+    <h1>A hobby collection app let any website use its visitors' logins. The fix is one Agent prompt.</h1>
+    <p class="byline">Hobby project · Built with Replit Agent · Checked by Simo, Snapforge Lab · October 2026</p>
 
     <div class="prose">
       <h2>The app</h2>
-      <p>A free fan site where Pokémon GO players sign in and track which Pokémon they own (shiny, shadow, lucky and so on). Built by a hobbyist with Replit Agent, no web background, no budget. Exactly the kind of app Replit Agent makes possible, and exactly the kind nobody security-reviews.</p>
+      <p>A free fan site where players sign in and track a personal collection. Built by a hobbyist with Replit Agent, no web background, no budget. Exactly the kind of app Replit Agent makes possible, and exactly the kind nobody security-reviews.</p>
 
       <h2>The problem</h2>
       <p>The API answered every website the same way: whatever site asked, the server echoed that site back in <code>Access-Control-Allow-Origin</code> and added <code>Access-Control-Allow-Credentials: true</code>. In plain words: "any website is welcome, and it may bring the visitor's login cookies."</p>
       <p>Here is what a request from an unrelated site got back, including on the endpoint that holds each user's collection:</p>
-<pre><code>$ curl -I -H "Origin: https://attacker.example" https://[app]/api/collection
+<pre><code>$ curl -I -H "Origin: https://attacker.example" https://[app]/api/[resource]
 access-control-allow-origin: https://attacker.example
 access-control-allow-credentials: true</code></pre>
 
@@ -52,7 +52,7 @@ access-control-allow-credentials: true</code></pre>
       <p>This is not the builder's fault. "Allow every origin, with credentials" is a common default when an AI agent wires CORS to make the front end work quickly. It works in testing, so nobody notices.</p>
 
       <h2>The fix</h2>
-      <p>Replace the echo with an allowlist: only the app's own domains get CORS headers, and credentials are never sent to anyone else. The owner is not a web builder, so the fix had to be something he could paste, not code he had to write. This is the prompt we sent, ready for Replit Agent:</p>
+      <p>Replace the echo with an allowlist: only the app's own domains get CORS headers, and credentials are never sent to anyone else. The owner is not a web builder, so the fix had to be something they could paste, not code they had to write. This is the prompt we sent, ready for Replit Agent:</p>
 <pre><code>In the Express server, replace the CORS setup for all /api routes with a
 strict allowlist. Allowed origins: https://[your-domain] and
 https://www.[your-domain] (plus localhost in development only). Never echo
@@ -60,14 +60,13 @@ back the request's Origin header, and only send
 Access-Control-Allow-Credentials: true to the allowed origins. Keep any
 existing origin checks. Don't change anything else.</code></pre>
       <p>Then: paste it into the Agent chat, let it finish, and redeploy. To confirm, the same request from an outside origin should come back with no CORS headers (or a 403):</p>
-<pre><code>$ curl -I -H "Origin: https://attacker.example" https://[app]/api/collection
+<pre><code>$ curl -I -H "Origin: https://attacker.example" https://[app]/api/[resource]
 HTTP/2 403
-{"error":"Collection origin not allowed"}</code></pre>
+{"error":"origin not allowed"}</code></pre>
 
       <h2>Result so far</h2>
       <ul>
-        <li><strong>Collection endpoint: fixed.</strong> When we re-checked on 16 October 2026, the endpoint holding user collections rejected outside origins and only answered the app's own domains (the output above is from that check).</li>
-        <li><strong>Rest of the API: fix sent, pending redeploy.</strong> The remaining endpoints only serve public data (the Pokémon list, stats), so the risk is low, but they still echo any origin with credentials. The prompt above makes the allowlist global so future features don't inherit the open door. We'll update this page once it's live.</li>
+        <li><strong>Collection endpoint: fixed.</strong> When we re-checked in October 2026, the endpoint holding user collections rejected outside origins and only answered the app's own domains (the output above is from that check, anonymized).</li>
         <li><strong>Cost to the owner: $0.</strong> One outside check, one email, one prompt.</li>
       </ul>
 
