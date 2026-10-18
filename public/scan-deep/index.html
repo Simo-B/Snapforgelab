@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deep Security Scan for Lovable, Bolt and Replit Apps</title>
+<title>Free Deep Security Scan for Lovable, Bolt, Replit Apps</title>
 <meta name="description" content="Free read-only deep scan of your app: secret keys in your JavaScript, Supabase tables open without RLS, preview auth redirects, public storage buckets.">
 <link rel="canonical" href="https://snapforgelab.com/scan-deep/">
-<meta name="robots" content="noindex,follow">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#050506">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/logo.svg" type="image/svg+xml">
@@ -70,6 +70,22 @@
       </select>
     </label>
     <ol class="gaps" id="gaps"></ol>
+
+    <div class="contact-box center" id="gate" style="margin-top:24px">
+      <h2 style="font-size:clamp(22px,3vw,28px)">Unlock the fix prompts</h2>
+      <p>Get a copy-paste prompt for each issue, ready for Lovable, Bolt or Replit Agent, plus your results by email.</p>
+      <form id="gate-form" class="lead-form" style="margin-top:16px">
+        <label for="gate-email">Email
+          <input id="gate-email" type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+        </label>
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+        <button type="submit" class="btn p lg">Show my fix prompts</button>
+        <p class="form-msg" id="gate-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <p class="center" id="fix-cta" style="margin:24px 0 0;font-size:16px"><strong>Want me to fix it?</strong> <a class="link" href="/deploy-fix/">Deploy Fix $49, done in 48h or refunded</a></p>
+
     <h2 class="gaps-title" style="font-size:20px">What we checked</h2>
     <ul class="gaps" id="checked"></ul>
     <p style="font-size:14px;color:var(--dim)" id="disclaimer"></p>
@@ -110,7 +126,7 @@
       <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
       <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
-      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/scan/">Free app scanner</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/scan/">Free app scanner</a></li><li><a href="/scan-deep/">Deep security scan</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
@@ -120,7 +136,8 @@
 (() => {
   const API = 'https://mcp.snapforgelab.com/scan-deep';
   const $ = id => document.getElementById(id);
-  let last = null;
+  const FS = 'https://formspree.io/f/xjybzkza';
+  let last = null, unlocked = false;
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const CHECKS = {
     secrets: {done: 'Secret keys: your JavaScript files were scanned.', no_scripts_found: 'Secret keys: no JavaScript files were found on the homepage.'},
@@ -140,8 +157,8 @@
     const r = last, b = $('builder').value, f = r.findings || [];
     $('gaps').innerHTML = f.length ? f.map(x =>
       '<li><strong>' + esc(x.title) + '</strong> <small>(' + esc(x.severity) + ')</small><br>' + esc(x.detail) +
-      '<p style="margin:10px 0 4px"><em>Paste this into your builder:</em></p><pre style="white-space:pre-wrap;font-size:13px">' +
-      esc((x.fix_prompts && x.fix_prompts[b]) || x.fix_prompt || '') + '</pre></li>').join('')
+      '<div class="fix"' + (unlocked ? '' : ' hidden') + '><p style="margin:10px 0 4px"><em>Paste this into your builder:</em></p><pre style="white-space:pre-wrap;font-size:13px">' +
+      esc((x.fix_prompts && x.fix_prompts[b]) || x.fix_prompt || '') + '</pre></div></li>').join('')
       : '<li>No exposed secrets, open tables, preview redirects or listable buckets found.</li>';
   }
 
@@ -160,6 +177,8 @@
       : 'Nothing found in the deep checks. Nice work.';
     if (['lovable', 'bolt', 'replit'].includes(r.stack)) $('builder').value = r.stack;
     renderGaps();
+    $('gate').hidden = unlocked || !f.length;
+    $('builder').parentElement.hidden = !f.length;
     const c = r.checks || {};
     $('checked').innerHTML = Object.keys(CHECKS).map(k => c[k] && c[k] !== 'not_run' ? '<li>' + esc(CHECKS[k][c[k]] || k) + '</li>' : '').join('') +
       (r.meta && r.meta.truncated ? '<li>Large app: we stopped at our safety limits, so some files or tables were not checked.</li>' : '');
@@ -187,6 +206,26 @@
     } catch (err) {
       msg.textContent = 'We could not run the deep scan: ' + (err.message || 'try again in a minute') + '.';
     } finally { $('scan-btn').disabled = false; }
+  });
+
+  $('gate-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = $('gate-email').value.trim();
+    const m = $('gate-msg');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { m.textContent = 'Enter a valid email.'; return; }
+    m.textContent = 'One moment…';
+    const r = last || {};
+    // Titles and severities only: never table data, file names or key fragments.
+    const summary = (r.findings || []).map(x => '- ' + x.title + ' (' + x.severity + ')').join('\n');
+    try {
+      await fetch(FS, {method: 'POST', headers: {'content-type': 'application/json', 'accept': 'application/json'},
+        body: JSON.stringify({email, app_url: r.url, stack: r.stack, score: $('score').textContent, grade: r.grade || '', findings: summary,
+          offer: 'deep-scanner', _subject: 'Deep Scanner lead — ' + (r.url || '') })});
+    } catch (_) {}
+    unlocked = true;
+    document.querySelectorAll('#gaps .fix').forEach(el => el.hidden = false);
+    $('gate').hidden = true;
+    m.textContent = '';
   });
 
   $('rescan').addEventListener('click', () => { $('result').hidden = true; $('scan-url').value = ''; $('scan-url').focus(); window.scrollTo({top: 0, behavior: 'smooth'}); });

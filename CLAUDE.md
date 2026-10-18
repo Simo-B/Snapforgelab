@@ -35,7 +35,7 @@ Marketing site for snapforgelab.com: Simo, an independent Replit specialist, sel
 - `main.js`: `PAYMENT_URL` (review), `FOUNDING`, PayPal next-steps note (`NEXT`), Formspree form (`https://formspree.io/f/xjybzkza`) with UTM attribution, sticky mobile CTA.
 - Logo: inline SVG; gradient ids must be unique per page (`sfl-logo-h` header, `sfl-logo-f` footer). Files: `logo.svg`, `favicon.svg`, `favicon.ico`, `apple-touch-icon.png`.
 - `docs/` (French, not deployed): sales kits, audits, playbooks. `.claude/agents/`: marketing and sales agents.
-- MCP Worker (`workers/mcp/`, served at mcp.snapforgelab.com): MCP tool `check_app` (public, surface only: its published contract says it never scans JS bundles, do not change that) and a separate ownership-gated `POST /scan-deep` (`deep-scan.js`) used by `/scan-deep/` (noindex until the endpoint is live). `_worker.js` is generated: `node build-pages-worker.mjs`. Tests: `node test-local.mjs && node test-deep.mjs`.
+- MCP Worker (`workers/mcp/`, served at mcp.snapforgelab.com): MCP tool `check_app` (public, surface only: its published contract says it never scans JS bundles, do not change that) and a separate ownership-gated `POST /scan-deep` (`deep-scan.js`) used by `/scan-deep/` (indexed since 2026-10-18; fix prompts gated behind email → Formspree "Deep Scanner lead", titles/severities only; linked from `/scan/` results with `?url=`). `_worker.js` is generated: `node build-pages-worker.mjs`. Tests: `node test-local.mjs && node test-deep.mjs`.
 - Free audit delivery: `scripts/free_audit_check.py` (passive checker; run it outside the cloud container, which cannot reach client sites) and `docs/free-audit-kit.md` (workflow and email templates).
 
 ## Checks before pushing

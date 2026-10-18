@@ -27,6 +27,7 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 STATIC_PAGES = [
     ("/", "1.0"),
     ("/scan/", "0.9", "2026-10-18"),
+    ("/scan-deep/", "0.8", "2026-10-18"),
     ("/prompt-pack/", "0.8", "2026-10-18"),
     ("/replit-app-to-production/", "0.9", "2026-10-17"),
     ("/deploy-fix/", "0.9", "2026-10-17"),
