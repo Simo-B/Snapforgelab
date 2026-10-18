@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Security Scan for Lovable, Bolt and Replit Apps</title>
+<meta name="description" content="Free read-only deep scan of your app: secret keys in your JavaScript, Supabase tables open without RLS, preview auth redirects, public storage buckets.">
+<link rel="canonical" href="https://snapforgelab.com/scan-deep/">
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Snapforge Lab">
+<meta property="og:url" content="https://snapforgelab.com/scan-deep/">
+<meta property="og:title" content="Deep scan: is your app leaking keys or data?">
+<meta property="og:description" content="Secrets in your JavaScript, open Supabase tables, preview auth redirects. Read-only, free.">
+<meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Deep scan: is your app leaking keys or data?">
+<meta name="twitter:description" content="Secrets in your JavaScript, open Supabase tables, preview auth redirects. Read-only, free.">
+<meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
+<link rel="stylesheet" href="/assets/styles.css?v=20">
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Snapforge Deep Scan","url":"https://snapforgelab.com/scan-deep/","applicationCategory":"SecurityApplication","operatingSystem":"Any (web browser)","description":"Free read-only deep security scan for apps built with Lovable, Bolt or Replit: secrets in JavaScript bundles, Supabase Row Level Security, auth redirects and storage buckets.","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","@id":"https://snapforgelab.com/#org","name":"Snapforge Lab","url":"https://snapforgelab.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://snapforgelab.com/"},{"@type":"ListItem","position":2,"name":"Deep Scan","item":"https://snapforgelab.com/scan-deep/"}]}]}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/scan/">Free scan</a></nav>
+    <a href="/replit-app-to-production/#book" class="btn p sm">Book the $199 review</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/scan/">App Scanner</a> / Deep Scan</nav>
+  <div class="article" style="padding-bottom:24px">
+    <div class="kicker">Free tool · about 30 seconds · read-only</div>
+    <h1>Is your app leaking keys or customer data?</h1>
+    <p class="lede">The deep scan reads your app's own JavaScript and asks your Supabase project what a stranger could see. It finds exposed secret keys, tables anyone can read, login emails that point to a preview build and storage buckets anyone can list. Every fix comes as a prompt to paste into Lovable, Bolt or Replit Agent.</p>
+  </div>
+
+  <form id="scan" class="lead-form" novalidate style="margin-bottom:8px">
+    <label for="scan-url">Your app's public URL
+      <input id="scan-url" type="url" name="url" placeholder="https://yourapp.lovable.app" autocomplete="url" required>
+    </label>
+    <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px"><input type="checkbox" id="scan-own" required style="width:auto;margin-top:3px"> I own this app or I'm allowed to test it.</label>
+    <button type="submit" class="btn p lg" id="scan-btn">Run the deep scan <span class="arrow" aria-hidden="true">→</span></button>
+    <p class="form-msg" id="scan-msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <section id="result" class="result" hidden aria-live="polite">
+    <div class="score-card">
+      <div class="gauge" id="gauge"><span id="score">0</span><small>/100</small></div>
+      <div>
+        <p class="grade" id="grade"></p>
+        <p class="verdict" id="verdict"></p>
+      </div>
+    </div>
+    <h2 class="gaps-title">What we found</h2>
+    <label for="builder" style="font-size:14px;color:var(--dim)">Fix prompts for
+      <select id="builder" style="margin-left:6px;background:var(--bg2);color:inherit;border:1px solid var(--line);border-radius:8px;padding:4px 8px">
+        <option value="lovable">Lovable</option><option value="bolt">Bolt</option><option value="replit">Replit Agent</option>
+      </select>
+    </label>
+    <ol class="gaps" id="gaps"></ol>
+    <h2 class="gaps-title" style="font-size:20px">What we checked</h2>
+    <ul class="gaps" id="checked"></ul>
+    <p style="font-size:14px;color:var(--dim)" id="disclaimer"></p>
+
+    <aside class="cta-box" style="margin-top:8px">
+      <div>
+        <p class="cta-kicker">Want it fixed for you?</p>
+        <p class="cta-title">I fix it, you keep shipping.</p>
+        <p class="cta-text">The <a class="link" href="/replit-app-to-production/#book">$199 Ship-Ready Security Review</a> covers everything a scan can't see: Stripe webhooks, server-side checks, roles and policies, with fixes applied. One blocker only? <a class="link" href="/deploy-fix/">$49 Deploy Fix</a>.</p>
+      </div>
+      <a href="/free-audit" class="btn p" id="deep-cta">Get the free audit</a>
+    </aside>
+    <p class="center" style="margin-top:20px"><button type="button" class="btn g" id="rescan">Scan another app</button></p>
+  </section>
+
+  <div class="prose" style="margin-top:72px">
+    <h2>What the deep scan checks</h2>
+    <ul>
+      <li><strong>Secret keys in your JavaScript:</strong> Stripe live secret keys, OpenAI and Anthropic keys, AWS keys, GitHub tokens, Supabase service_role and secret keys. We show only the last 4 characters.</li>
+      <li><strong>Supabase tables readable by anyone:</strong> we use only the public key your app already ships, and ask each table once for a single row. We report the table name, never its data.</li>
+      <li><strong>Login emails pointing to a preview:</strong> password resets and magic links that redirect to a preview build or localhost.</li>
+      <li><strong>Storage buckets anyone can list:</strong> Supabase Storage buckets that let a stranger list your files. We never read file names or contents.</li>
+    </ul>
+    <h2>What is not a problem</h2>
+    <p>Your Supabase anon or publishable key, your Firebase web config and your Stripe publishable key are meant to be public. The scan never flags them on their own.</p>
+    <h2>Is it safe to run?</h2>
+    <p>Yes. The scan is read-only: it never signs in, never creates an account, never writes or deletes anything. It reads only your app's own files (same domain) and your own Supabase project. No table rows, file names or full keys are kept, logged or sent back. Private and internal addresses are refused, and each scan is capped in time and number of requests.</p>
+    <p>Only scan apps you own or are allowed to test. For a quick surface check of headers, CORS and SEO, use the <a href="/scan/">free app scanner</a>.</p>
+  </div>
+</div>
+</main>
+
+<div class="m-cta"><a href="#scan" class="btn p lg">Run the deep scan, free</a></div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/scan/">Free app scanner</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+<script>
+(() => {
+  const API = 'https://mcp.snapforgelab.com/scan-deep';
+  const $ = id => document.getElementById(id);
+  let last = null;
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const CHECKS = {
+    secrets: {done: 'Secret keys: your JavaScript files were scanned.', no_scripts_found: 'Secret keys: no JavaScript files were found on the homepage.'},
+    supabase_rls: {done: 'Supabase tables: each table was asked once for one row.', no_supabase_found: 'Supabase tables: no Supabase project found in your app.', no_public_key_found: 'Supabase tables: Supabase found, but not its public key in the files we scanned.', no_tables_found: 'Supabase tables: Supabase found, but your project does not list its tables publicly and none were named in the files we scanned.'},
+    auth_redirect: {done: 'Login redirects: checked for preview and localhost addresses.'},
+    storage_buckets: {done: 'Storage buckets: each bucket named in your code was checked once.', no_supabase_found: 'Storage buckets: no Supabase project found.', no_public_key_found: 'Storage buckets: Supabase public key not found.', no_buckets_found: 'Storage buckets: no bucket named in the files we scanned.'}
+  };
+
+  function norm(u) {
+    u = (u || '').trim();
+    if (!u) return '';
+    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+    return u;
+  }
+
+  function renderGaps() {
+    const r = last, b = $('builder').value, f = r.findings || [];
+    $('gaps').innerHTML = f.length ? f.map(x =>
+      '<li><strong>' + esc(x.title) + '</strong> <small>(' + esc(x.severity) + ')</small><br>' + esc(x.detail) +
+      '<p style="margin:10px 0 4px"><em>Paste this into your builder:</em></p><pre style="white-space:pre-wrap;font-size:13px">' +
+      esc((x.fix_prompts && x.fix_prompts[b]) || x.fix_prompt || '') + '</pre></li>').join('')
+      : '<li>No exposed secrets, open tables, preview redirects or listable buckets found.</li>';
+  }
+
+  function render(r) {
+    last = r;
+    const f = r.findings || [];
+    const score = r.score == null ? 0 : r.score;
+    const gauge = $('gauge');
+    gauge.style.setProperty('--p', score);
+    gauge.dataset.level = score >= 85 ? 'ok' : score >= 60 ? 'mid' : 'low';
+    $('score').textContent = r.score == null ? '–' : score;
+    $('grade').textContent = r.grade ? 'Grade ' + r.grade : 'No grade';
+    $('verdict').textContent = r.reachable === false ? 'We could not reach this app. If it is live, it may be down for your visitors too.'
+      : r.http_status >= 400 ? 'Your app answered with HTTP ' + r.http_status + ', so the deep scan could not run.'
+      : f.length ? f.length + ' issue' + (f.length > 1 ? 's' : '') + ' found. Fix the critical ones first.'
+      : 'Nothing found in the deep checks. Nice work.';
+    if (['lovable', 'bolt', 'replit'].includes(r.stack)) $('builder').value = r.stack;
+    renderGaps();
+    const c = r.checks || {};
+    $('checked').innerHTML = Object.keys(CHECKS).map(k => c[k] && c[k] !== 'not_run' ? '<li>' + esc(CHECKS[k][c[k]] || k) + '</li>' : '').join('') +
+      (r.meta && r.meta.truncated ? '<li>Large app: we stopped at our safety limits, so some files or tables were not checked.</li>' : '');
+    $('disclaimer').textContent = r.disclaimer || '';
+    $('result').hidden = false;
+    $('result').scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+
+  $('builder').addEventListener('change', () => last && renderGaps());
+
+  $('scan').addEventListener('submit', async e => {
+    e.preventDefault();
+    const url = norm($('scan-url').value);
+    const msg = $('scan-msg');
+    if (!url) { msg.textContent = 'Paste your app URL first.'; return; }
+    if (!$('scan-own').checked) { msg.textContent = 'Please confirm you own this app or are allowed to test it.'; return; }
+    $('scan-btn').disabled = true; msg.textContent = 'Scanning… about 10 to 30 seconds.';
+    try {
+      const res = await fetch(API, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({url, ownershipConfirmed: true})});
+      if (res.status === 404) throw new Error('the deep scan is not switched on yet');
+      const j = await res.json();
+      if (!res.ok || j.error) throw new Error(j.error || 'scan failed');
+      msg.textContent = '';
+      render(j);
+    } catch (err) {
+      msg.textContent = 'We could not run the deep scan: ' + (err.message || 'try again in a minute') + '.';
+    } finally { $('scan-btn').disabled = false; }
+  });
+
+  $('rescan').addEventListener('click', () => { $('result').hidden = true; $('scan-url').value = ''; $('scan-url').focus(); window.scrollTo({top: 0, behavior: 'smooth'}); });
+
+  const q = new URLSearchParams(location.search).get('url');
+  if (q) $('scan-url').value = q;
+})();
+</script>
+<script src="/assets/main.js?v=20" defer></script>
+</body>
+</html>

@@ -13,6 +13,8 @@
 // addresses, so the DNS lookup is dropped; the hostname and IP-literal guards
 // are kept.
 
+import { deepScan, GuardError, DEEP_RATE_LIMIT } from "./deep-scan.js";
+
 const UA = "SnapforgeShipReadyCheck/1.0 (+https://snapforgelab.com)";
 const FREE_AUDIT = "https://snapforgelab.com/free-audit";
 const DEEP_NOTE =
@@ -307,9 +309,58 @@ const CORS = {
   "Access-Control-Expose-Headers": "Mcp-Session-Id",
 };
 
+// ---------- /scan-deep: ownership-gated deep scan (separate from the MCP tool check_app) ----------
+// Not an MCP tool: check_app's published contract (never scans JS bundles) is unchanged.
+const DEEP_PATH = "/scan-deep";
+const DEEP_ORIGINS = ["https://snapforgelab.com", "https://www.snapforgelab.com"];
+function deepCors(request) {
+  const o = request.headers.get("origin") || "";
+  const allow = DEEP_ORIGINS.includes(o) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o) ? o : DEEP_ORIGINS[0];
+  return { "Access-Control-Allow-Origin": allow, "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "content-type", Vary: "Origin", "Cache-Control": "no-store" };
+}
+async function underDeepRateLimit(env, ip) {
+  if (!env || !env.RATE_KV || !ip) return true;
+  const key = `rld:${ip}:${new Date().toISOString().slice(0, 13)}`;
+  try {
+    const n = Number((await env.RATE_KV.get(key)) || 0);
+    if (n >= DEEP_RATE_LIMIT) return false;
+    await env.RATE_KV.put(key, String(n + 1), { expirationTtl: 3600 });
+    return true;
+  } catch {
+    return true;
+  }
+}
+async function handleDeepScan(request, env) {
+  const cors = deepCors(request);
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "POST") return Response.json({ error: "Use POST with {url, ownershipConfirmed: true}." }, { status: 405, headers: { ...cors, Allow: "POST, OPTIONS" } });
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid JSON body." }, { status: 400, headers: cors });
+  }
+  if (!body || body.ownershipConfirmed !== true)
+    return Response.json({ error: "Please confirm you own this app or are allowed to test it." }, { status: 400, headers: cors });
+  if (typeof body.url !== "string" || body.url.length < 4 || body.url.length > 2048)
+    return Response.json({ error: "Paste the public URL of your app." }, { status: 400, headers: cors });
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  if (!(await underDeepRateLimit(env, ip)))
+    return Response.json({ error: `Rate limit reached (${DEEP_RATE_LIMIT} deep scans per hour). Please try again later.` }, { status: 429, headers: cors });
+  try {
+    const report = await deepScan(body.url);
+    return Response.json(report, { headers: cors });
+  } catch (e) {
+    const msg = e instanceof GuardError ? e.message : "Could not run the deep scan on that URL.";
+    return Response.json({ error: msg }, { status: 400, headers: cors });
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    if (url.pathname === DEEP_PATH) return handleDeepScan(request, env);
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 

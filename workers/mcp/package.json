@@ -6,7 +6,9 @@
   "description": "Snapforge Ship-Ready Check — passive read-only MCP server (Cloudflare Worker).",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test": "node test-local.mjs && node test-deep.mjs",
+    "build:pages": "node build-pages-worker.mjs"
   },
   "devDependencies": {
     "wrangler": "^3"

@@ -19,7 +19,30 @@ deliberately kept to what a security-header checker reads. Anything deeper (keys
 auth, database rules) is intentionally **not** here and is handled by the
 ownership-gated free audit at https://snapforgelab.com/free-audit.
 
+## Deep scan: `POST /scan-deep` (separate from `check_app`)
+
+The page https://snapforgelab.com/scan-deep/ calls `POST https://mcp.snapforgelab.com/scan-deep`
+with `{ "url": "...", "ownershipConfirmed": true }` (400 without the checkbox). It is a plain HTTP
+endpoint, **not** an MCP tool: `tools/list` and `check_app` are unchanged.
+
+Code: `deep-scan.js` (spec: private issue Simo-B/simo#10, "Résultat Grok"). Read-only checks:
+secrets in the app's own same-origin JS bundles (masked to the last 4 characters), Supabase tables
+readable with the public anon/publishable key (one `GET ?select=*&limit=1` per table, only the table
+name is reported), auth redirects to preview/localhost hosts (string scan), publicly listable Storage
+buckets (one list call, limit 1). Anon/publishable keys, Firebase web config and Stripe publishable keys
+are never findings. SSRF guard + DNS-over-HTTPS check, manual redirects, caps on sub-requests (45),
+time (25 s), scripts (14), bytes, tables (20), buckets (5). 5 deep scans per IP per hour (KV `rld:` keys).
+CORS allows snapforgelab.com only. Nothing is logged.
+
+`_worker.js` (Cloudflare Pages advanced mode) is GENERATED: after editing `worker.js` or
+`deep-scan.js`, run `node build-pages-worker.mjs`.
+
 ## Local test (no deploy)
+
+```
+node test-deep.mjs             # deep scan: masking, false positives, SSRF, one GET per table, endpoint
+```
+
 
 ```
 cd workers/mcp
