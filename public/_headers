@@ -14,3 +14,5 @@
 /og.png
   Cache-Control: public, max-age=86400
 
+/.well-known/mcp-registry-auth
+  Content-Type: text/plain; charset=utf-8

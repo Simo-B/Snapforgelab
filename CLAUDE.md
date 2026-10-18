@@ -23,6 +23,7 @@ Marketing site for snapforgelab.com: Simo, an independent Replit specialist, sel
 - Cloudflare Worker `proud-truth-105e` serves `public/` (see `wrangler.jsonc`, `not_found_handling: 404-page`). Every push to `claude/awesome-faraday-f1lckc` deploys.
 - `public/_headers`: security headers, cache rules (`/assets/*` 1 day, `/og.png`). `public/_redirects`: `/x`, `/review`.
 - `public/google2fe8697a02dbcd50.html` is the Search Console verification: keep it.
+- `public/.well-known/mcp-registry-auth` is the MCP Registry HTTP-auth public key (served as text/plain via `_headers`) for `server.json` at the root (`com.snapforgelab/ship-ready-check`): keep it. Never commit the private key (`key.pem` is gitignored).
 - The live site is not reachable from the cloud container: verify locally.
 
 ## Layout

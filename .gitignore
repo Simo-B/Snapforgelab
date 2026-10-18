@@ -3,3 +3,7 @@
 
 # SEO strategy notes: local only, never pushed to the public repo
 seo/
+
+# MCP Registry signing key: never commit
+key.pem
+mcp-registry-key*

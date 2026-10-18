@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.snapforgelab/ship-ready-check",
+  "title": "Snapforge Ship-Ready Check",
+  "description": "Free, read-only ship-readiness check for Replit, Lovable and Bolt apps.",
+  "version": "1.0.0",
+  "websiteUrl": "https://snapforgelab.com/chatgpt-demo/",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.snapforgelab.com/mcp"
+    }
+  ]
+}
