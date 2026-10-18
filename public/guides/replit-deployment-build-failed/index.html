@@ -207,6 +207,7 @@
 
 <h2 id="causes">Likely causes</h2>
 <ol><li>A dependency is installed in the workspace but missing from <code>package.json</code> or <code>requirements.txt</code>/<code>pyproject.toml</code>.</li><li>TypeScript or lint errors fail the production build, even though the dev server ignores them.</li><li>The build command or output folder does not match the project.</li><li>A database migration in the build step fails.</li><li>Large files (datasets, videos, model weights, <code>node_modules</code> copies, build output) push the app over the size limit.</li></ol>
+<p>If the build passes but the app still breaks after publishing, see how to <a href="/fix-replit-app/">fix Replit app</a> issues symptom by symptom.</p>
 
 <h2 id="fix">Step-by-step fix</h2>
 

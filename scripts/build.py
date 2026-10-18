@@ -28,6 +28,7 @@ STATIC_PAGES = [
     ("/", "1.0"),
     ("/replit-app-to-production/", "0.9", "2026-10-17"),
     ("/deploy-fix/", "0.9", "2026-10-17"),
+    ("/fix-replit-app/", "0.8", "2026-10-18"),
     ("/hire-replit-developer/", "0.9"),
     ("/about/", "0.6"),
     ("/replit-app-to-production/example-report/", "0.7"),

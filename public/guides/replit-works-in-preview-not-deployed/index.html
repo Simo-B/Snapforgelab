@@ -207,6 +207,7 @@
 
 <h2 id="causes">Likely causes</h2>
 <ol><li><strong>Secrets differ.</strong> A key is missing, unsynced or set to a different value for the published app.</li><li><strong>Different database.</strong> The published app uses the production database, which starts empty and may lack recent schema changes.</li><li><strong>Hard-coded URLs.</strong> Code calls <code>localhost</code>, <code>127.0.0.1</code> or the <code>replit.dev</code> preview URL.</li><li><strong>Third-party settings still point to dev.</strong> OAuth redirect URIs, Stripe webhook endpoints and CORS allowlists.</li><li><strong>Local files.</strong> Uploads or generated files were saved to disk, which resets on every publish.</li><li><strong>Wrong deployment type.</strong> A full-stack Agent app published as a Static deployment has no server running.</li></ol>
+<p>None of these? Start from the symptom instead: here is how to <a href="/fix-replit-app/">fix Replit app</a> problems, with the matching guide or fixed-price option for each.</p>
 
 <h2 id="fix">Step-by-step fix</h2>
 

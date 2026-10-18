@@ -200,6 +200,7 @@
 
 <h2 id="causes">Likely causes</h2>
 <ol><li>The server listens on <code>localhost</code> or <code>127.0.0.1</code>. That works in the workspace but not in a published app.</li><li>The port is hard-coded to a value that does not match the <code>[[ports]]</code> mapping in <code>.replit</code>.</li><li><code>.replit</code> exposes several external ports. Autoscale and Reserved VM deployments support a single external port.</li><li>The homepage is slow at startup (database seeding, cache warm-up, big imports) and misses the health check window.</li><li>The run command starts a dev server or a one-shot script instead of a long-running production server.</li></ol>
+<p>Port and health-check errors are one family of deploy failures; the overview of how to <a href="/fix-replit-app/">fix Replit app</a> deployments covers the others.</p>
 
 <h2 id="fix">Step-by-step fix</h2>
 
