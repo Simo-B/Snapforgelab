@@ -27,6 +27,7 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 STATIC_PAGES = [
     ("/", "1.0"),
     ("/scan/", "0.9", "2026-10-18"),
+    ("/prompt-pack/", "0.8", "2026-10-18"),
     ("/replit-app-to-production/", "0.9", "2026-10-17"),
     ("/deploy-fix/", "0.9", "2026-10-17"),
     ("/fix-replit-app/", "0.8", "2026-10-18"),
@@ -131,7 +132,7 @@ def footer(mobile_cta=True, cta_link=REVIEW_CTA):
       <div><a href="/" class="logo">{LOGO_FOOT}Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Independent Replit specialist. Productized, fixed-price business apps for growing teams worldwide.</p></div>
       <div><p class="foot-h">Services</p><ul><li><a href="/replit-app-to-production/">Replit Agent app to production</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
-      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
@@ -384,6 +385,7 @@ def build_llms(guides):
         "## Services",
         f"- [Free security audit]({SITE}/free-audit): free, read-only security check of a live Replit, Lovable or Bolt app, private audit page with exact fix steps within 24 hours. Lovable & Bolt version: {SITE}/lovable-bolt-audit\n"
         f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Security Review if booked within 30 days).",
+        f"- [Ship-Ready Prompt Pack]({SITE}/prompt-pack/): $19 one-time PDF (7 pages, October 2026 edition): 16 copy-paste prompts and a 15-point checklist to fix SEO, Supabase RLS, secrets, auth redirects, Stripe webhooks and deploys on apps built with Replit Agent, Lovable and Bolt. Paid with PayPal, emailed within a few hours, full refund within 14 days if it doesn't help.",
         f"- [Ship-Ready Security Review]({SITE}/replit-app-to-production/): $199 security and production-readiness audit of an AI-built app (Row Level Security, secrets, CORS, Stripe webhooks, access control), delivered in 48 hours, full refund if fewer than 3 real issues are found.",
         f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited).",
         f"- [Starter Build]({SITE}/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.",
