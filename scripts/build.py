@@ -26,6 +26,7 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
     ("/", "1.0"),
+    ("/scan/", "0.9", "2026-10-18"),
     ("/replit-app-to-production/", "0.9", "2026-10-17"),
     ("/deploy-fix/", "0.9", "2026-10-17"),
     ("/fix-replit-app/", "0.8", "2026-10-18"),
