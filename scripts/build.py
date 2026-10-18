@@ -178,17 +178,21 @@ DEPLOY_CTA_BOX = """<aside class="cta-box">
 
 
 # Problem/fix guides ("cta": "fix" in meta): the reader is blocked now, so lead with the free
-# audit and offer the $49 Deploy Fix next to it.
+# audit and offer the $49 Deploy Fix next to it. Optional meta "agent" and "audit" name the
+# builder and the free-audit page for guides about other builders (default: Replit Agent);
+# "deployFix": false drops the $49 Deploy Fix offer, whose page covers Replit only.
 FREE_AUDIT_CTA = ("Get a free audit", "/free-audit")
-FIX_CTA_BOX = """<aside class="cta-box">
+def fix_cta_box(agent="Replit Agent", audit=FREE_AUDIT_CTA[1], deploy_fix=True):
+    offer = " Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund." if deploy_fix else ""
+    button = '\n    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>' if deploy_fix else ""
+    return f"""<aside class="cta-box">
   <div>
     <p class="cta-kicker">Free audit · 24h</p>
     <p class="cta-title">Still stuck? Get a free audit in 24h</p>
-    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into Replit Agent. Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund.</p>
+    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into {agent}.{offer}</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
-    <a href="/free-audit" class="btn p">Get my free audit</a>
-    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>
+    <a href="{audit}" class="btn p">Get my free audit</a>{button}
   </div>
 </aside>"""
 
@@ -251,7 +255,8 @@ def build_guide(g, by_slug):
     sec = g.get("cta") == "security"
     fix = g.get("cta") == "fix" or sec
     deploy = g.get("topic") in DEPLOY_TOPICS
-    box = SECURITY_CTA_BOX if sec else FIX_CTA_BOX if fix else DEPLOY_CTA_BOX if deploy else CTA_BOX
+    audit = g.get("audit", FREE_AUDIT_CTA[1])
+    box = SECURITY_CTA_BOX if sec else fix_cta_box(g.get("agent", "Replit Agent"), audit, g.get("deployFix", True)) if fix else DEPLOY_CTA_BOX if deploy else CTA_BOX
     body = g["body"].replace("<!--cta-->", box)
     tldr = "".join(f"<li>{t}</li>" for t in g.get("tldr", []))
     faq_html = ""
@@ -284,7 +289,7 @@ def build_guide(g, by_slug):
 {rel_html}
 </main>
 """
-    out += footer(cta_link=FREE_AUDIT_CTA if fix else DEPLOY_CTA if deploy else REVIEW_CTA)
+    out += footer(cta_link=(FREE_AUDIT_CTA[0], audit) if fix else DEPLOY_CTA if deploy else REVIEW_CTA)
     dest = PUBLIC / "guides" / g["slug"] / "index.html"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(out)

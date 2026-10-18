@@ -257,6 +257,8 @@ Run the build again and show me it passes before I publish.</code></pre></div>
 
 <p>If the build passes but the app fails at the promote step, the cause is elsewhere: see <a href="/guides/replit-deployment-failed-port/">port and 0.0.0.0 errors</a>. If Agent keeps reintroducing errors, read <a href="/guides/replit-agent-keeps-breaking-app/">how to stop the fix loop</a>.</p>
 
+<p>On Lovable, a failed publish has its own causes and fixes: see <a href="/guides/lovable-app-not-working-after-publish/">Lovable app not working after publish</a>.</p>
+
 <h2 id="faq">FAQ</h2>
 <h3>Why does my app build in the workspace but not when publishing?</h3>
 <p>The workspace may have packages installed by hand or a dev server that tolerates type errors. The deployment runs a clean install and the production build, so anything not declared in your dependency files or any type error shows up there.</p>

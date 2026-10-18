@@ -1,0 +1,127 @@
+<!--meta
+{
+ "topic": "Deployment",
+ "order": 29,
+ "cta": "fix",
+ "agent": "Lovable",
+ "audit": "/lovable-bolt-audit",
+ "about": "Lovable",
+ "ogLabel": "Lovable guide",
+ "title": "Lovable App Not Working After Publish: 7 Fixes",
+ "h1": "Lovable app not working after publish? 7 fixes, by symptom",
+ "kicker": "Deployment",
+ "description": "Lovable app broken after you publish? 7 fixes by symptom: changes not live, failed publish, blank page, login, missing data, custom domain, outside hosting.",
+ "published": "2026-10-18",
+ "minutes": 5,
+ "tldr": [
+  "The live site is a snapshot of your last publish: edits only go live after you publish an update.",
+  "If the publish fails, read the build error in the logs, or go back to the last version that published and reapply changes one at a time.",
+  "Login, data and domain problems after publishing usually come from settings outside the code: Supabase auth URLs, database permissions and DNS records."
+ ],
+ "steps": [
+  [
+   "Publish the update, then check in a private window",
+   "The live site is a snapshot of the version you last published. Edits made afterwards show in the editor preview, not on the live site, until you publish an update. Publish, then open the live URL in a private window so your browser cache doesn't show the old version."
+  ],
+  [
+   "Read the publish error",
+   "If publishing fails, Lovable's FAQ says the cause is usually a build error in the current version. Open the publish or deployment logs, fix the first error they name, and publish again. If publishing is stuck for more than 10 minutes, refresh the page and try again."
+  ],
+  [
+   "Go back to the last version that published",
+   "If you can't find the error, restore the last version that published successfully, publish it, then reapply your recent changes one at a time until the publish breaks again. That change is the one to fix."
+  ],
+  [
+   "Read the first console error on a blank page",
+   "Open the live URL, press F12 and read the first red error in the console, not the last. It usually names the missing variable, the failed import or the component that crashed."
+  ],
+  [
+   "Fix the Supabase auth URLs",
+   "If login works in the preview but not on the live site, open Supabase, then Authentication and URL Configuration. Set the Site URL to your live address, and add your lovable.app URL and your custom domain to the Redirect URLs. The default Site URL is localhost."
+  ],
+  [
+   "Check database permissions for missing data",
+   "If data shows in the preview but not for real users, the database is refusing the request. Look for permission errors such as 42501 in the console, then check the Row Level Security policies and grants for that table."
+  ],
+  [
+   "Fix the custom domain records",
+   "Use exactly the DNS records shown in your project's domain settings. While the domain shows Verifying, Lovable has not detected your record yet. Turn off Cloudflare's proxy for that record if you use Cloudflare, and allow up to 72 hours."
+  ]
+ ],
+ "faq": [
+  [
+   "Why does my Lovable app work in the preview but not after publishing?",
+   "The preview shows the editor's current version. The live site is a separate snapshot of your last publish, so it only changes when you publish an update, and a publish can fail on a build error in the current version, which the logs show."
+  ],
+  [
+   "How long does a Lovable custom domain take to work?",
+   "DNS changes can take up to 72 hours, according to Lovable's documentation. While the domain shows Verifying, Lovable has not detected your record yet: check it matches the records in your project's domain settings exactly."
+  ],
+  [
+   "Do I need a paid Lovable plan for a custom domain?",
+   "Yes. According to Lovable's documentation, custom domains require a paid plan."
+  ],
+  [
+   "Can you fix it for me?",
+   "Yes. Start with the <a href=\"/lovable-bolt-audit\">free Lovable and Bolt audit</a>: it checks your live app and sends exact fix steps within 24 hours. If you would rather not apply them yourself, I can fix the issue for you after the audit."
+  ]
+ ],
+ "related": [
+  "supabase-october-30-grants-change",
+  "replit-works-in-preview-not-deployed",
+  "replit-vs-lovable-vs-bolt"
+ ],
+ "deployFix": false
+}
+-->
+<p>Your app works in the Lovable editor. You publish, and the live site shows old content, a blank page, a broken login or no data at all. Here are the seven usual causes, in the order to check them.</p>
+
+<h2 id="symptoms">Symptoms</h2>
+<table>
+<thead><tr><th>What you see on the live site</th><th>Go to</th></tr></thead>
+<tbody>
+<tr><td>Your latest changes are missing</td><td><a href="#step-1">Step 1</a></td></tr>
+<tr><td>Publishing fails or never finishes</td><td><a href="#step-2">Steps 2 and 3</a></td></tr>
+<tr><td>A blank white page</td><td><a href="#step-4">Step 4</a></td></tr>
+<tr><td>Login works in the preview, not on the live site</td><td><a href="#step-5">Step 5</a></td></tr>
+<tr><td>Data shows in the preview, not for real users</td><td><a href="#step-6">Step 6</a></td></tr>
+<tr><td>Your custom domain shows nothing or stays on Verifying</td><td><a href="#step-7">Step 7</a></td></tr>
+<tr><td>You host the app on Netlify or Vercel and pages 404 or stay blank</td><td><a href="#outside">Hosting outside Lovable</a></td></tr>
+</tbody>
+</table>
+
+<h2 id="causes">Likely causes</h2>
+<ol><li><strong>The update was never published.</strong> The live site keeps the last published version.</li><li><strong>A build error stops the publish.</strong> The preview can look fine while the publish fails.</li><li><strong>A runtime error stops the page from rendering</strong>, which leaves it blank.</li><li><strong>Supabase auth still points to localhost or the preview</strong>, so logins bounce.</li><li><strong>Database permissions</strong> refuse requests from real users.</li><li><strong>DNS records</strong> for the custom domain are missing, wrong or proxied.</li><li><strong>An outside host</strong> is missing environment variables or a routing rule.</li></ol>
+
+<h2 id="fix">Step-by-step fix</h2>
+<h3 id="step-1">1. Publish the update, then check in a private window</h3>
+<p>The live site is a snapshot of the version you last published. Edits made afterwards show in the editor preview, not on the live site, until you publish an update. Publish, then open the live URL in a private window so your browser cache doesn't show the old version.</p>
+<h3 id="step-2">2. Read the publish error</h3>
+<p>If publishing fails, Lovable's FAQ says the cause is usually a build error in the current version. Open the publish or deployment logs, fix the first error they name, and publish again. If publishing is stuck for more than 10 minutes, refresh the page and try again.</p>
+<h3 id="step-3">3. Go back to the last version that published</h3>
+<p>If you can't find the error, restore the last version that published successfully, publish it, then reapply your recent changes one at a time until the publish breaks again. That change is the one to fix.</p>
+<h3 id="step-4">4. Read the first console error on a blank page</h3>
+<p>Open the live URL, press F12 and read the first red error in the console, not the last. It usually names the missing variable, the failed import or the component that crashed.</p>
+<h3 id="step-5">5. Fix the Supabase auth URLs</h3>
+<p>If login works in the preview but not on the live site, open Supabase, then Authentication and URL Configuration. Set the Site URL to your live address, and add your lovable.app URL and your custom domain to the Redirect URLs. The default Site URL is localhost.</p>
+<h3 id="step-6">6. Check database permissions for missing data</h3>
+<p>If data shows in the preview but not for real users, the database is refusing the request. Look for permission errors such as 42501 in the console, then check the Row Level Security policies and grants for that table.</p>
+<h3 id="step-7">7. Fix the custom domain records</h3>
+<p>Use exactly the DNS records shown in your project's domain settings. While the domain shows Verifying, Lovable has not detected your record yet. Turn off Cloudflare's proxy for that record if you use Cloudflare, and allow up to 72 hours.</p>
+
+<p>Sources: <a href="https://docs.lovable.dev/features/publish" rel="noopener">Lovable publishing</a>, <a href="https://lovable.dev/faq/deployment/troubleshooting" rel="noopener">Lovable deployment troubleshooting</a>, <a href="https://docs.lovable.dev/features/custom-domain" rel="noopener">Lovable custom domains</a> and <a href="https://supabase.com/docs/guides/auth/redirect-urls" rel="noopener">Supabase redirect URLs</a>. Before you dig into your code, check <a href="https://status.lovable.dev" rel="noopener">Lovable's status page</a> for an incident. For error 42501, see <a href="/guides/supabase-october-30-grants-change/">the Supabase grants change</a>.</p>
+
+<h2 id="outside">Hosting outside Lovable (Netlify, Vercel)</h2>
+<ul><li><strong>Environment variables:</strong> variables set in Lovable don't travel to another host. Copy every <code>VITE_</code> variable your app uses (for Supabase, typically the project URL and the publishable key) into the host's settings, then redeploy: Vite bakes them in at build time.</li><li><strong>Routing:</strong> a single-page app needs a rewrite, or every page except the home page returns 404 on refresh. On Netlify, add a <code>_redirects</code> file containing <code>/* /index.html 200</code>, as <a href="https://www.netlify.com/knowledge-base/deploy-your-lovable-app-to-netlify/" rel="noopener">Netlify's Lovable guide</a> shows. On Vercel, add the equivalent rewrite in <code>vercel.json</code>.</li><li><strong>Auth URLs:</strong> add the new domain to your Supabase Site URL and Redirect URLs (step 5).</li></ul>
+
+<h2 id="agent-prompt">Copy-paste prompt for Lovable</h2>
+<div class="callout"><pre style="white-space:pre-wrap"><code>My app works in the Lovable preview but not on the published site. Without rewriting features:
+1. Check the latest publish or build logs and list every error, with file and line.
+2. Fix only those errors, one at a time, and tell me what you changed.
+3. List every environment variable and Supabase setting the published site needs, and tell me which ones are missing.
+Don't change anything else.</code></pre></div>
+
+<!--cta-->
+
+<h2 id="verify">How to verify the fix</h2>
+<ul><li>Open the live URL in a private window: sign up as a new user, log in, create a record, log out.</li><li>The browser console stays free of red errors during that journey.</li><li>Refresh a deep page (for example <code>/dashboard</code>): it loads, with no 404.</li><li>Repeat the test on your custom domain if you have one.</li></ul>

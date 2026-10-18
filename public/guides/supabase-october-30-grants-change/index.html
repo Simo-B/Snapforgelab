@@ -189,6 +189,8 @@
 <p>For an AI-built app, the realistic scenario is this: after October 30 you ask your AI tool for a new feature (comments, invoices, a waitlist). It creates a new table, writes the frontend code, and the feature fails with 42501 because nobody granted access. Your existing features keep working. The new one does not, until the grants are added.</p>
 <p>The trap: an AI tool that sees "permission denied" may try to "fix" it by disabling RLS or loosening policies. That is the wrong fix. RLS is not the problem; the missing grant is.</p>
 
+<p>No 42501 in the console, but your Lovable app still breaks after a publish? The cause is elsewhere: see <a href="/guides/lovable-app-not-working-after-publish/">Lovable app not working after publish</a>.</p>
+
 <h2 id="fix">The fix: grant, RLS, policies, as one unit</h2>
 <p>Supabase recommends treating these three steps as a unit whenever you create a table you want to reach from the Data API. This is the SQL from the changelog, with <code>your_table</code> to replace:</p>
 <pre><code>-- 1. Grant the privileges the role needs
