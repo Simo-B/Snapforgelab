@@ -16,6 +16,7 @@
 <meta property="og:image" content="https://snapforgelab.com/og.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/assets/styles.css?v=20">
+<style>.sev.ref{background:rgba(255,255,255,.08);color:var(--dim);white-space:normal}</style>
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -51,14 +52,16 @@
           <tr><td>Deployment</td><td><span class="sev ok">Solid</span></td><td>Right deployment type, domain and HTTPS</td></tr>
         </tbody>
       </table>
+      <p>Every finding below was verified by hand, with the exact test I ran. No automated-scanner noise, no false positives.</p>
     </div>
 
     <section class="findings" aria-labelledby="must-title">
       <h2 id="must-title">Must-fix before launch</h2>
       <div class="finding">
-        <h3><span class="sev must">Must-fix</span> 1. Any logged-in user can open any invoice</h3>
+        <h3><span class="sev must">Must-fix</span><span class="sev ref">OWASP A01:2021 Broken Access Control</span> 1. Any logged-in user can open any invoice</h3>
         <dl>
           <dt>What</dt><dd><code>GET /api/invoices/:id</code> checks that a user is logged in, but not that the invoice belongs to them. Changing the ID in the URL shows another customer's invoice.</dd>
+          <dt>How I verified</dt><dd>Logged in as test account A and requested <code>GET /api/invoices/1042</code>, an invoice owned by test account B. The API returned 200 with B's invoice. Verified by hand.</dd>
           <dt>Why it matters</dt><dd>Customer names, amounts and addresses are exposed to every other user. This is the kind of issue that ends trust in a product overnight.</dd>
           <dt>How to fix</dt><dd>Scope every invoice query to the current user (<code>where: &#123; id, ownerId: req.user.id &#125;</code>) and return 404 otherwise. Apply the same check to update and delete routes. Test with two accounts.</dd>
           <dt>Effort</dt><dd>Small, under an hour</dd>
@@ -66,9 +69,10 @@
       </div>
 
       <div class="finding">
-        <h3><span class="sev must">Must-fix</span> 2. The OpenAI key is shipped to the browser</h3>
+        <h3><span class="sev must">Must-fix</span><span class="sev ref">OWASP A07:2021 Identification and Authentication Failures</span> 2. The OpenAI key is shipped to the browser</h3>
         <dl>
           <dt>What</dt><dd>The invoice-summary feature calls OpenAI directly from React. The key is inlined in the JavaScript bundle and visible in DevTools.</dd>
+          <dt>How I verified</dt><dd>Searched the production JavaScript bundle in DevTools: the key appears in <code>/assets/index-*.js</code> (masked: <code>sk-…9f2c</code>). Verified by hand.</dd>
           <dt>Why it matters</dt><dd>Anyone can copy the key and use it at your expense until the account is drained or blocked.</dd>
           <dt>How to fix</dt><dd>Move the call to a backend route (<code>POST /api/summarize</code>) that reads the key from Replit Secrets. Then rotate the key, since the old one must be considered public.</dd>
           <dt>Effort</dt><dd>Small, about an hour</dd>
@@ -80,9 +84,10 @@
     <section class="findings" aria-labelledby="soon-title">
       <h2 id="soon-title">Fix soon</h2>
       <div class="finding">
-        <h3><span class="sev soon">Fix soon</span> 3. No rate limit on /api/generate</h3>
+        <h3><span class="sev soon">Fix soon</span><span class="sev ref">OWASP API4:2023 Unrestricted Resource Consumption</span> 3. No rate limit on /api/generate</h3>
         <dl>
           <dt>What</dt><dd>One user can trigger unlimited AI calls.</dd>
+          <dt>How I verified</dt><dd>Sent 50 requests in 60 seconds from one account. All 50 returned 200, none were throttled. Verified by hand.</dd>
           <dt>Why it matters</dt><dd>A script or a curious user can burn the month's AI budget in an afternoon.</dd>
           <dt>How to fix</dt><dd>Add a per-user rate limit (for example 20 calls per hour) and a spending cap at the provider.</dd>
           <dt>Effort</dt><dd>Small</dd>
@@ -90,9 +95,10 @@
       </div>
 
       <div class="finding">
-        <h3><span class="sev soon">Fix soon</span> 4. Backups were never restored</h3>
+        <h3><span class="sev soon">Fix soon</span><span class="sev ref">Launch readiness</span> 4. Backups were never restored</h3>
         <dl>
           <dt>What</dt><dd>Backups exist, but nobody has tried restoring one.</dd>
+          <dt>How I verified</dt><dd>Asked for the last successful restore test. None on record. Verified by hand.</dd>
           <dt>Why it matters</dt><dd>You only find out a backup is broken when you need it.</dd>
           <dt>How to fix</dt><dd>Restore the latest backup into a copy once, and note the steps and the time it took.</dd>
           <dt>Effort</dt><dd>Small, 30 minutes</dd>
@@ -100,9 +106,10 @@
       </div>
 
       <div class="finding">
-        <h3><span class="sev soon">Fix soon</span> 5. No error alerts</h3>
+        <h3><span class="sev soon">Fix soon</span><span class="sev ref">OWASP A09:2021 Security Logging and Monitoring Failures</span> 5. No error alerts</h3>
         <dl>
           <dt>What</dt><dd>Errors only show up in the logs.</dd>
+          <dt>How I verified</dt><dd>Checked for an uptime monitor and an error tracker. Neither is configured. Verified by hand.</dd>
           <dt>Why it matters</dt><dd>Customers find outages before you do.</dd>
           <dt>How to fix</dt><dd>Add an uptime monitor on a <code>/health</code> route and an error tracker that emails you.</dd>
           <dt>Effort</dt><dd>Small</dd>
@@ -121,6 +128,7 @@
       </ul>
 
       <h2>Next steps</h2>
+      <p>For comparison: an agency security review typically takes 2–4 weeks. This review ships in 48 hours.</p>
       <p><strong>Option A:</strong> fix it yourself with this list. Each item above has the exact change to make.</p>
       <p><strong>Option B:</strong> the Ship-It Sprint. I fix every must-fix and fix-soon item and deploy to production in 5 days, for $990, with the $199 review credited. The first month of Care is included.</p>
     </div>
