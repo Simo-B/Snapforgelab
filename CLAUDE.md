@@ -9,6 +9,7 @@ Marketing site for snapforgelab.com: Simo, an independent Replit specialist, sel
 - Founding review: $99, first 3 clients, private page `/founding-review/` (noindex, not linked). Closed by `FOUNDING.open = false` in `main.js`.
 - Ship-Ready Prompt Pack: $19 one-time PDF (16 prompts + 15-point checklist, 7 pages, October 2026 edition). Page `/prompt-pack/`, `paypal.me/mbsimo/19USD`; the PDF is emailed to the buyer's PayPal address within a few hours; full refund within 14 days if it doesn't help. Linked from the shared footer (not on the frozen pages) and the `/scan/` results.
 - Ship-It Sprint $990 (review credited); Starter Build $2,500 ($1,500 founding); Care $249/month.
+- Sprint fix guarantee, same wording everywhere (homepage Sprint card and FAQ visible + JSON-LD, `/replit-app-to-production/` Sprint card, `/terms/` refund guarantee, llms.txt): "Every Sprint comes with a fix guarantee: if a must-fix item from the review is not fixed in production, or breaks again within 14 days of launch, I fix it at no extra cost." Card bullet: "Guarantee: every must-fix item from the review fixed in production. If one isn't, or breaks again within 14 days of launch, I fix it at no extra cost."
 - Payment: PayPal only, `paypal.me/mbsimo/{19,49,99,199}USD`. Contact: hello@snapforgelab.com. X: @Simo_Bc.
 
 ## Hard rules
