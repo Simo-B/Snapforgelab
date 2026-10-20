@@ -391,7 +391,7 @@ def build_llms(guides):
         f"- [Ship-Ready Security Review]({SITE}/replit-app-to-production/): $199 (founder price, then $390 after the first 10) security and production-readiness audit of an AI-built app (Row Level Security, secrets, CORS, Stripe webhooks, access control): technical report + executive summary delivered in 48 hours, free retest within 14 days, full refund if fewer than 3 real issues are found.",
         f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited).",
         f"- [Starter Build]({SITE}/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.",
-        f"- [Care]({SITE}/#pricing): $249/month hosting, monitoring and improvements.",
+        f"- [Care]({SITE}/#pricing) ($249/month, cancel anytime): continuous security monitoring of a live app, with a security re-check after every release plus a monthly full pass, an alert within 1 business day if a new issue appears, fixes for what the re-check finds, bug fixes and security updates, hosting and uptime monitoring, small monthly improvements, priority support within 1 business day.",
         f"- [Hire a Replit developer]({SITE}/hire-replit-developer/)",
         "",
         "## Free tools",
