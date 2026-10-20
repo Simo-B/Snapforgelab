@@ -5,7 +5,7 @@ Marketing site for snapforgelab.com: Simo, an independent Replit specialist, sel
 ## Offers (keep prices consistent everywhere: pages, JSON-LD, FAQ, llms.txt, terms)
 - Free audit: `/free-audit` (`public/free-audit.html`, Google Form), promised within 24h.
 - Replit Deploy Fix: $49, one deployment blocker, 48h, refund if not fixed, $49 credited toward the review within 30 days. Page `/deploy-fix/`.
-- Ship-Ready Review: $199 launch price for the first 10, then $390. Page `/replit-app-to-production/` (`#book`).
+- Ship-Ready Review: $199 founder price for the first 10, then $390 (shown with a "Founder price" label and a "Retest included" badge, no struck-through price). Deliverables: technical report, one-page executive summary, prioritized action plan, 10-15 minute video walkthrough, free retest requested within 14 days of delivery. Page `/replit-app-to-production/` (`#book`, `#due-diligence`).
 - Founding review: $99, first 3 clients, private page `/founding-review/` (noindex, not linked). Closed by `FOUNDING.open = false` in `main.js`.
 - Ship-Ready Prompt Pack: $19 one-time PDF (16 prompts + 15-point checklist, 7 pages, October 2026 edition). Page `/prompt-pack/`, `paypal.me/mbsimo/19USD`; the PDF is emailed to the buyer's PayPal address within a few hours; full refund within 14 days if it doesn't help. Linked from the shared footer (not on the frozen pages) and the `/scan/` results.
 - Ship-It Sprint $990 (review credited); Starter Build $2,500 ($1,500 founding); Care $249/month.

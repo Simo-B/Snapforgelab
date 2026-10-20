@@ -22,6 +22,9 @@
 <meta name="twitter:description" content="Security, auth, data and deployment review for Replit Agent apps. Prioritized fix list in 48 hours. $199, refund guarantee.">
 <meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
 <link rel="stylesheet" href="/assets/styles.css?v=20">
+<style>
+.plan .price .price-badge{position:static;display:inline-block;vertical-align:middle;margin-left:12px;letter-spacing:0;line-height:1.4}
+</style>
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
 {
@@ -47,12 +50,12 @@
       "@type": "FAQPage",
       "mainEntity": [
         {"@type": "Question", "name": "How is this different from Replit's Security Agent scan?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Security Agent is a great first pass on code-level vulnerabilities, and I run it too. It doesn't know your business rules, test multi-user data access end to end, or check your production database, backups, costs and deployment setup. The review covers what an automated scan can't see."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "Replit's Security Agent is a great first pass on code-level vulnerabilities, and I run it too. It doesn't know your business rules, test multi-user data access end to end, or check your production database, backups, costs and deployment setup. The review covers what an automated scan can't see. Wondering whether Replit itself is ready? Read Is Replit production-ready?"}},
         {"@type": "Question", "name": "What do I need to provide?",
          "acceptedAnswer": {"@type": "Answer", "text": "Read access to your Replit project (invite as a collaborator) and a short description of who uses the app and what data it handles."}},
         {"@type": "Question", "name": "Will you change my code during the review?",
          "acceptedAnswer": {"@type": "Answer", "text": "No. The review is read-only. You get a report and a video walkthrough. If you want me to implement the fixes, the Ship-It Sprint ($990, 5 days) does it and the $199 is credited."}},
-        {"@type": "Question", "name": "What if you don't find much?", "acceptedAnswer": {"@type": "Answer", "text": "If I find fewer than 3 real issues, you get a full refund."}}
+        {"@type": "Question", "name": "What if you don't find much?", "acceptedAnswer": {"@type": "Answer", "text": "If I find fewer than 3 real issues, you get a full refund. No questions asked."}}
       ]
     }
   ]
@@ -104,8 +107,10 @@
       <div class="callout">
         <p><strong>Everything included in the $199:</strong></p>
         <ul>
-          <li><strong>A written report</strong> ranking every issue as must-fix before launch, fix soon or nice to have.</li>
-          <li><strong>Exact fix steps</strong> for each issue, in plain language, so you or any developer can apply them.</li>
+          <li><strong>Technical report:</strong> every issue, severity, and the exact fix (or a ready-to-paste prompt for Replit Agent / Lovable).</li>
+          <li><strong>One-page executive summary:</strong> plain-English risk level and what to fix first, readable by a non-technical cofounder, investor or buyer.</li>
+          <li><strong>Prioritized action plan.</strong></li>
+          <li><strong>Free retest included:</strong> once you've applied the fixes, I re-check every issue within 14 days and confirm what's resolved.</li>
           <li><strong>A 10-15 minute video walkthrough</strong> of your app, showing where each issue lives.</li>
           <li><strong>Delivery within 48 hours</strong> of getting access to your Repl.</li>
           <li><strong>A full refund</strong> if I find fewer than 3 real issues.</li>
@@ -135,9 +140,9 @@
       <div class="plan hl">
         <span class="badge">10 launch spots</span>
         <div class="name">Ship-Ready Security Review</div>
-        <div class="for">Audit + prioritized fix list + video walkthrough.</div>
-        <div class="price">$199</div>
-        <div class="per">launch price for the first 10 reviews, then $390 · 48h · refund guarantee</div>
+        <div class="for">Audit + technical report + executive summary + video + free retest.</div>
+        <div class="price">$199<span class="badge price-badge">Retest included</span></div>
+        <div class="per"><strong>Founder price</strong> for the first 10 reviews, then $390 · 48h · refund guarantee</div>
         <a href="#book" class="btn p">Book the $199 review</a>
       </div>
       <div class="plan">
@@ -153,16 +158,23 @@
       <ol>
         <li><strong>Book your review:</strong> pay $199 with PayPal (button above), then email <a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a> with your Repl link. Or use the form below if you have questions first.</li>
         <li><strong>Invite me to your Repl</strong> as a collaborator (read access is enough).</li>
-        <li><strong>Get your report</strong> and video within 48 hours of access. Then fix it yourself or hand it to me.</li>
+        <li><strong>Get your technical report, executive summary and video</strong> within 48 hours of access. Then fix it yourself or hand it to me, and ask for your free retest within 14 days.</li>
       </ol>
 
+      <h2 id="due-diligence">Raising or selling your app?</h2>
+      <p>Investors and buyers ask one question first: is this app safe to scale? The Ship-Ready Review gives you a clear, independent report you can share in due diligence, plus a retest that proves the fixes are done.</p>
+    </div>
+    <div class="book-cta" style="margin:0 0 8px">
+      <a href="https://paypal.me/mbsimo/199USD" class="btn p lg" target="_blank" rel="noopener" data-buy="review">Get my report: $199</a>
+    </div>
+    <div class="prose">
       <h2>FAQ</h2>
       <h3>How is this different from Replit's Security Agent scan?</h3>
       <p>Replit's <a href="https://blog.replit.com/meet-replit-security-agent" rel="noopener">Security Agent</a> is a great first pass on code-level vulnerabilities, and I run it too. It doesn't know your business rules, test multi-user data access end to end, or check your production database, backups, costs and deployment setup. The review covers what an automated scan can't see. Wondering whether Replit itself is ready? Read <a href="/guides/is-replit-production-ready/">Is Replit production-ready?</a></p>
       <h3>What do I need to provide?</h3>
       <p>Read access to your Replit project (invite as a collaborator) and a short description of who uses the app and what data it handles.</p>
       <h3>Will you change my code during the review?</h3>
-      <p>No. The review is read-only. If you want me to implement the fixes, the Ship-It Sprint ($990, 5 days) does it and the $199 is credited.</p>
+      <p>No. The review is read-only. You get a report and a video walkthrough. If you want me to implement the fixes, the Ship-It Sprint ($990, 5 days) does it and the $199 is credited.</p>
       <h3>What if you don't find much?</h3>
       <p>If I find fewer than 3 real issues, you get a full refund. No questions asked.</p>
       <p> Need a new app instead? See the <a href="/#pricing">Starter Build</a> or <a href="/hire-replit-developer/">hire a Replit developer</a>.</p>
@@ -174,12 +186,13 @@
   <div class="wrap narrow">
     <div class="contact-box book">
       <h2 id="book-title">Book your Ship-Ready Security Review</h2>
-      <p class="sub" style="margin:0">$199, launch price for the first 10 reviews. Here is exactly what happens.</p>
+      <p class="sub" style="margin:0">$199, founder price for the first 10 reviews (then $390). Here is exactly what happens.</p>
       <ol class="book-steps">
         <li><strong>Pay $199 with PayPal.</strong> Card or PayPal balance, in about a minute.</li>
         <li><strong>Email me your Repl link</strong> at <a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a>, with a line on who uses the app and what data it stores.</li>
         <li><strong>Invite hello@snapforgelab.com to your Repl</strong> as a collaborator. Read access is enough; I never change your code during a review.</li>
-        <li><strong>Get your report and video within 48 hours</strong> of access: every issue ranked must-fix, fix soon or nice to have.</li>
+        <li><strong>Get your technical report, executive summary and video within 48 hours</strong> of access: every issue ranked must-fix, fix soon or nice to have.</li>
+        <li><strong>Apply the fixes, then ask for your free retest</strong> within 14 days: I re-check every issue and confirm what's resolved.</li>
       </ol>
       <p class="book-sample">Not sure what you get? <a href="/replit-app-to-production/example-report/">See an example report</a> for a fictional app.</p>
       <p class="book-guarantee">Fewer than 3 real issues found? Full refund. Want me to fix everything after? The $199 is credited toward the $990 Ship-It Sprint.</p>

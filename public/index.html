@@ -27,6 +27,9 @@
 <meta name="twitter:image" content="https://snapforgelab.com/og.png?v=2">
 
 <link rel="stylesheet" href="/assets/styles.css?v=20">
+<style>
+.plan .price .price-badge{position:static;display:inline-block;vertical-align:middle;margin-left:12px;letter-spacing:0;line-height:1.4}
+</style>
 <style>@media (min-width:681px) and (max-width:960px){.plans:not(.two) .plan:last-child{grid-column:1/-1}}
 .sec-list{margin:0;padding-left:18px;display:grid;gap:10px;color:var(--dim)}.sec-list strong{color:var(--fg)}
 .free-offer{display:flex;gap:20px;align-items:center;justify-content:space-between;padding:24px 28px;border:1px solid rgba(48,209,88,.45);background:rgba(48,209,88,.07);border-radius:22px}.free-offer .name{font-size:19px;font-weight:620;margin:6px 0}.free-offer p{margin:0;color:var(--dim);max-width:60ch}.free-offer .btn{flex:none}
@@ -236,12 +239,14 @@
           <span class="badge">Most complete · 10 launch spots</span>
           <div class="name">Ship-Ready Security Review</div>
           <div class="for">A full security and production-readiness audit, inside your code.</div>
-          <div class="price">$199</div>
-          <div class="per">launch price for the first 10 reviews, then $390 · 48h</div>
+          <div class="price">$199<span class="badge price-badge">Retest included</span></div>
+          <div class="per"><strong>Founder price</strong> for the first 10 reviews, then $390 · 48h</div>
           <ul>
             <li>Row Level Security, secrets, CORS & webhooks</li><li>Auth, access control & data audit</li>
             <li>Performance, costs & deployment check</li>
-            <li>Prioritized fix list + video walkthrough</li>
+            <li>Technical report, one-page executive summary & prioritized action plan</li>
+            <li>Free retest included: once you've applied the fixes, I re-check every issue within 14 days and confirm what's resolved.</li>
+            <li>A 10-15 minute video walkthrough of your app, showing where each issue lives.</li>
             <li>Fewer than 3 real issues found? Full refund</li>
           </ul>
           <a class="plan-sample" href="/replit-app-to-production/example-report/">See an example report →</a>
