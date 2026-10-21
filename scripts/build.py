@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "20"
+ASSET_V = "21"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
@@ -79,7 +79,7 @@ def load_guides():
 
 
 def head(title, description, canonical, og_type="article", extra="", image=None):
-    image = image or f"{SITE}/og.png?v=2"
+    image = image or f"{SITE}/og.png?v=3"
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -308,7 +308,7 @@ def og_image(g):
     """Per-guide social image (made by scripts/og.js) with the site image as fallback."""
     if (PUBLIC / "og" / f"{g['slug']}.png").exists():
         return f"{SITE}/og/{g['slug']}.png?v=2"
-    return f"{SITE}/og.png?v=2"
+    return f"{SITE}/og.png?v=3"
 
 
 def format_date(d):

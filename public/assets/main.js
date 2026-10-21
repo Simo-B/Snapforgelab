@@ -19,6 +19,38 @@
     else location.replace('/replit-app-to-production/#book');
   }
 
+  // Usage stats: PostHog (US cloud), cookie-free (in-memory persistence), no session
+  // recording, no autocapture: pageviews plus the click and form events below.
+  // Paste the project API key (phc_...) here. While it is empty, nothing loads or is sent.
+  const POSTHOG_KEY = 'phc_ymDLM66rmVQoeBtew3rVu9TXSv3fYpJkgHehuHfTMktq';
+  if (POSTHOG_KEY) {
+    // Calls made before the library loads are queued and replayed by array.js
+    const ph = window.posthog = window.posthog || [];
+    ph._i = [[POSTHOG_KEY, {
+      api_host: 'https://us.i.posthog.com', persistence: 'memory', disable_session_recording: true,
+      autocapture: false, capture_pageview: true, person_profiles: 'identified_only',
+    }]];
+    ph.capture = (...args) => { ph.push(['capture', ...args]); };
+    const s = d.createElement('script');
+    s.async = true; s.crossOrigin = 'anonymous';
+    s.src = 'https://us-assets.i.posthog.com/static/array.js';
+    d.head.appendChild(s);
+  }
+  const track = (event, props) => {
+    if (POSTHOG_KEY && window.posthog) window.posthog.capture(event, props, { transport: 'sendBeacon' });
+  };
+  d.addEventListener('click', (e) => {
+    const buy = e.target.closest('[data-buy]');
+    if (buy) track('buy_click', { product: buy.dataset.buy });
+    const a = e.target.closest('a[href]');
+    if (a && a.origin === location.origin && /^\/free-audit\/?$/.test(a.pathname)) track('free_audit_click');
+  });
+  d.querySelectorAll('#contact form').forEach((f) => f.addEventListener('submit', () => {
+    const picked = f.querySelector('input[name="interest"]:checked');
+    const offer = f.querySelector('input[name="offer"]');
+    track('contact_submit', { interest: picked ? picked.value : offer ? offer.value : null });
+  }));
+
   // PayPal opens in a new tab and never sends buyers back, so keep the next
   // steps on screen in this tab, with a pre-filled email.
   const mail = (subject, body) => `mailto:hello@snapforgelab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -65,6 +97,7 @@
 
   // Lead form: async submit to Formspree, inline confirmation matched to the request
   const SUCCESS = {
+    fix: 'Got it. I’ll reply within 48 hours with what I’d fix, the fixed price and the next step.',
     build: 'Got it. Your fixed-price plan lands in your inbox within 48 hours.',
     review: 'Got it. I’ll reply within 24 hours with the payment link and next steps.',
     'ship-ready-review': 'Got it. I’ll answer your question within 24 hours.',
