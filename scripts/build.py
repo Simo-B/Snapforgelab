@@ -26,6 +26,7 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
     ("/", "1.0"),
+    ("/safe-to-launch/", "1.0", "2026-10-24"),
     ("/scan/", "0.9", "2026-10-18"),
     ("/scan-deep/", "0.8", "2026-10-18"),
     ("/prompt-pack/", "0.8", "2026-10-18"),
@@ -382,16 +383,17 @@ def build_llms(guides):
         "",
         "> Snapforge Lab is an independent Replit specialist studio focused on the security of AI-built apps (Replit, Lovable, Bolt, Supabase): "
         "a free read-only security audit in 24h (exposed Supabase tables with Row Level Security off, secrets in the JS bundle, open CORS with credentials, unverified Stripe webhooks, auth redirects to preview domains), "
-        "then fixed-price fixes and reviews. It also builds custom business apps on Replit at fixed prices, for clients worldwide.",
+        "then one fixed-price offer, Safe to Launch, to check and fix the app in 48 hours. It also builds custom business apps on Replit at fixed prices, for clients worldwide.",
         "",
         "## Services",
         f"- [Free security audit]({SITE}/free-audit): free, read-only security check of a live Replit, Lovable or Bolt app, private audit page with exact fix steps within 24 hours. Lovable & Bolt version: {SITE}/lovable-bolt-audit\n"
+        f"- [Safe to Launch]({SITE}/safe-to-launch/): the main offer. $149 flat (founding price $49 for the first 3 clients, in exchange for a testimonial). An AI-built app (Replit, Lovable, Bolt or Cursor) checked the way an attacker would and fixed in 48 hours: exposed keys and secrets, database access rules, login and accounts, payments and webhooks, deploy and environment settings, backups. Delivers the fixes pushed and tested, a 1-page report and a 5-minute video walkthrough. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing.",
         f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Security Review if booked within 30 days).",
         f"- [Ship-Ready Prompt Pack]({SITE}/prompt-pack/): $19 one-time PDF (7 pages, October 2026 edition): 16 copy-paste prompts and a 15-point checklist to fix SEO, Supabase RLS, secrets, auth redirects, Stripe webhooks and deploys on apps built with Replit Agent, Lovable and Bolt. Paid with PayPal, emailed within a few hours, full refund within 14 days if it doesn't help.",
         f"- [Ship-Ready Security Review]({SITE}/replit-app-to-production/): $199 (founder price, then $390 after the first 10) security and production-readiness audit of an AI-built app (Row Level Security, secrets, CORS, Stripe webhooks, access control): technical report + executive summary delivered in 48 hours, free retest within 14 days, full refund if fewer than 3 real issues are found.",
-        f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): $990 fixed price to fix a Replit app and deploy it to production in 5 days (review fee credited). Every Sprint comes with a fix guarantee: if a must-fix item from the review is not fixed in production, or breaks again within 14 days of launch, I fix it at no extra cost.",
-        f"- [Starter Build]({SITE}/#pricing): custom business app on Replit, $2,500 fixed ($1,500 for founding clients), live in about 7 days.",
-        f"- [Care]({SITE}/#pricing) ($249/month, cancel anytime): continuous security monitoring of a live app, with a security re-check after every release plus a monthly full pass, an alert within 1 business day if a new issue appears, fixes for what the re-check finds, bug fixes and security updates, hosting and uptime monitoring, small monthly improvements, priority support within 1 business day.",
+        f"- [Ship-It Sprint]({SITE}/replit-app-to-production/): legacy offer, replaced by Safe to Launch.",
+        f"- [Starter Build]({SITE}/#contact): custom business app built from scratch, fixed-price quote within 48 hours on request.",
+        f"- [Care]({SITE}/#pricing) (the follow-on after Safe to Launch, $249/month, cancel anytime): continuous security monitoring of a live app, with a security re-check after every release plus a monthly full pass, an alert within 1 business day if a new issue appears, fixes for what the re-check finds, bug fixes and security updates, hosting and uptime monitoring, small monthly improvements, priority support within 1 business day.",
         f"- [Hire a Replit developer]({SITE}/hire-replit-developer/)",
         "",
         "## Free tools",
