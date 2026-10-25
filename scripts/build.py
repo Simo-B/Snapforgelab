@@ -26,7 +26,8 @@ TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Tr
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
     ("/", "1.0"),
-    ("/safe-to-launch/", "1.0", "2026-10-24"),
+    ("/launch-fix-sprint/", "1.0", "2026-10-25"),
+    ("/safe-to-launch/", "0.9", "2026-10-25"),
     ("/scan/", "0.9", "2026-10-18"),
     ("/scan-deep/", "0.8", "2026-10-18"),
     ("/prompt-pack/", "0.8", "2026-10-18"),
@@ -383,11 +384,12 @@ def build_llms(guides):
         "",
         "> Snapforge Lab is an independent Replit specialist studio focused on the security of AI-built apps (Replit, Lovable, Bolt, Supabase): "
         "a free read-only security audit in 24h (exposed Supabase tables with Row Level Security off, secrets in the JS bundle, open CORS with credentials, unverified Stripe webhooks, auth redirects to preview domains), "
-        "then one fixed-price offer, Safe to Launch, to check and fix the app in 48 hours. It also builds custom business apps on Replit at fixed prices, for clients worldwide.",
+        "then the Launch Fix Sprint ($990, 5 business days) to fix everything the audit found, or Safe to Launch for a single quick fix in 48 hours. It also builds custom business apps on Replit at fixed prices, for clients worldwide.",
         "",
         "## Services",
         f"- [Free security audit]({SITE}/free-audit): free, read-only security check of a live Replit, Lovable or Bolt app, private audit page with exact fix steps within 24 hours. Lovable & Bolt version: {SITE}/lovable-bolt-audit\n"
-        f"- [Safe to Launch]({SITE}/safe-to-launch/): the main offer. $149 flat (founding price $49 for the first 3 clients, in exchange for a testimonial). An AI-built app (Replit, Lovable, Bolt or Cursor) checked the way an attacker would and fixed in 48 hours: exposed keys and secrets, database access rules, login and accounts, payments and webhooks, deploy and environment settings, backups. Delivers the fixes pushed and tested, a 1-page report and a 5-minute video walkthrough. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing.",
+        f"- [Launch Fix Sprint]({SITE}/launch-fix-sprint/): the main offer. $990 flat, done for you in 5 business days: the top issues from the free audit fixed (security, uptime, CORS and secrets, performance, SEO basics), retested, with a written report. Paid only after the fixes are verified working. Guarantee: if a fixed issue comes back within 14 days, I fix it free. Start with a 15-minute call (hello@snapforgelab.com).",
+        f"- [Safe to Launch]({SITE}/safe-to-launch/): the small option for a single quick fix. $149 flat (founding price $49 for the first 3 clients, in exchange for a testimonial). An AI-built app (Replit, Lovable, Bolt or Cursor) checked the way an attacker would and fixed in 48 hours: exposed keys and secrets, database access rules, login and accounts, payments and webhooks, deploy and environment settings, backups. Delivers the fixes pushed and tested, a 1-page report and a 5-minute video walkthrough. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing.",
         f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed ($49 credited toward the Ship-Ready Security Review if booked within 30 days).",
         f"- [Ship-Ready Prompt Pack]({SITE}/prompt-pack/): $19 one-time PDF (7 pages, October 2026 edition): 16 copy-paste prompts and a 15-point checklist to fix SEO, Supabase RLS, secrets, auth redirects, Stripe webhooks and deploys on apps built with Replit Agent, Lovable and Bolt. Paid with PayPal, emailed within a few hours, full refund within 14 days if it doesn't help.",
         f"- [Ship-Ready Security Review]({SITE}/replit-app-to-production/): $199 (founder price, then $390 after the first 10) security and production-readiness audit of an AI-built app (Row Level Security, secrets, CORS, Stripe webhooks, access control): technical report + executive summary delivered in 48 hours, free retest within 14 days, full refund if fewer than 3 real issues are found.",
