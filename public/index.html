@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Security Audit for AI-Built Apps | Snapforge Lab</title>
+<title>Vibe Coding Security Audit &amp; Launch Fixes | Snapforge Lab</title>
 <meta name="description" content="Is your Replit, Lovable or Bolt app leaking user data? Free read-only security audit in 24h: Supabase RLS, exposed secrets, CORS, Stripe webhooks.">
 <link rel="canonical" href="https://snapforgelab.com/">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -85,22 +85,16 @@
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {"@type": "Question", "name": "Is the free security audit safe for my app?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Yes. The free audit is read-only: I only look at what your live app already shows any visitor (its pages, JavaScript files, headers and API responses). I never log in as your users, never submit forms, never change anything and never touch your data. If I find a leaked key, I tell you where it is, redacted, and never use it."}},
-        {"@type": "Question", "name": "How much does a custom business app on Replit cost?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Tell me the workflow (dashboard, CRM, portal, automation or AI assistant) and you get a written fixed-price quote within 48 hours. No hourly billing."}},
-        {"@type": "Question", "name": "How fast can my app be live?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Most Starter builds go live in about 7 days after I receive access to your data. Custom scopes come with a dated timeline before you pay anything."}},
-        {"@type": "Question", "name": "Do I own the code?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Yes. The app lives on your own Replit account. It is standard code you can export, and it keeps running if you stop working with me."}},
-        {"@type": "Question", "name": "Do I need a Replit account?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Yes, the app is deployed on your Replit account so you keep full ownership. I handle setup, deployment and configuration for you."}},
-        {"@type": "Question", "name": "I already built an app with Replit Agent. Can you make it production-ready?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Launch Fix Sprint ($990, paid after the fixes are verified) fixes everything your audit found in 5 business days: security, uptime, CORS and secrets, performance, SEO basics. For a single quick fix, Safe to Launch ($149, $49 for my first 3 clients) checks your app the way an attacker would, fixes what could leak data or break payments, and ships the fixes within 48 hours, with a 1-page report and a 5-minute video. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing."}},
-        {"@type": "Question", "name": "How do payments work?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Safe to Launch is paid upfront via PayPal. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing. Custom builds are paid half at the start and half when your app is live in production. Care is $249/month and you can cancel anytime."}},
-        {"@type": "Question", "name": "Do you work with clients outside the US?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Yes. I work fully async and remote with clients worldwide, in English, with written updates."}}
+        {"@type": "Question", "name": "Is the free security audit safe for my app?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The free audit is read-only: I only look at what your live app already shows any visitor (its pages, JavaScript files, headers and API responses). I never log in as your users, never submit forms, never change anything and never touch your data. If I find a leaked key, I tell you where it is, redacted, and never use it."}},
+        {"@type": "Question", "name": "What happens after the free audit?", "acceptedAnswer": {"@type": "Answer", "text": "You get a private audit page with exact fix steps within 24 hours. You can fix it yourself, or book a 15-minute call: we agree on the list of issues, and the Launch Fix Sprint fixes them for you in 5 business days. $990 flat, fixed scope, paid only after the fixes are verified working."}},
+        {"@type": "Question", "name": "Lovable or Replit already scans my app. Why pay someone to fix it?", "acceptedAnswer": {"@type": "Answer", "text": "A built-in scan checks that a security rule exists. It does not check that the rule matches your business: who can read which record, who can trigger a payment. I check that by hand, then push the fix instead of handing you a list."}},
+        {"@type": "Question", "name": "What do I get at the end of the Launch Fix Sprint?", "acceptedAnswer": {"@type": "Answer", "text": "The fixes pushed in small changes you can review (security, uptime, CORS and secrets, performance, SEO basics), a retest of everything, and a written report: what was wrong, what I changed and how to keep it fixed."}},
+        {"@type": "Question", "name": "When do I pay, and what if a fix doesn't hold?", "acceptedAnswer": {"@type": "Answer", "text": "After the fixes are live and you've checked they work: you pay $990 by PayPal once the retest passes. Nothing upfront. If a fixed issue comes back within 14 days, I fix it free."}},
+        {"@type": "Question", "name": "Do you need my passwords or my users' data?", "acceptedAnswer": {"@type": "Answer", "text": "No passwords. I need edit access to your project and hosting for the duration of the work. Create a checkpoint or backup first, and remove my access when we're done. I never use a key I find outside the fix."}},
+        {"@type": "Question", "name": "What if I only need one quick fix?", "acceptedAnswer": {"@type": "Answer", "text": "Then Safe to Launch is enough: one app checked and fixed in 48 hours for $149 ($49 for my first 3 clients, in exchange for a testimonial). The fix pushed and tested, a 1-page report and a 5-minute video. If I find nothing worth fixing, you pay nothing."}},
+        {"@type": "Question", "name": "Does it work for Lovable, Bolt and Supabase apps?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Apps built with Replit, Lovable, Bolt or Cursor, and most small SaaS stacks: React or Next.js front ends, Node or Python back ends, Supabase or Firebase, Stripe. Database access rules are checked table by table, which is where Supabase-backed apps most often leak data."}},
+        {"@type": "Question", "name": "What happens after launch?", "acceptedAnswer": {"@type": "Answer", "text": "Optional: Care, at $249/month, re-checks your live app after every release, alerts you within 1 business day if a new issue appears and fixes what it finds. Cancel anytime."}},
+        {"@type": "Question", "name": "Do I own the code?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Your app stays on your own account. It is standard code you can export, and it keeps running if you stop working with me."}}
       ]
     }
   ]
@@ -296,8 +290,8 @@
         <h3>Secure an app you built with AI</h3>
         <ol>
           <li><strong>Start with the free security audit.</strong> Send your live URL; the report arrives within 24 hours.</li>
-          <li><strong>Get Safe to Launch.</strong> Invite me to your project; I check it the way an attacker would.</li>
-                    <li><strong>Fixed and shipped in 48 hours.</strong> Fixes pushed and tested, a 1-page report and a 5-minute video, with a 14-day fix guarantee.</li>
+          <li><strong>Book a 15-minute call.</strong> We agree on the list of issues to fix. Fixed scope, fixed price.</li>
+          <li><strong>Launch Fix Sprint: fixed in 5 business days.</strong> Retested, with a written report. You pay $990 only once the fixes are verified working. Just one quick fix? <a class="link" href="/safe-to-launch/">Safe to Launch</a>, in 48 hours.</li>
         </ol>
       </div>
       <div class="path reveal">
@@ -336,16 +330,18 @@
 <!-- FAQ -->
 <section id="faq" aria-labelledby="faq-title">
   <div class="wrap">
-    <div class="center"><h2 id="faq-title">Replit app development FAQ</h2></div>
+    <div class="center"><h2 id="faq-title">Security audit and launch fix FAQ</h2></div>
     <div class="faq">
       <details><summary>Is the free security audit safe for my app?</summary><div class="a"><p>Yes. The free audit is read-only: I only look at what your live app already shows any visitor (its pages, JavaScript files, headers and API responses). I never log in as your users, never submit forms, never change anything and never touch your data. If I find a leaked key, I tell you where it is, redacted, and never use it.</p></div></details>
-      <details><summary>How much does a custom business app on Replit cost?</summary><div class="a"><p>Tell me the workflow (dashboard, CRM, portal, automation or AI assistant) and you get a written fixed-price quote within 48 hours. No hourly billing.</p></div></details>
-      <details><summary>How fast can my app be live?</summary><div class="a"><p>Most Starter builds go live in about 7 days after I receive access to your data. Custom scopes come with a dated timeline before you pay anything.</p></div></details>
-      <details><summary>Do I own the code?</summary><div class="a"><p>Yes. The app lives on your own Replit account. It is standard code you can export, and it keeps running if you stop working with me.</p></div></details>
-      <details><summary>Do I need a Replit account?</summary><div class="a"><p>Yes, the app is deployed on your Replit account so you keep full ownership. I handle setup, deployment and configuration for you.</p></div></details>
-      <details><summary>I already built an app with Replit Agent. Can you make it production-ready?</summary><div class="a"><p>Yes. The <a href="/launch-fix-sprint/" class="link">Launch Fix Sprint</a> ($990, paid after the fixes are verified) fixes everything your audit found in 5 business days: security, uptime, CORS and secrets, performance, SEO basics. For a single quick fix, <a href="/safe-to-launch/" class="link">Safe to Launch</a> ($149, $49 for my first 3 clients) checks your app the way an attacker would, fixes what could leak data or break payments, and ships the fixes within 48 hours, with a 1-page report and a 5-minute video. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing.</p></div></details>
-      <details><summary>How do payments work?</summary><div class="a"><p>Safe to Launch is paid upfront via PayPal. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing. Custom builds are paid half at the start and half when your app is live in production. Care is $249/month and you can cancel anytime.</p></div></details>
-      <details><summary>Do you work with clients outside the US?</summary><div class="a"><p>Yes. I work fully async and remote with clients worldwide, in English, with written updates.</p></div></details>
+      <details><summary>What happens after the free audit?</summary><div class="a"><p>You get a private audit page with exact fix steps within 24 hours. You can fix it yourself, or book a 15-minute call: we agree on the list of issues, and the <a href="/launch-fix-sprint/" class="link">Launch Fix Sprint</a> fixes them for you in 5 business days. $990 flat, fixed scope, paid only after the fixes are verified working.</p></div></details>
+      <details><summary>Lovable or Replit already scans my app. Why pay someone to fix it?</summary><div class="a"><p>A built-in scan checks that a security rule exists. It does not check that the rule matches your business: who can read which record, who can trigger a payment. I check that by hand, then push the fix instead of handing you a list.</p></div></details>
+      <details><summary>What do I get at the end of the Launch Fix Sprint?</summary><div class="a"><p>The fixes pushed in small changes you can review (security, uptime, CORS and secrets, performance, SEO basics), a retest of everything, and a written report: what was wrong, what I changed and how to keep it fixed.</p></div></details>
+      <details><summary>When do I pay, and what if a fix doesn't hold?</summary><div class="a"><p>After the fixes are live and you've checked they work: you pay $990 by PayPal once the retest passes. Nothing upfront. If a fixed issue comes back within 14 days, I fix it free.</p></div></details>
+      <details><summary>Do you need my passwords or my users' data?</summary><div class="a"><p>No passwords. I need edit access to your project and hosting for the duration of the work. Create a checkpoint or backup first, and remove my access when we're done. I never use a key I find outside the fix.</p></div></details>
+      <details><summary>What if I only need one quick fix?</summary><div class="a"><p>Then <a href="/safe-to-launch/" class="link">Safe to Launch</a> is enough: one app checked and fixed in 48 hours for $149 ($49 for my first 3 clients, in exchange for a testimonial). The fix pushed and tested, a 1-page report and a 5-minute video. If I find nothing worth fixing, you pay nothing.</p></div></details>
+      <details><summary>Does it work for Lovable, Bolt and Supabase apps?</summary><div class="a"><p>Yes. Apps built with Replit, Lovable, Bolt or Cursor, and most small SaaS stacks: React or Next.js front ends, Node or Python back ends, Supabase or Firebase, Stripe. Database access rules are checked table by table, which is where Supabase-backed apps most often leak data.</p></div></details>
+      <details><summary>What happens after launch?</summary><div class="a"><p>Optional: Care, at $249/month, re-checks your live app after every release, alerts you within 1 business day if a new issue appears and fixes what it finds. Cancel anytime.</p></div></details>
+      <details><summary>Do I own the code?</summary><div class="a"><p>Yes. Your app stays on your own account. It is standard code you can export, and it keeps running if you stop working with me.</p></div></details>
     </div>
   </div>
 </section>
