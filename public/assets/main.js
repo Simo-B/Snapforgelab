@@ -4,7 +4,7 @@
   // Founding-client offer: private page /founding-review/ (first 3 clients, $99).
   // Set open to false once the three spots are taken; the page then sends
   // visitors to /replit-app-to-production/#book (free audit + Launch Fix Sprint) instead.
-  const FOUNDING = { open: true, url: 'https://paypal.me/mbsimo/99USD' };
+  const FOUNDING = { open: false, url: 'https://paypal.me/mbsimo/99USD' };
   const founding = d.querySelectorAll('[data-buy="founding"]');
   if (founding.length) {
     if (FOUNDING.open) founding.forEach((a) => { a.href = FOUNDING.url; });
