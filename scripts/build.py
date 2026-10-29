@@ -179,7 +179,7 @@ CTA_BOX = f"""<aside class="cta-box">
 </aside>"""
 
 # Readers of deployment, data and troubleshooting guides are usually blocked right now:
-# offer the $49 Deploy Fix first instead of the full review.
+# offer the $49 Deploy Fix first instead of the free audit + Sprint ladder.
 DEPLOY_TOPICS = {"Deployment", "Data", "Troubleshooting"}
 DEPLOY_CTA_BOX = f"""<aside class="cta-box">
   <div>
@@ -412,7 +412,7 @@ def build_llms(guides):
         f"- [Safe to Launch]({SITE}/safe-to-launch/): the smaller fallback when only one quick fix is needed. $149 flat (founding price $49 for the first 3 clients, in exchange for a testimonial). An AI-built app (Replit, Lovable, Bolt or Cursor) checked the way an attacker would and fixed in 48 hours: exposed keys and secrets, database access rules, login and accounts, payments and webhooks, deploy and environment settings, backups. Delivers the fixes pushed and tested, a 1-page report and a 5-minute video walkthrough. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing.",
         f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed.",
         f"- [Ship-Ready Prompt Pack]({SITE}/prompt-pack/): $19 one-time PDF (7 pages, October 2026 edition) to fix it yourself: 16 copy-paste prompts and a 15-point checklist to fix SEO, Supabase RLS, secrets, auth redirects, Stripe webhooks and deploys on apps built with Replit Agent, Lovable and Bolt. Paid with PayPal, emailed within a few hours, full refund within 14 days if it doesn't help.",
-        f"- [Replit app security review]({SITE}/replit-app-to-production/): report-only review for founders who want a written audit without fixes ($199 founder price, then $390). For fixes, the Launch Fix Sprint is the main path.",
+        f"- [Replit app security]({SITE}/replit-app-to-production/): security, auth, data and deployment checks for apps built with Replit Agent: free audit in 24 hours, then the Launch Fix Sprint ($990 flat, 5 business days, paid after the fixes are verified); Safe to Launch ($149) for one quick fix.",
         "",
         "## After launch and other services",
         f"- [Care]({SITE}/#pricing) (after a fix, $249/month, cancel anytime): continuous security monitoring of a live app, with a security re-check after every release plus a monthly full pass, an alert within 1 business day if a new issue appears, fixes for what the re-check finds, bug fixes and security updates, hosting and uptime monitoring, small monthly improvements, priority support within 1 business day.",

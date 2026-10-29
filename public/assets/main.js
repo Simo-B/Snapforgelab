@@ -1,17 +1,9 @@
 (() => {
   const d = document;
 
-  // Paste the checkout link for the $199 Ship-Ready Review here
-  // (PayPal payment link or paypal.me/<name>/199USD).
-  // While empty, "buy" buttons scroll to the review request form instead.
-  const PAYMENT_URL = 'https://paypal.me/mbsimo/199USD';
-  if (PAYMENT_URL) {
-    d.querySelectorAll('[data-buy="review"]').forEach((a) => { a.href = PAYMENT_URL; });
-  }
-
   // Founding-client offer: private page /founding-review/ (first 3 clients, $99).
   // Set open to false once the three spots are taken; the page then sends
-  // visitors to the regular $199 review instead.
+  // visitors to /replit-app-to-production/#book (free audit + Launch Fix Sprint) instead.
   const FOUNDING = { open: true, url: 'https://paypal.me/mbsimo/99USD' };
   const founding = d.querySelectorAll('[data-buy="founding"]');
   if (founding.length) {
@@ -56,7 +48,6 @@
   const mail = (subject, body) => `mailto:hello@snapforgelab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const NEXT = {
     'deploy-fix': `<strong>PayPal is open in a new tab.</strong> Once you have paid, <a href="${mail('Deploy Fix (paid)', 'Repl link:\nError (copy it or attach a screenshot):\n')}">email me your Repl link and the error</a>, then invite hello@snapforgelab.com to your Repl with edit access. Fixed within 48 hours of access, or you get a full refund.`,
-    review: `<strong>PayPal is open in a new tab.</strong> Once you have paid, <a href="${mail('Ship-Ready Review (paid)', 'Repl link:\nWho uses the app and what data it stores:\n')}">email me your Repl link</a> and invite hello@snapforgelab.com to your Repl (read access is enough). Your report and video arrive within 48 hours of access.`,
     founding: `<strong>PayPal is open in a new tab.</strong> Once you have paid, <a href="${mail('Founding review (paid)', 'Repl link:\nWho uses the app and what data it stores:\n')}">email me your Repl link</a> and invite hello@snapforgelab.com to your Repl (read access is enough). Your report and video arrive within 48 hours of access.`,
   };
   d.querySelectorAll('a[data-buy]').forEach((a) => a.addEventListener('click', () => {
@@ -101,6 +92,7 @@
     build: 'Got it. Your fixed-price plan lands in your inbox within 48 hours.',
     review: 'Got it. I’ll reply within 24 hours with the payment link and next steps.',
     'ship-ready-review': 'Got it. I’ll answer your question within 24 hours.',
+    'replit-app-security': 'Got it. I’ll answer your question within 24 hours.',
     care: 'Got it. I’ll reply within 48 hours about Care for your app.',
     'readiness-score': 'Got it. I’ll email your results and the full checklist within 24 hours.',
   };
