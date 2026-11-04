@@ -28,6 +28,7 @@ STATIC_PAGES = [
     ("/", "1.0", "2026-10-29"),
     ("/launch-fix-sprint/", "1.0", "2026-10-25"),
     ("/safe-to-launch/", "0.9", "2026-10-25"),
+    ("/agent-ready/", "0.9", "2026-11-04"),
     ("/scan/", "0.9", "2026-10-18"),
     ("/scan-deep/", "0.8", "2026-10-18"),
     ("/prompt-pack/", "0.8", "2026-10-18"),
@@ -135,7 +136,7 @@ def footer(mobile_cta=True, cta_link=REVIEW_CTA):
     <div class="foot">
       <div><a href="/" class="logo">{LOGO_FOOT}Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Independent Replit specialist. Security audits and fixes for AI-built apps, and fixed-price business apps.</p></div>
-      <div><p class="foot-h">Services</p><ul><li><a href="/free-audit">Free security audit</a></li><li><a href="/launch-fix-sprint/">Launch Fix Sprint</a></li><li><a href="/safe-to-launch/">Safe to Launch</a></li><li><a href="/lovable-bolt-audit">Lovable &amp; Bolt audit</a></li><li><a href="/replit-app-to-production/">Replit app security</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/free-audit">Free security audit</a></li><li><a href="/launch-fix-sprint/">Launch Fix Sprint</a></li><li><a href="/safe-to-launch/">Safe to Launch</a></li><li><a href="/agent-ready/">Agent-Ready Sprint</a></li><li><a href="/lovable-bolt-audit">Lovable &amp; Bolt audit</a></li><li><a href="/replit-app-to-production/">Replit app security</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
       <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
@@ -409,6 +410,7 @@ def build_llms(guides):
         f"- [Launch Fix Sprint]({SITE}/launch-fix-sprint/): step 3, the main offer. $990 flat, done for you in 5 business days: the top issues from the free audit fixed (security, uptime, CORS and secrets, performance, SEO basics), retested, with a written report. Paid only after the fixes are verified working, nothing upfront. Guarantee: if a fixed issue comes back within 14 days, I fix it free.",
         "",
         "## Smaller options",
+        f"- [Agent-Ready Sprint]({SITE}/agent-ready/): your Replit, Lovable or Bolt app made usable from ChatGPT and Claude in 5 business days. An MCP server with 3 to 8 tools on the app's key actions, secure access (API key or OAuth, read-only by default), deployed on a Cloudflare Worker and tested in both assistants, plus a user setup guide and a video demo. $990 flat; founding price $490 for the first 3 clients, in exchange for a testimonial. Full refund if the tools do not work from ChatGPT and Claude at delivery.",
         f"- [Safe to Launch]({SITE}/safe-to-launch/): the smaller fallback when only one quick fix is needed. $149 flat (founding price $49 for the first 3 clients, in exchange for a testimonial). An AI-built app (Replit, Lovable, Bolt or Cursor) checked the way an attacker would and fixed in 48 hours: exposed keys and secrets, database access rules, login and accounts, payments and webhooks, deploy and environment settings, backups. Delivers the fixes pushed and tested, a 1-page report and a 5-minute video walkthrough. Guarantee: if a fixed issue comes back within 14 days, I fix it free. If I find nothing worth fixing, you pay nothing.",
         f"- [Replit Deploy Fix]({SITE}/deploy-fix/): $49 fixed price to fix one Replit deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) in 48 hours, full refund if not fixed.",
         f"- [Ship-Ready Prompt Pack]({SITE}/prompt-pack/): $19 one-time PDF (7 pages, October 2026 edition) to fix it yourself: 16 copy-paste prompts and a 15-point checklist to fix SEO, Supabase RLS, secrets, auth redirects, Stripe webhooks and deploys on apps built with Replit Agent, Lovable and Bolt. Paid with PayPal, emailed within a few hours, full refund within 14 days if it doesn't help.",
