@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Fixe Fidèle — Keep your business number. An AI receptionist answers when you're on a job</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap"
+    />
+    <link rel="stylesheet" href="../hark.css" />
+    <link rel="stylesheet" href="../hark-hero.css" />
+    <style>
+      .x-dialog { max-width: 68ch; margin: 0; padding: 22px 24px; border-radius: var(--r-m); background: var(--fill-tertiary); display: grid; gap: 12px; }
+      .x-dialog__row { display: grid; grid-template-columns: 64px 1fr; gap: 12px; font: var(--type-body); color: var(--text-primary); }
+      .x-dialog__who { font: var(--type-label); color: var(--text-secondary); padding-top: 1px; }
+      .x-dialog__row--ia .x-dialog__who { color: var(--text-primary); font-weight: var(--weight-medium); }
+      .x-sms { max-width: 68ch; margin-top: 24px; padding: 20px 22px; border: 1px solid var(--stroke-primary); border-radius: var(--r-m); }
+      .x-sms__label { font: var(--type-label); color: var(--text-secondary); margin-bottom: 10px; }
+      .x-sms pre { margin: 0; white-space: pre-wrap; font-family: "Geist Mono", ui-monospace, monospace; font-size: var(--size-small); line-height: 1.6; color: var(--text-primary); }
+      .x-highlight { max-width: 68ch; margin-top: 24px; padding: 18px 22px; border-radius: var(--r-m); background: var(--fill-primary); color: var(--text-primary-on); font: var(--type-heading); }
+      .x-faq { max-width: 72ch; border-top: 1px solid var(--stroke-secondary); }
+      .x-faq details { border-bottom: 1px solid var(--stroke-secondary); }
+      .x-faq summary { min-height: var(--tap); padding: 14px 32px 14px 0; font: var(--type-body); font-weight: var(--weight-medium); cursor: pointer; list-style: none; position: relative; }
+      .x-faq summary::-webkit-details-marker { display: none; }
+      .x-faq summary::after { content: "+"; position: absolute; right: 4px; top: 12px; font: var(--type-heading); color: var(--text-secondary); transition: transform var(--dur-quick) var(--ease-out); }
+      .x-faq details[open] summary::after { transform: rotate(45deg); }
+      .x-faq details p { padding: 0 0 16px; font: var(--type-body); color: var(--text-secondary); }
+      .x-gap { margin-top: 24px; }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="top">
+      <header class="nav glass" data-auto></header>
+      <main class="main">
+        <section class="hero">
+          <img class="hero__img" src="../hero-fixe.jpg" alt="An old wall-mounted landline phone in a tradesperson's workshop, with a smartphone on the workbench" />
+          <div class="hero__copy">
+            <p class="hero__eyebrow">Fixe Fidèle · The UK landline switch-off</p>
+            <h1>Keep your business number. An AI receptionist answers when you're on a job.</h1>
+            <p class="hero__sub">The old copper phone network closes on 31 January 2027. While you sort out your switch to a digital line, we can make sure no call goes unanswered: an AI receptionist picks up when you can't, takes the details and sends you a summary by text and email.</p>
+            <p class="hero__meta">For trade businesses: plumbers, heating engineers, locksmiths, electricians.</p>
+          </div>
+          <aside class="callout" aria-label="Next step">
+            <p class="callout__head"><span class="hark-mark" data-size="16"></span> Next step</p>
+            <p class="callout__lead">
+              <strong>Free one-month pilot for 10 trade businesses in England.</strong> Just reply to the email you received.
+            </p>
+            <a class="btn" href="#pilot">See the pilot</a>
+          </aside>
+        </section>
+
+        <section class="section" id="context" data-nav="What's changing">
+          <div class="head">
+            <p class="head__eyebrow">What's changing</p>
+            <h2>The old phone network closes on 31 January 2027.</h2>
+          </div>
+          <div class="prose">
+            <p>The PSTN is the old analogue phone network that runs over copper wires: the classic landline. ISDN is the older digital business line that uses the same network. Openreach is closing both, and Openreach and BT say there will be no extension.</p>
+          </div>
+          <div class="cards x-gap">
+            <div>
+              <h3>Most firms: a digital line</h3>
+              <p>Most businesses move to a digital line that runs over broadband (for example BT Digital Voice) and keep the same phone number.</p>
+            </div>
+            <div>
+              <h3>Lines not moved in time</h3>
+              <p>Lines that haven't been moved may be put on EVAc, a limited, temporary, last-resort service. It is not a long-term solution.</p>
+            </div>
+          </div>
+          <section class="stats">
+            <div class="stat"><span class="stat__fig">~1 million</span><span class="stat__label">Copper lines still active (Openreach, Oct 2026)</span></div>
+            <div class="stat"><span class="stat__fig">~300,000</span><span class="stat__label">Of them in business premises</span></div>
+          </section>
+          <ol class="timeline">
+            <li>
+              <p class="timeline__when">Now</p>
+              <div class="timeline__what">About 1 million copper lines are still active, including about 300,000 in business premises.</div>
+            </li>
+            <li>
+              <p class="timeline__when">31 January 2027</p>
+              <div class="timeline__what">The PSTN and ISDN close. Openreach and BT say there is no extension.</div>
+              <p><span class="chip chip--solid">Switch-off</span></p>
+            </li>
+            <li>
+              <p class="timeline__when">After the switch-off</p>
+              <div class="timeline__what">Lines not moved may be put on EVAc, a limited, temporary, last-resort service.</div>
+            </li>
+          </ol>
+          <div class="aside x-gap">
+            <h3>Good to know</h3>
+            <p class="fineprint">Moving to a digital line is between you and your phone provider. Our service doesn't replace it: it sits on top of whatever line you have, old or new.</p>
+          </div>
+          <p class="fineprint">Sources: GOV.UK; Openreach (30 October 2026).</p>
+        </section>
+
+        <section class="section" id="number" data-nav="Your number">
+          <div class="head">
+            <p class="head__eyebrow">Your number</p>
+            <h2>Your number stays where it is.</h2>
+            <p class="head__sub">We don't take over your line. We work with call forwarding, a standard feature of business phone lines.</p>
+          </div>
+          <div class="steps">
+            <article class="step">
+              <div class="step__intro"><p class="step__num">01</p><p class="step__eyebrow">Your line</p></div>
+              <div>
+                <h3>Nothing changes with your provider</h3>
+                <p>Your number stays with your current provider, on your current contract. Customers keep dialling the same number.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div class="step__intro"><p class="step__num">02</p><p class="step__eyebrow">Forwarding</p></div>
+              <div>
+                <h3>You divert missed calls</h3>
+                <p>You set call forwarding on no answer or when busy. You still answer when you can; only the calls you miss come to us.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div class="step__intro"><p class="step__num">03</p><p class="step__eyebrow">The summary</p></div>
+              <div>
+                <h3>You get the details</h3>
+                <p>The AI receptionist answers, takes the caller's name, address and problem, and sends you a summary by text and email.</p>
+              </div>
+            </article>
+          </div>
+          <p class="fineprint">Want to stop? Simply turn off call forwarding. Your line works exactly as before.</p>
+        </section>
+
+        <section class="section" id="digital" data-nav="Digital Voice">
+          <div class="head">
+            <p class="head__eyebrow">Old line or new</p>
+            <h2>Already on Digital Voice?</h2>
+          </div>
+          <div class="prose">
+            <p>It works the same. Call forwarding works on the old copper line and on a digital line, so you can start the pilot now and keep it after your switch.</p>
+            <p>Moving to a digital line keeps your phone working. It doesn't answer the calls you miss while you're under a sink or up a ladder. That's the part we handle.</p>
+          </div>
+        </section>
+
+        <section class="section" id="equipment" data-nav="Equipment">
+          <div class="head">
+            <p class="head__eyebrow">Equipment</p>
+            <h2>What do I need?</h2>
+          </div>
+          <ul class="checklist">
+            <li><span class="checklist__item">Nothing to buy.</span></li>
+            <li><span class="checklist__item">No new kit: the AI receptionist runs online, nothing to install.</span></li>
+            <li><span class="checklist__item">You get the summaries by text and email on your mobile.</span></li>
+            <li><span class="checklist__item">Keep your current phones <small>Your line and handsets stay as they are.</small></span></li>
+          </ul>
+        </section>
+
+        <section class="section" id="offer" data-nav="The offer">
+          <div class="head">
+            <p class="head__eyebrow">The offer</p>
+            <h2>An AI receptionist on your usual number</h2>
+            <p class="head__sub">Your customers keep dialling the same number.</p>
+          </div>
+          <div class="cards">
+            <div>
+              <h3>It answers</h3>
+              <p>24/7, including when you're on a job, driving or off for the evening.</p>
+            </div>
+            <div>
+              <h3>It takes the details</h3>
+              <p>The caller's name, address and what the problem is.</p>
+            </div>
+            <div>
+              <h3>It sends you a summary</h3>
+              <p>By text and by email, straight after the call.</p>
+            </div>
+            <div>
+              <h3>You call back</h3>
+              <p>With everything you need to know before you pick up the phone.</p>
+            </div>
+          </div>
+          <p class="x-highlight">Old line or new: stop losing jobs to missed calls.</p>
+        </section>
+
+        <section class="section" id="example" data-nav="Example">
+          <div class="head">
+            <p class="head__eyebrow">Example</p>
+            <h2>What does a call sound like?</h2>
+            <p class="head__sub"><span class="chip">Fictional example</span></p>
+          </div>
+          <div class="x-dialog" role="list" aria-label="Example conversation between the AI and a caller">
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">AI</span><span>"Hello, you're through to Northside Plumbing &amp; Heating. I'm the firm's AI assistant: I'll take your details and pass them on straight away. Can I take your name?"</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Caller</span><span>"It's Sam. My boiler's leaking all over the kitchen floor."</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">AI</span><span>"Thanks, Sam. Is it still leaking, and have you been able to turn the water off?"</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Caller</span><span>"I've turned the boiler off, but it's still dripping and we've no heating."</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">AI</span><span>"Understood. What's the address?"</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Caller</span><span>"14 Example Road, Leeds."</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">AI</span><span>"Thank you. I'll mark this as urgent and send the details to the engineer now, so they can call you back as soon as possible."</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Caller</span><span>"Great, thanks."</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">AI</span><span>"You're welcome. Goodbye."</span></p>
+          </div>
+          <div class="x-sms">
+            <p class="x-sms__label">Example text received by the tradesperson</p>
+            <pre>📞 New call – 07:42
+Sam
+Boiler leaking onto kitchen floor, boiler off, still dripping, no heating
+14 Example Road, Leeds
+Urgent: YES
+Wants a call back as soon as possible</pre>
+          </div>
+          <p class="fineprint">Fictional example. The name, firm and address above are made up. No audio.</p>
+        </section>
+
+        <section class="section" id="who" data-nav="Who it's for">
+          <div class="head">
+            <p class="head__eyebrow">Who it's for</p>
+            <h2>For trades who can't always pick up.</h2>
+          </div>
+          <div class="cards">
+            <div>
+              <h3>Trade and small businesses</h3>
+              <p class="quote">A missed call while you're on a job is often a lost customer.</p>
+              <p>Repairs and call-outs: plumbers, heating engineers, locksmiths, electricians.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="pilot" data-nav="Pilot">
+          <div class="head">
+            <p class="head__eyebrow">Pilot</p>
+            <h2>Free one-month pilot for 10 trade businesses in England</h2>
+          </div>
+          <div class="pair">
+            <ul class="checklist">
+              <li><span class="checklist__item">Free for one month <small>The AI receptionist costs you nothing during the pilot</small></span></li>
+              <li><span class="checklist__item">No commitment <small>Turn off call forwarding whenever you like</small></span></li>
+              <li><span class="checklist__item">In return: your feedback <small>On what works and what's missing</small></span></li>
+              <li><span class="checklist__item">After the pilot, you decide</span></li>
+              <li><span class="checklist__item">10 places</span><span class="chip chip--solid">Open</span></li>
+            </ul>
+            <aside class="callout" aria-label="How to join">
+              <p class="callout__head">How to join</p>
+              <p class="callout__lead">
+                <strong>Just reply to the email you received.</strong> Tell us your trade and the kind of calls you get most.
+              </p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section" id="data" data-nav="Data">
+          <div class="head">
+            <p class="head__eyebrow">Transparency and data</p>
+            <h2>What the caller knows, and what happens to their data.</h2>
+          </div>
+          <div class="cards">
+            <div>
+              <h3>AI transparency</h3>
+              <p>The assistant tells the caller at the start of the call that it's an AI.</p>
+            </div>
+            <div>
+              <h3>UK GDPR</h3>
+              <ul>
+                <li>Data used only to pass you the message</li>
+                <li>Deleted on request</li>
+                <li>Never sold</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Independent</h3>
+              <p>Fixe Fidèle is not BT, Openreach or any of their partners.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="faq" data-nav="FAQ">
+          <div class="head">
+            <p class="head__eyebrow">FAQ</p>
+            <h2>Your questions, answered.</h2>
+          </div>
+          <div class="x-faq">
+            <details>
+              <summary>Do I keep my number?</summary>
+              <p>Yes. Your number stays with your current provider. We only receive the calls you forward to us.</p>
+            </details>
+            <details>
+              <summary>What if I'm already on Digital Voice?</summary>
+              <p>It works the same. Call forwarding works on a digital line just as it does on the old copper line.</p>
+            </details>
+            <details>
+              <summary>Do I need new equipment?</summary>
+              <p>No. There's nothing to buy or install. You keep your line and your phones, and the summaries arrive by text and email.</p>
+            </details>
+            <details>
+              <summary>What about emergency calls?</summary>
+              <p>999 calls are made from your own line as usual and never go through us. We only handle incoming calls you forward to us.</p>
+            </details>
+            <details>
+              <summary>Does the caller know it's an AI?</summary>
+              <p>Yes. The assistant says so at the start of every call.</p>
+            </details>
+            <details>
+              <summary>What about data?</summary>
+              <p>We follow UK GDPR. Caller details are used only to pass you the message, and are deleted on request.</p>
+            </details>
+            <details>
+              <summary>What happens after the pilot?</summary>
+              <p>You decide. There's no commitment: if you don't want to carry on, simply turn off call forwarding.</p>
+            </details>
+          </div>
+        </section>
+      </main>
+      <footer class="foot">
+        <p>Fixe Fidèle — pilot for trade businesses in England. This service uses AI to answer calls. Personal data handled under UK GDPR. Not BT, Openreach or any of their partners. Sources: GOV.UK, Openreach.</p>
+      </footer>
+    </div>
+    <script src="../hark.js"></script>
+  </body>
+</html>
