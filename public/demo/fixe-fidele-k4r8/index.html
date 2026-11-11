@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="fr">
   <head>
-<meta name="robots" content="noindex" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Fixe Fidèle — Votre numéro fixe garde la ligne, une IA décroche 24 h/24</title>
+    <meta name="robots" content="noindex" />
+    <title>Fixe Fidèle — Votre numéro fixe garde la ligne, une IA décroche sur le chantier</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,6 +13,24 @@
     />
     <link rel="stylesheet" href="hark.css" />
     <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      .x-dialog { max-width: 68ch; margin: 0; padding: 22px 24px; border-radius: var(--r-m); background: var(--fill-tertiary); display: grid; gap: 12px; }
+      .x-dialog__row { display: grid; grid-template-columns: 64px 1fr; gap: 12px; font: var(--type-body); color: var(--text-primary); }
+      .x-dialog__who { font: var(--type-label); color: var(--text-secondary); padding-top: 1px; }
+      .x-dialog__row--ia .x-dialog__who { color: var(--text-primary); font-weight: var(--weight-medium); }
+      .x-sms { max-width: 68ch; margin-top: 24px; padding: 20px 22px; border: 1px solid var(--stroke-primary); border-radius: var(--r-m); }
+      .x-sms__label { font: var(--type-label); color: var(--text-secondary); margin-bottom: 10px; }
+      .x-sms pre { margin: 0; white-space: pre-wrap; font-family: "Geist Mono", ui-monospace, monospace; font-size: var(--size-small); line-height: 1.6; color: var(--text-primary); }
+      .x-highlight { max-width: 68ch; margin-top: 24px; padding: 18px 22px; border-radius: var(--r-m); background: var(--fill-primary); color: var(--text-primary-on); font: var(--type-heading); }
+      .x-faq { max-width: 72ch; border-top: 1px solid var(--stroke-secondary); }
+      .x-faq details { border-bottom: 1px solid var(--stroke-secondary); }
+      .x-faq summary { min-height: var(--tap); padding: 14px 32px 14px 0; font: var(--type-body); font-weight: var(--weight-medium); cursor: pointer; list-style: none; position: relative; }
+      .x-faq summary::-webkit-details-marker { display: none; }
+      .x-faq summary::after { content: "+"; position: absolute; right: 4px; top: 12px; font: var(--type-heading); color: var(--text-secondary); transition: transform var(--dur-quick) var(--ease-out); }
+      .x-faq details[open] summary::after { transform: rotate(45deg); }
+      .x-faq details p { padding: 0 0 16px; font: var(--type-body); color: var(--text-secondary); }
+      .x-gap { margin-top: 24px; }
+    </style>
   </head>
   <body>
     <div class="page" id="top">
@@ -22,73 +40,148 @@
           <img class="hero__img" src="hero-fixe.jpg" alt="Un vieux téléphone fixe mural dans un atelier d'artisan, un smartphone posé sur l'établi" />
           <div class="hero__copy">
             <p class="hero__eyebrow">Fixe Fidèle · Fin du réseau cuivre</p>
-            <h1>Votre numéro fixe garde la ligne, une IA décroche 24 h/24</h1>
-            <p class="hero__sub">Le réseau cuivre d'Orange s'arrête commune par commune. Gardez votre numéro historique : nous le basculons en téléphonie IP et y branchons une standardiste IA qui répond à chaque appel.</p>
-            <p class="hero__meta">Artisans · petits cabinets · petites mairies · coupure du lot 3 le 31 janvier 2027</p>
+            <h1>Votre numéro fixe garde la ligne. Une IA décroche quand vous êtes sur le chantier.</h1>
+            <p class="hero__sub">Orange éteint le réseau cuivre commune par commune. Nous vous aidons à garder votre numéro historique sur une ligne internet, et nous y branchons une standardiste IA qui répond à chaque appel et vous envoie un résumé par SMS.</p>
+            <p class="hero__meta">Pour les artisans et TPE : plombiers, électriciens, chauffagistes, serruriers.</p>
           </div>
           <aside class="callout" aria-label="Prochaine étape">
             <p class="callout__head"><span class="hark-mark" data-size="16"></span> Prochaine étape</p>
             <p class="callout__lead">
-              <strong>Pilote gratuit pour 10 entreprises et mairies.</strong> Répondez simplement à l'email que vous avez reçu.
+              <strong>Pilote gratuit pour 10 artisans.</strong> Répondez simplement à l'email que vous avez reçu.
             </p>
             <a class="btn" href="#pilote">Voir le pilote</a>
           </aside>
         </section>
 
-        <section class="section" id="contexte" data-nav="Contexte">
+        <section class="section" id="contexte" data-nav="Ce qui change">
           <div class="head">
             <p class="head__eyebrow">Ce qui change</p>
-            <h2>Le cuivre s'éteint par lots de communes, pas votre numéro.</h2>
-            <p class="head__sub">Calendrier publié par Orange et encadré par l'Arcep.</p>
+            <h2>Le cuivre s'arrête en deux étapes, commune par commune.</h2>
+          </div>
+          <div class="prose">
+            <p>Le réseau cuivre, c'est le fil de téléphone historique d'Orange (téléphone fixe classique et ADSL). Il s'arrête par lots de communes jusqu'à fin 2030.</p>
+          </div>
+          <div class="cards x-gap">
+            <div>
+              <h3>Étape 1 – Fermeture commerciale</h3>
+              <p>On ne peut plus souscrire de nouvel abonnement sur le cuivre dans la commune. Votre ligne actuelle continue de marcher.</p>
+            </div>
+            <div>
+              <h3>Étape 2 – Fermeture technique</h3>
+              <p>Au moins 12 mois plus tard, le réseau est éteint. La ligne cuivre s'arrête.</p>
+            </div>
           </div>
           <section class="stats">
-            <div class="stat"><span class="stat__fig">~2 100</span><span class="stat__label">Communes du lot 3</span></div>
+            <div class="stat"><span class="stat__fig">2 097</span><span class="stat__label">Communes coupées le 31 janvier 2027 (lot 3)</span></div>
             <div class="stat"><span class="stat__fig">2030</span><span class="stat__label">Fin du cuivre partout</span></div>
           </section>
           <ol class="timeline">
-            <li class="is-current">
-              <p class="timeline__when">Maintenant</p>
-              <div class="timeline__what">Orange ferme son réseau cuivre (téléphone fixe classique RTC, ADSL) par lots de communes. Vérifiez la date de la vôtre.</div>
-              <p><span class="chip chip--solid">À vérifier</span></p>
+            <li>
+              <p class="timeline__when">31 janvier 2026</p>
+              <div class="timeline__what">Fermeture commerciale dans 2 097 communes du lot 3.</div>
             </li>
             <li>
-              <p class="timeline__when">31 janv. 2027</p>
-              <div class="timeline__what">Lot 3 : fermeture technique dans environ 2 100 communes. Les lignes cuivre encore actives y sont coupées.</div>
-              <p><span class="chip">Coupure</span></p>
+              <p class="timeline__when">31 janvier 2027</p>
+              <div class="timeline__what">Fermeture technique de ces 2 097 communes (lot 3) : les lignes cuivre encore actives sont coupées.</div>
+              <p><span class="chip chip--solid">Coupure</span></p>
+            </li>
+            <li>
+              <p class="timeline__when">2028</p>
+              <div class="timeline__what">44 communes du lot 3 dont la fermeture a été reportée.</div>
             </li>
             <li>
               <p class="timeline__when">Fin 2030</p>
-              <div class="timeline__what">Fin de la fermeture du réseau cuivre sur tout le territoire.</div>
+              <div class="timeline__what">Fin du cuivre sur tout le territoire.</div>
             </li>
           </ol>
-          <div class="prose">
-            <p><strong>Votre numéro n'est pas perdu.</strong> La portabilité permet de le conserver en passant sur une offre fibre ou IP.</p>
+          <div class="aside x-gap">
+            <h3>Garde-fou</h3>
+            <p class="fineprint">L'Arcep (le régulateur des télécoms) impose qu'un réseau fibre complet soit déployé dans la commune avant la fermeture. Les rares locaux sans fibre doivent disposer d'une autre solution très haut débit (4G/5G fixe, satellite).</p>
+          </div>
+          <div class="head x-gap">
+            <h3>Vérifiez la date de votre commune</h3>
           </div>
           <div class="links">
-            <a class="btn" href="https://www.economie.gouv.fr/treshautdebit/la-fermeture-du-reseau-cuivre-dans-votre-commune" target="_blank" rel="noopener">Outil officiel economie.gouv.fr</a>
+            <a class="btn" href="https://www.economie.gouv.fr/treshautdebit/la-fermeture-du-reseau-cuivre-dans-votre-commune" target="_blank" rel="noopener">Outil officiel (economie.gouv.fr)</a>
             <a class="btn" href="https://reseaux.orange.fr/nos-reseaux/modernisation-des-reseaux/evolution-de-la-telephonie-fixe-et-internet" target="_blank" rel="noopener">Carte Orange</a>
           </div>
-          <p class="fineprint">L'outil de l'État s'intitule « La fermeture du réseau cuivre dans votre commune ».</p>
+          <p class="fineprint">Sources : Arcep, calendrier de fermeture du réseau cuivre d'Orange (mis à jour en 2026).</p>
+        </section>
+
+        <section class="section" id="numero" data-nav="Numéro">
+          <div class="head">
+            <p class="head__eyebrow">La portabilité</p>
+            <h2>Garder son numéro : comment ça marche</h2>
+            <p class="head__sub">Changer de technologie ne veut pas dire changer de numéro. Ce droit s'appelle la portabilité, et il est gratuit.</p>
+          </div>
+          <div class="steps">
+            <article class="step">
+              <div class="step__intro"><p class="step__num">01</p><p class="step__eyebrow">Le code</p></div>
+              <div>
+                <h3>Vous récupérez votre RIO</h3>
+                <p>Appelez le 3179 depuis votre ligne fixe (appel gratuit). Un serveur vocal vous donne votre RIO, un code de 12 caractères, confirmé par SMS ou email.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div class="step__intro"><p class="step__num">02</p><p class="step__eyebrow">La demande</p></div>
+              <div>
+                <h3>Le nouvel opérateur fait la demande</h3>
+                <p>Vous signez un mandat de portabilité. Le nouvel opérateur demande le transfert et résilie lui-même l'ancien contrat : vous n'avez rien à résilier.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div class="step__intro"><p class="step__num">03</p><p class="step__eyebrow">Le jour J</p></div>
+              <div>
+                <h3>Le numéro bascule</h3>
+                <p>Le jour J, votre numéro arrive sur la nouvelle ligne. Vos clients composent le même numéro qu'avant.</p>
+              </div>
+            </article>
+          </div>
+          <p class="fineprint">Seul un opérateur télécom déclaré auprès de l'Arcep peut recevoir un numéro porté. C'est pourquoi nous travaillons avec un opérateur partenaire déclaré, qui porte votre numéro ; nous nous occupons de la standardiste IA et de l'accompagnement.</p>
+        </section>
+
+        <section class="section" id="fibre" data-nav="Sans fibre">
+          <div class="head">
+            <p class="head__eyebrow">Connexion</p>
+            <h2>Et si je n'ai pas la fibre ?</h2>
+          </div>
+          <div class="prose">
+            <p>La ligne IP (téléphonie par internet) fonctionne sur n'importe quelle connexion internet : fibre, box 4G/5G ou satellite.</p>
+            <p>Là où la fibre n'arrive pas encore, une box 4G/5G ou une offre satellite suffit. C'est pour cela que la première étape, c'est de vérifier votre connexion avec vous.</p>
+          </div>
+        </section>
+
+        <section class="section" id="materiel" data-nav="Matériel">
+          <div class="head">
+            <p class="head__eyebrow">Équipement</p>
+            <h2>Quel matériel ?</h2>
+          </div>
+          <ul class="checklist">
+            <li><span class="checklist__item">Rien à acheter.</span></li>
+            <li><span class="checklist__item">La standardiste IA tourne dans le cloud : rien à installer chez vous.</span></li>
+            <li><span class="checklist__item">Vous recevez les résumés par SMS et par email sur votre portable.</span></li>
+            <li><span class="checklist__item">Vous tenez à votre vieux combiné ? <small>Il se branche sur la prise téléphone de votre box.</small></span></li>
+          </ul>
         </section>
 
         <section class="section" id="offre" data-nav="L'offre">
           <div class="head">
             <p class="head__eyebrow">L'offre</p>
-            <h2>Une standardiste IA sur votre numéro habituel.</h2>
+            <h2>Une standardiste IA sur votre numéro habituel</h2>
             <p class="head__sub">Vos clients composent toujours le même numéro.</p>
           </div>
           <div class="cards">
             <div>
               <h3>Elle décroche</h3>
-              <p>24 h/24, 7 j/7, même quand vous êtes sur un chantier ou en rendez-vous.</p>
+              <p>24 h/24, 7 j/7, même quand vous êtes sur un chantier.</p>
             </div>
             <div>
               <h3>Elle qualifie l'appel</h3>
-              <p>Qui appelle, pour quoi, urgence ou pas, adresse.</p>
+              <p>Qui appelle, pour quoi, urgent ou pas, à quelle adresse.</p>
             </div>
             <div>
               <h3>Elle note</h3>
-              <p>Prend un rendez-vous ou un message.</p>
+              <p>Elle prend un rendez-vous ou un message.</p>
             </div>
             <div>
               <h3>Elle vous résume</h3>
@@ -99,79 +192,68 @@
               <p>Vers votre portable, selon vos règles.</p>
             </div>
           </div>
+          <p class="x-highlight">Même après le cuivre : ne perdez plus d'appels quand vous êtes sur un chantier.</p>
         </section>
 
-        <section class="section" id="etapes" data-nav="Étapes">
+        <section class="section" id="exemple" data-nav="Exemple">
           <div class="head">
-            <p class="head__eyebrow">Comment ça marche</p>
-            <h2>Trois étapes, sans changement pour vos clients.</h2>
+            <p class="head__eyebrow">Exemple</p>
+            <h2>À quoi ressemble un appel ?</h2>
+            <p class="head__sub"><span class="chip">Exemple fictif</span></p>
           </div>
-          <div class="steps">
-            <article class="step">
-              <div class="step__intro"><p class="step__num">01</p><p class="step__eyebrow">Vérifier</p></div>
-              <div>
-                <h3>Date de coupure et ligne actuelle</h3>
-                <p>On vérifie avec vous la date de coupure de votre commune et votre ligne actuelle.</p>
-              </div>
-            </article>
-            <article class="step">
-              <div class="step__intro"><p class="step__num">02</p><p class="step__eyebrow">Porter</p></div>
-              <div>
-                <h3>Votre numéro passe sur une ligne IP</h3>
-                <p>Vous gardez le numéro ; aucun changement pour vos clients.</p>
-              </div>
-            </article>
-            <article class="step">
-              <div class="step__intro"><p class="step__num">03</p><p class="step__eyebrow">Paramétrer</p></div>
-              <div>
-                <h3>La standardiste IA à votre image</h3>
-                <p>Vos horaires, vos services, vos urgences et votre agenda. Vous recevez ensuite les résumés d'appel.</p>
-              </div>
-            </article>
+          <div class="x-dialog" role="list" aria-label="Exemple de dialogue entre l'IA et un client">
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">IA</span><span>« Bonjour, vous êtes bien chez Plomberie Martin. Je suis l'assistante IA de l'entreprise : je prends votre demande et je la transmets tout de suite. À qui ai-je l'honneur ? »</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Client</span><span>« Julie Durand. J'ai une fuite sous l'évier. »</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">IA</span><span>« C'est noté, Madame Durand. L'eau coule-t-elle en continu, avez-vous pu couper l'arrivée d'eau ? »</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Client</span><span>« Oui, j'ai coupé, mais je n'ai plus d'eau dans la cuisine. »</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">IA</span><span>« Quelle est l'adresse de l'intervention ? »</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Client</span><span>« 12 rue des Lilas, à Ennery. »</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">IA</span><span>« Merci. Je le classe comme urgent. M. Martin peut vous rappeler aujourd'hui entre 14 h et 15 h, ou demain matin entre 8 h et 9 h. Qu'est-ce qui vous arrange ? »</span></p>
+            <p class="x-dialog__row" role="listitem"><span class="x-dialog__who">Client</span><span>« Aujourd'hui 14 h. »</span></p>
+            <p class="x-dialog__row x-dialog__row--ia" role="listitem"><span class="x-dialog__who">IA</span><span>« Parfait, il vous rappelle aujourd'hui entre 14 h et 15 h. Bonne journée. »</span></p>
           </div>
+          <div class="x-sms">
+            <p class="x-sms__label">Exemple de SMS reçu par l'artisan</p>
+            <pre>📞 Nouvel appel – 10:42
+Julie Durand
+Fuite sous évier, eau coupée, plus d'eau en cuisine
+12 rue des Lilas, Ennery
+Urgence : OUI
+Rappel souhaité : aujourd'hui 14 h–15 h</pre>
+          </div>
+          <p class="fineprint">Démo audio en préparation. Les noms et l'adresse ci-dessus sont fictifs.</p>
         </section>
 
         <section class="section" id="pour-qui" data-nav="Pour qui">
           <div class="head">
             <p class="head__eyebrow">Pour qui</p>
-            <h2>Pour ceux qui ne peuvent pas toujours décrocher.</h2>
+            <h2>Pour les artisans qui ne peuvent pas toujours décrocher.</h2>
           </div>
           <div class="cards">
             <div>
-              <h3>Artisans</h3>
-              <p class="quote">Un appel manqué pendant un chantier, c'est un client perdu.</p>
-              <p>Plombiers, électriciens, chauffagistes, serruriers, couvreurs.</p>
+              <h3>Artisans et TPE</h3>
+              <p class="quote">Un appel manqué pendant un chantier, c'est souvent un client perdu.</p>
+              <p>Bâtiment et dépannage : plombiers, électriciens, chauffagistes, serruriers.</p>
             </div>
-            <div>
-              <h3>Petits cabinets</h3>
-              <p class="quote">Un accueil téléphonique sans standardiste.</p>
-              <p>Comptables, immobilier, professions libérales.</p>
-            </div>
-            <div>
-              <h3>Petites mairies</h3>
-              <p class="quote">Le secrétariat joignable en dehors des heures d'ouverture.</p>
-              <p>Les messages des administrés sont classés et transmis.</p>
-            </div>
+          </div>
+          <div class="aside x-gap">
+            <h3>Pas adapté aux professionnels de santé</h3>
+            <p class="fineprint">Les données de santé exigent un hébergement certifié HDS, que nous ne proposons pas.</p>
           </div>
         </section>
 
         <section class="section" id="pilote" data-nav="Pilote">
           <div class="head">
             <p class="head__eyebrow">Pilote 2026-2027</p>
-            <h2>Pilote gratuit pour 10 entreprises et mairies.</h2>
+            <h2>Pilote gratuit pour 10 artisans</h2>
           </div>
           <div class="pair">
             <ul class="checklist">
-              <li>
-                <span class="checklist__item">Gratuit pendant le pilote <small>Sans engagement</small></span>
-              </li>
-              <li>
-                <span class="checklist__item">En échange, vos retours <small>Ce qui marche et ce qui manque</small></span>
-              </li>
-              <li>
-                <span class="checklist__item">10 places <small>Entreprises et mairies</small></span>
-                <span class="chip chip--solid">Ouvert</span>
-              </li>
+              <li><span class="checklist__item">Gratuit pendant le pilote <small>La standardiste IA est offerte</small></span></li>
+              <li><span class="checklist__item">Sans engagement</span></li>
+              <li><span class="checklist__item">En échange : vos retours <small>Sur ce qui marche et ce qui manque</small></span></li>
+              <li><span class="checklist__item">Le prix sera annoncé avant la fin du pilote <small>Vous décidez ensuite librement de continuer ou non.</small></span></li>
+              <li><span class="checklist__item">10 places</span><span class="chip chip--solid">Ouvert</span></li>
             </ul>
             <aside class="callout" aria-label="Pour participer">
               <p class="callout__head">Pour participer</p>
@@ -190,7 +272,7 @@
           <div class="cards">
             <div>
               <h3>Transparence IA</h3>
-              <p>L'appelant est informé dès le début de l'appel qu'il échange avec un assistant IA, conformément à l'obligation de transparence du règlement européen sur l'IA.</p>
+              <p>L'appelant est informé dès le début de l'appel qu'il parle à un assistant IA (obligation de transparence du règlement européen sur l'IA).</p>
             </div>
             <div>
               <h3>RGPD</h3>
@@ -202,8 +284,12 @@
               </ul>
             </div>
             <div>
+              <h3>Enregistrement</h3>
+              <p>Les appels ne sont enregistrés que si vous le choisissez, et l'appelant en est informé.</p>
+            </div>
+            <div>
               <h3>Indépendance</h3>
-              <p>Fixe Fidèle n'est ni Orange ni un partenaire d'Orange. Nous accompagnons la transition de votre ligne.</p>
+              <p>Fixe Fidèle n'est ni Orange ni un partenaire d'Orange.</p>
             </div>
           </div>
         </section>
@@ -211,30 +297,42 @@
         <section class="section" id="faq" data-nav="FAQ">
           <div class="head">
             <p class="head__eyebrow">FAQ</p>
-            <h2>Les trois questions qu'on nous pose.</h2>
+            <h2>Vos questions, nos réponses.</h2>
           </div>
-          <div class="cards">
-            <div>
-              <h3>Je vais perdre mon numéro ?</h3>
-              <p>Non : la portabilité permet de le conserver.</p>
-            </div>
-            <div>
-              <h3>Mes clients vont parler à un robot ?</h3>
-              <p>Ils sont prévenus qu'il s'agit d'un assistant IA. Il prend la demande proprement, vous la transmet et peut vous transférer les urgences.</p>
-            </div>
-            <div>
-              <h3>Ma commune est-elle concernée ?</h3>
-              <p>Vérifiez sur l'<a class="link" href="https://www.economie.gouv.fr/treshautdebit/la-fermeture-du-reseau-cuivre-dans-votre-commune" target="_blank" rel="noopener">outil officiel economie.gouv.fr</a>, ou répondez à notre email : on vérifie pour vous.</p>
-            </div>
+          <div class="x-faq">
+            <details>
+              <summary>Mes clients vont parler à un robot ?</summary>
+              <p>Oui, à un assistant IA, et ils en sont prévenus dès le début. Il prend la demande proprement (nom, besoin, adresse, urgence), vous l'envoie par SMS et peut vous transférer les urgences.</p>
+            </details>
+            <details>
+              <summary>Je garde mon numéro ?</summary>
+              <p>Oui. Grâce à la portabilité (code RIO obtenu au 3179), votre numéro passe sur la nouvelle ligne. Vos clients ne voient aucune différence.</p>
+            </details>
+            <details>
+              <summary>Y a-t-il une coupure pendant le transfert ?</summary>
+              <p>La bascule est programmée à une date convenue avec vous. Le jour du portage, la coupure ne peut pas dépasser 4 heures (règle fixée par l'Arcep) ; on la cale sur un moment calme.</p>
+            </details>
+            <details>
+              <summary>Et les urgences ?</summary>
+              <p>Vous fixez vos règles : par exemple, une fuite ou une panne de chauffage est transférée directement sur votre portable. Les appels d'urgence vers le 112, le 15 ou le 18 depuis votre ligne restent acheminés par l'opérateur.</p>
+            </details>
+            <details>
+              <summary>Et le RGPD, l'enregistrement des appels ?</summary>
+              <p>Les données servent uniquement à gérer vos appels, ne sont jamais revendues et sont supprimées après une durée limitée. L'enregistrement est optionnel et l'appelant en est informé.</p>
+            </details>
+            <details>
+              <summary>Et après le pilote ?</summary>
+              <p>Le prix est annoncé avant la fin du pilote. Sans engagement : si vous arrêtez, vous gardez votre numéro (il vous appartient et peut être porté ailleurs).</p>
+            </details>
+            <details>
+              <summary>Ma commune est-elle concernée ?</summary>
+              <p>Vérifiez sur l'<a class="link" href="https://www.economie.gouv.fr/treshautdebit/la-fermeture-du-reseau-cuivre-dans-votre-commune" target="_blank" rel="noopener">outil officiel (economie.gouv.fr)</a>, ou répondez à notre email : on vérifie pour vous.</p>
+            </details>
           </div>
         </section>
       </main>
       <footer class="foot">
-        <p>Fixe Fidèle — pilote 2026-2027. Sources : Orange (calendrier de fermeture du réseau cuivre), Arcep, data.gouv.fr.</p>
-        <nav aria-label="Retour aux sections" data-auto></nav>
-        <a class="badge" href="https://hark.com/" target="_blank" rel="noopener"
-          ><span class="hark-mark"></span><span>built by hark</span></a
-        >
+        <p>Fixe Fidèle — pilote 2026-2027. Sources : Arcep, Orange (calendrier de fermeture du réseau cuivre), economie.gouv.fr.</p>
       </footer>
     </div>
     <script src="hark.js"></script>
