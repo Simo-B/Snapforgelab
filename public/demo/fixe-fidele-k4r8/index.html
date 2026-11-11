@@ -30,6 +30,8 @@
       .x-faq details[open] summary::after { transform: rotate(45deg); }
       .x-faq details p { padding: 0 0 16px; font: var(--type-body); color: var(--text-secondary); }
       .x-gap { margin-top: 24px; }
+      .x-audio { max-width: 68ch; margin-top: 24px; padding: 20px 22px; border: 1px solid var(--stroke-primary); border-radius: var(--r-m); }
+      .x-audio audio { display: block; width: 100%; margin-bottom: 8px; }
     </style>
   </head>
   <body>
@@ -93,28 +95,29 @@
             </div>
           </div>
           <section class="stats">
-            <div class="stat"><span class="stat__fig">2 097</span><span class="stat__label">Communes coupées le 31 janvier 2027 (lot 3)</span></div>
+            <div class="stat"><span class="stat__fig">≈ 2 100</span><span class="stat__label">Communes coupées le 31 janvier 2027 (lot 3)</span></div>
             <div class="stat"><span class="stat__fig">2030</span><span class="stat__label">Fin du cuivre partout</span></div>
           </section>
           <ol class="timeline">
             <li>
               <p class="timeline__when">31 janvier 2026</p>
-              <div class="timeline__what">Fermeture commerciale dans 2 097 communes du lot 3.</div>
+              <div class="timeline__what">Fermeture commerciale dans environ 2 100 communes du lot 3.</div>
             </li>
             <li>
               <p class="timeline__when">31 janvier 2027</p>
-              <div class="timeline__what">Fermeture technique de ces 2 097 communes (lot 3) : les lignes cuivre encore actives sont coupées.</div>
+              <div class="timeline__what">Fermeture technique de ces quelque 2 100 communes (lot 3) : les lignes cuivre encore actives sont coupées.</div>
               <p><span class="chip chip--solid">Coupure</span></p>
             </li>
             <li>
               <p class="timeline__when">2028</p>
-              <div class="timeline__what">44 communes du lot 3 dont la fermeture a été reportée.</div>
+              <div class="timeline__what">Une quarantaine de communes du lot 3 reportées à 2028.</div>
             </li>
             <li>
               <p class="timeline__when">Fin 2030</p>
               <div class="timeline__what">Fin du cuivre sur tout le territoire.</div>
             </li>
           </ol>
+          <p class="fineprint">Dates prévisionnelles, susceptibles d'évoluer (communes reportées, changements de lots). Vérifiez votre commune sur le site d'Orange ou de l'Arcep.</p>
           <div class="aside x-gap">
             <h3>Garde-fou</h3>
             <p class="fineprint">L'Arcep (le régulateur des télécoms) impose qu'un réseau fibre complet soit déployé dans la commune avant la fermeture. Les rares locaux sans fibre doivent disposer d'une autre solution très haut débit (4G/5G fixe, satellite).</p>
@@ -202,15 +205,15 @@
             </div>
             <div>
               <h3>Elle note</h3>
-              <p>Elle prend un rendez-vous ou un message.</p>
+              <p>Nom, besoin, adresse, urgence et créneau de rappel souhaité.</p>
             </div>
             <div>
               <h3>Elle vous résume</h3>
               <p>Un résumé par SMS et par email juste après l'appel.</p>
             </div>
             <div>
-              <h3>Elle transfère l'urgent</h3>
-              <p>Vers votre portable, selon vos règles.</p>
+              <h3>Elle signale l'urgent</h3>
+              <p>Les demandes urgentes arrivent en tête du résumé, pour que vous rappeliez en priorité.</p>
             </div>
           </div>
           <p class="x-highlight">Même après le cuivre : ne perdez plus d'appels quand vous êtes sur un chantier.</p>
@@ -242,7 +245,11 @@ Fuite sous évier, eau coupée, plus d'eau en cuisine
 Urgence : OUI
 Rappel souhaité : aujourd'hui 14 h–15 h</pre>
           </div>
-          <p class="fineprint">Démo audio en préparation. Les noms et l'adresse ci-dessus sont fictifs.</p>
+          <div class="x-audio">
+            <p class="x-sms__label">Écouter l'appel</p>
+            <audio controls preload="none" src="demo-appel.mp3">Votre navigateur ne lit pas l'audio. <a class="link" href="demo-appel.mp3">Télécharger la démo (MP3)</a>.</audio>
+            <p class="fineprint">Démo simulée : voix de synthèse, appel et noms fictifs.</p>
+          </div>
         </section>
 
         <section class="section" id="pour-qui" data-nav="Pour qui">
@@ -305,10 +312,6 @@ Rappel souhaité : aujourd'hui 14 h–15 h</pre>
               </ul>
             </div>
             <div>
-              <h3>Enregistrement</h3>
-              <p>Les appels ne sont enregistrés que si vous le choisissez, et l'appelant en est informé.</p>
-            </div>
-            <div>
               <h3>Indépendance</h3>
               <p>Fixe Fidèle n'est ni Orange ni un partenaire d'Orange.</p>
             </div>
@@ -323,7 +326,7 @@ Rappel souhaité : aujourd'hui 14 h–15 h</pre>
           <div class="x-faq">
             <details>
               <summary>Mes clients vont parler à un robot ?</summary>
-              <p>Oui, à un assistant IA, et ils en sont prévenus dès le début. Il prend la demande proprement (nom, besoin, adresse, urgence), vous l'envoie par SMS et peut vous transférer les urgences.</p>
+              <p>Oui, à un assistant IA, et ils en sont prévenus dès le début. Il prend la demande proprement (nom, besoin, adresse, urgence), puis vous l'envoie par SMS et par email juste après l'appel.</p>
             </details>
             <details>
               <summary>Je garde mon numéro ?</summary>
@@ -335,11 +338,11 @@ Rappel souhaité : aujourd'hui 14 h–15 h</pre>
             </details>
             <details>
               <summary>Et les urgences ?</summary>
-              <p>Vous fixez vos règles : par exemple, une fuite ou une panne de chauffage est transférée directement sur votre portable. Les appels d'urgence vers le 112, le 15 ou le 18 depuis votre ligne restent acheminés par l'opérateur.</p>
+              <p>L'assistante repère les demandes urgentes (fuite, panne de chauffage, porte claquée) et les signale en tête du résumé SMS, pour que vous rappeliez en priorité.</p>
             </details>
             <details>
-              <summary>Et le RGPD, l'enregistrement des appels ?</summary>
-              <p>Les données servent uniquement à gérer vos appels, ne sont jamais revendues et sont supprimées après une durée limitée. L'enregistrement est optionnel et l'appelant en est informé.</p>
+              <summary>Et le RGPD, que deviennent les données ?</summary>
+              <p>Les données servent uniquement à gérer vos appels, ne sont jamais revendues et sont supprimées après une durée limitée.</p>
             </details>
             <details>
               <summary>Et après le pilote ?</summary>
