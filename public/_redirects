@@ -2,3 +2,8 @@
 /review /replit-app-to-production/?utm_source=x&utm_medium=social&utm_campaign=review 302
 /free-audit/ /free-audit 301
 /lovable-bolt-audit/ /lovable-bolt-audit 301
+/demo/fixe-fidele-k4r8/en/ /callbrik/en/ 301
+/demo/fixe-fidele-k4r8/en /callbrik/en/ 301
+/demo/fixe-fidele-k4r8/ /callbrik/ 301
+/demo/fixe-fidele-k4r8 /callbrik/ 301
+/demo/fixe-fidele-k4r8/* /callbrik/:splat 301
