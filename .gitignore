@@ -7,3 +7,8 @@ seo/
 # MCP Registry signing key: never commit
 key.pem
 mcp-registry-key*
+
+# Dependencies and local env (Worker secrets live in .dev.vars locally)
+node_modules/
+.dev.vars
+.env
