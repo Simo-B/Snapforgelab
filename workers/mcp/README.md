@@ -1,89 +1,53 @@
-# Snapforge Ship-Ready Check — MCP Worker
+# Snapforge Ship-Ready Check (MCP) & Self-Serve Scanner Worker
 
-A Cloudflare Worker (FREE plan) that exposes an MCP server over streamable HTTP at
-`/mcp`. It is the Worker port of `chatgpt-plugin/server.js`.
+Cloudflare Worker (FREE plan) serving two isolated surfaces on `mcp.snapforgelab.com`:
 
-**What it does:** two tools, both read-only.
-- `check_app` — passive launch check of a public app URL. Reads only what any
-  visitor's browser already receives (homepage HTML, response headers,
-  robots.txt, sitemap.xml, the CORS response header, a dev banner left in the
-  HTML). It never scans JavaScript bundles, never extracts secrets, never queries
-  a database or API, never signs in, submits forms or writes anything. Same class
-  and scope as securityheaders.com. Private/internal addresses are refused.
-- `get_fix_prompt` — returns a paste-ready fix prompt for an issue id.
+1. **Public MCP Server (`POST /mcp`)** — stateless Streamable HTTP JSON-RPC (`check_app` and `get_fix_prompt`).
+   - **Frozen public contract:** `check_app` is strictly surface-only (HTML, headers, `robots.txt`, `sitemap.xml`, CORS, dev banner). It never scans JS bundles or queries databases. Rate-limited to 20 calls/IP/hour via `RATE_KV`.
+2. **Self-Serve Scanner, Checkout & Private Report API (`/api/*` & `/scan-deep`)** — powers `/scan/`, `/scan-deep/` and `/report/` on `snapforgelab.com`:
+   - `POST /api/scan` (and `POST /scan-deep`) — runs the unified surface + deep read-only scan (`full-scan.js`) within 45 subrequests / 25s, stores the full report in Cloudflare D1, and returns **only** the score, 2 real preview findings (without fix prompts), and redacted severity/category summaries for findings `#3..N`.
+   - `GET /api/scan/:scanId` — reloads a saved scan preview without re-scanning.
+   - `POST /api/checkout/create` — creates a server-priced `$19.00 USD` PayPal REST v2 order (`custom_id = scanId`, `landing_page = NO_PREFERENCE` for PayPal + debit/credit card).
+   - `POST /api/checkout/capture` — captures & verifies the PayPal order on browser return, unlocks the full report + Master Fix Prompt in < 2s, and triggers idempotent Resend email delivery.
+   - `POST /api/webhooks/paypal` — verifies PayPal webhook signature (`CHECKOUT.ORDER.APPROVED` & `PAYMENT.CAPTURE.COMPLETED`), deduplicates via `webhook_events`, and delivers the report link even if the buyer closed their browser tab.
+   - `GET /api/report/:scanId` & `POST /api/report/:scanId/rescan` — Bearer-authenticated access to the full report and up to 3 included verification re-scans.
 
-A per-IP limit of 20 `check_app` calls per hour is enforced with a KV counter.
-
-Because it is an open endpoint anyone can point at any public URL, its scope is
-deliberately kept to what a security-header checker reads. Anything deeper (keys,
-auth, database rules) is intentionally **not** here and is handled by the
-ownership-gated free audit at https://snapforgelab.com/free-audit.
-
-## Deep scan: `POST /scan-deep` (separate from `check_app`)
-
-The page https://snapforgelab.com/scan-deep/ calls `POST https://mcp.snapforgelab.com/scan-deep`
-with `{ "url": "...", "ownershipConfirmed": true }` (400 without the checkbox). It is a plain HTTP
-endpoint, **not** an MCP tool: `tools/list` and `check_app` are unchanged.
-
-Code: `deep-scan.js` (spec: private issue Simo-B/simo#10, "Résultat Grok"). Read-only checks:
-secrets in the app's own same-origin JS bundles (masked to the last 4 characters), Supabase tables
-readable with the public anon/publishable key (one `GET ?select=*&limit=1` per table, only the table
-name is reported), auth redirects to preview/localhost hosts (string scan), publicly listable Storage
-buckets (one list call, limit 1). Anon/publishable keys, Firebase web config and Stripe publishable keys
-are never findings. SSRF guard + DNS-over-HTTPS check, manual redirects, caps on sub-requests (45),
-time (25 s), scripts (14), bytes, tables (20), buckets (5). 5 deep scans per IP per hour (KV `rld:` keys).
-CORS allows snapforgelab.com only. Nothing is logged.
-
-`_worker.js` (Cloudflare Pages advanced mode) is GENERATED: after editing `worker.js` or
-`deep-scan.js`, run `node build-pages-worker.mjs`.
-
-## Local test (no deploy)
-
-```
-node test-deep.mjs             # deep scan: masking, false positives, SSRF, one GET per table, endpoint
+`_worker.js` (single-file bundle for Cloudflare Pages advanced mode) is **generated** from `worker.js` + `deep-scan.js` + `full-scan.js` + `storage.js` + `paypal.js`:
+```bash
+node build-pages-worker.mjs
 ```
 
+## Local tests (offline, zero npm install required on Node 22)
 
-```
+```bash
 cd workers/mcp
-node test-local.mjs            # exercises JSON-RPC, the SSRF guard and get_fix_prompt
-# or, with the real runtime:
-npx wrangler dev               # then POST JSON-RPC to http://localhost:8787/mcp
+npm test
 ```
+Runs `test-local.mjs` (MCP JSON-RPC & SSRF), `test-deep.mjs` (deep scanner & masking), and `test-selfserve.mjs` (end-to-end D1 SQLite, server paywall, PayPal REST v2, webhook verification, Resend email, and paid re-scans against both `worker.js` and `_worker.js`).
 
-## Deploy (you run these; I can't touch your Cloudflare account)
+## Production setup (one-time Cloudflare + PayPal + Resend steps)
 
-1. **Log in:** `npx wrangler login`
-2. **Create the KV namespace and paste its id into `wrangler.toml`:**
+1. **Create the Cloudflare D1 database (Free tier):**
+   ```bash
+   cd workers/mcp
+   npx wrangler d1 create snapforge-selfserve
    ```
-   npx wrangler kv namespace create RATE_KV
+   Paste the returned `database_id` into `wrangler.toml` (uncomment the `[[d1_databases]]` block with `binding = "DB"`), then apply the schema:
+   ```bash
+   npx wrangler d1 execute snapforge-selfserve --remote --file=./migrations/0001_selfserve.sql
    ```
-   Copy the printed `id = "..."` into the `[[kv_namespaces]]` block.
-3. **Set the OpenAI challenge token** (served at `/.well-known/openai-apps-challenge`).
-   It is a public verification token, so a plain var is fine:
-   - Dashboard: Workers & Pages → `snapforge-mcp` → Settings → Variables → add
-     `OPENAI_APPS_CHALLENGE` with the value from the OpenAI portal. Or CLI:
-   - `npx wrangler secret put OPENAI_APPS_CHALLENGE` (paste the token when prompted).
-4. **Deploy:** `npx wrangler deploy`
-5. **Attach the custom domain** so the server is at `https://mcp.snapforgelab.com/mcp`:
-   Dashboard → the Worker → Settings → Domains & Routes → **Add → Custom Domain** →
-   `mcp.snapforgelab.com`. (The `snapforgelab.com` zone must be on this Cloudflare
-   account; Cloudflare creates the DNS record and certificate automatically.)
-6. **Verify:**
-   - `curl https://mcp.snapforgelab.com/` → `200`, plain text.
-   - `curl https://mcp.snapforgelab.com/.well-known/openai-apps-challenge` → the token.
-   - `tools/list` and a `check_app` call (see the JSON below).
+   *(If you deploy via Cloudflare Pages `_worker.js`, bind the D1 database under **Pages → Settings → Functions → D1 database bindings** with variable name `DB`.)*
 
-## JSON-RPC examples
+2. **Set production secrets (`npx wrangler secret put <NAME>` or Cloudflare Dashboard → Variables & Secrets):**
+   - `OPENAI_APPS_CHALLENGE` — OpenAI portal challenge token
+   - `PAYPAL_CLIENT_ID` — Live REST App Client ID from `developer.paypal.com`
+   - `PAYPAL_CLIENT_SECRET` — Live REST App Secret
+   - `PAYPAL_WEBHOOK_ID` — Webhook ID from PayPal Developer Dashboard pointing to `https://mcp.snapforgelab.com/api/webhooks/paypal` with events **`Checkout order approved`** (`CHECKOUT.ORDER.APPROVED`) and **`Payment capture completed`** (`PAYMENT.CAPTURE.COMPLETED`)
+   - `REPORT_SECRET` — 32-byte random secret (`openssl rand -hex 32`) used to HMAC-derive private report keys
+   - `RESEND_API_KEY` — API key from `resend.com` (domain `snapforgelab.com` verified)
 
-```
-# tools/list
-curl -s https://mcp.snapforgelab.com/mcp -H 'content-type: application/json' \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-
-# check_app
-curl -s https://mcp.snapforgelab.com/mcp -H 'content-type: application/json' \
-  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"check_app","arguments":{"url":"https://snapforgelab.com"}}}'
-```
-
-No paid Cloudflare features are used (Workers free tier + KV free tier).
+3. **Build & deploy:**
+   ```bash
+   node build-pages-worker.mjs
+   npx wrangler deploy
+   ```

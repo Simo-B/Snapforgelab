@@ -8,6 +8,11 @@
 /founding-review/*
   X-Robots-Tag: noindex, nofollow
 
+/report/*
+  X-Robots-Tag: noindex, nofollow
+  Referrer-Policy: no-referrer
+  Cache-Control: no-store
+
 /assets/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 

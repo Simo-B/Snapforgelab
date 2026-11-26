@@ -136,7 +136,7 @@
   // Sticky mobile CTA: only when no other primary action is on screen
   // (hero, the in-page CTA row of offer pages, the booking box or the form)
   const mcta = d.querySelector('.m-cta');
-  const zones = ['.hero', '.article .cta', '#book', '#contact'].map((sel) => d.querySelector(sel)).filter(Boolean);
+  const zones = ['.hero', '.article .cta', '#book', '#contact', '#scan', '#unlock-box'].map((sel) => d.querySelector(sel)).filter(Boolean);
   if (mcta && zones.length && 'IntersectionObserver' in window) {
     const seen = new Set();
     mcta.classList.add('hide');

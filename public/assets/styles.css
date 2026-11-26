@@ -437,3 +437,84 @@ footer{padding-bottom:56px}
 .founder-proof{font-size:14.5px!important;color:var(--dim)!important;margin:0 0 12px!important}
 .founder-proof a{color:var(--accent)}
 .hero .lede{max-width:44ch}
+
+/* Self-serve scanner & private report */
+.scan-progress{border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:20px 22px;margin:18px 0;display:grid;gap:10px}
+.scan-progress[hidden]{display:none}
+.scan-step{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--mute);transition:color .2s}
+.scan-step .dot-s{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.16);flex:none}
+.scan-step.active{color:var(--fg);font-weight:550}
+.scan-step.active .dot-s{background:var(--accent);box-shadow:0 0 0 4px rgba(41,151,255,.18)}
+.scan-step.done{color:var(--dim)}
+.scan-step.done .dot-s{background:var(--ok)}
+
+.sev-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sev-pill{font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
+.sev.critical{background:rgba(255,69,58,.2);color:#ff6961}
+.sev.high{background:rgba(255,159,10,.18);color:#ffb340}
+.sev.medium{background:rgba(255,214,10,.15);color:var(--warn)}
+.sev.low{background:rgba(255,255,255,.09);color:var(--dim)}
+.cat-tag{font-size:12px;color:var(--dim);padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+
+.preview-list,.locked-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:14px}
+.issue-card{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:20px 22px;display:grid;gap:10px}
+.issue-card.done-item{opacity:.68}
+.issue-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.issue-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.issue-card h3{margin:0;font-size:18px;line-height:1.35;letter-spacing:-.015em}
+.issue-detail{margin:0;color:#d2d2d7;font-size:15px;line-height:1.55;overflow-wrap:anywhere}
+.issue-why{margin:0;color:var(--dim);font-size:14px;line-height:1.5}
+.issue-why strong{color:var(--fg);font-weight:600}
+.prompt-lock{margin-top:4px;padding:11px 14px;border-radius:11px;border:1px dashed rgba(255,255,255,.16);background:rgba(0,0,0,.28);font-size:13.5px;color:var(--dim);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+.locked-row{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02);padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.locked-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.locked-blur{color:var(--mute);font-size:14px;user-select:none}
+.locked-tag{font-size:12.5px;color:var(--dim);white-space:nowrap}
+
+.unlock-box{border:1px solid rgba(41,151,255,.45);border-radius:22px;padding:32px;background:radial-gradient(560px 260px at 50% 0%,rgba(41,151,255,.14),transparent 72%),var(--bg2);display:grid;gap:18px;margin-top:8px}
+.unlock-head{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:baseline;justify-content:space-between}
+.unlock-head h2{font-size:clamp(22px,3vw,29px);margin:0}
+.unlock-price{font-size:34px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.unlock-price small{font-size:14px;font-weight:500;color:var(--dim);margin-left:4px}
+.unlock-perks{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.unlock-perks li{position:relative;padding-left:24px;font-size:15px;color:#d2d2d7;line-height:1.5}
+.unlock-perks li::before{content:"✓";position:absolute;left:0;top:0;color:var(--ok);font-weight:700}
+.unlock-form{display:grid;gap:12px;max-width:520px}
+.unlock-form label{font-size:13.5px;color:var(--dim);display:grid;gap:6px}
+.unlock-form input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:13px 15px;color:var(--fg);font:inherit;font-size:15px}
+.unlock-form input:focus{outline:none;border-color:var(--accent)}
+.unlock-foot{margin:0;font-size:13.5px;color:var(--dim);line-height:1.5}
+.unlock-foot a{color:var(--accent)}
+
+.report-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border:1px solid var(--line);border-radius:16px;background:var(--bg2);margin-bottom:22px}
+.report-bar-actions{display:flex;flex-wrap:wrap;gap:8px}
+.master-box{border:1px solid rgba(41,151,255,.45);border-radius:18px;background:linear-gradient(180deg,rgba(41,151,255,.09),rgba(41,151,255,.02));padding:22px 24px;display:grid;gap:12px}
+.prompt-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.prompt-pre{margin:0;padding:16px;border-radius:12px;border:1px solid var(--line);background:#09090c;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow-y:auto;color:#e5e5ea}
+.verify-line{margin:0;padding:10px 13px;border-radius:10px;background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.25);font-size:13.5px;color:#d2d2d7}
+.verify-line strong{color:var(--ok)}
+.check-toggle{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--dim);cursor:pointer;user-select:none}
+.check-toggle input{accent-color:var(--ok);width:16px;height:16px;margin:0}
+.builder-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:8px 0 4px}
+.builder-select{background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font:inherit;font-size:14.5px}
+
+.result,.preview-list,.locked-list,.issue-card,.unlock-box,.unlock-form,.master-box{grid-template-columns:minmax(0,1fr);min-width:0}
+.result > *{min-width:0}
+.result[hidden],.unlock-box[hidden],.master-box[hidden],.builder-bar[hidden],.sev-pills[hidden],.prompt-lock[hidden]{display:none!important}
+
+@media (max-width:680px){
+  .unlock-box{padding:22px 18px}
+  .unlock-form .btn{width:100%;white-space:normal;text-align:center;padding:14px 18px}
+  .locked-tag{white-space:normal}
+  .issue-card{padding:18px 16px}
+  .master-box{padding:18px 16px}
+  .report-bar{padding:14px 16px}
+}
+@media print{
+  body{background:#fff;color:#111}
+  .nav,.m-cta,footer,.no-print{display:none!important}
+  .wrap,.narrow{max-width:100%;padding:0}
+  .score-card,.issue-card,.master-box,.cta-box{background:#fff!important;border:1px solid #ccc!important;color:#111!important;break-inside:avoid}
+  .issue-detail,.issue-why,.verdict,.verify-line,.prompt-pre{color:#222!important;background:#f7f7f9!important;max-height:none!important}
+}

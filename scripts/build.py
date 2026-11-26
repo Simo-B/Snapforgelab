@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "21"
+ASSET_V = "22"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
@@ -422,6 +422,7 @@ def build_llms(guides):
         f"- [Hire a Replit developer]({SITE}/hire-replit-developer/)",
         "",
         "## Free tools",
+        f"- [App Security Scanner]({SITE}/scan/) & [Deep Security Scan]({SITE}/scan-deep/): free 1-click read-only scan of any live Replit, Lovable or Bolt app (secrets in JS bundles, open Supabase RLS tables, public Storage buckets, auth redirects, CORS, headers and SEO) with a score and 2 real findings free; full report, Master Fix Prompt, builder-specific prompts and 3 verification re-scans unlock instantly for $19 via PayPal.",
         f"- [Replit Readiness Score]({SITE}/tools/replit-readiness-score/): 2-minute self-assessment that scores whether a Replit app is ready for real users.",
         "",
         "## Guides",

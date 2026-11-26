@@ -1,13 +1,13 @@
 {
   "name": "snapforge-mcp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "Snapforge Ship-Ready Check — passive read-only MCP server (Cloudflare Worker).",
+  "description": "Snapforge Ship-Ready Check MCP server + Self-Serve Scanner & PayPal Checkout Worker.",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "test": "node test-local.mjs && node test-deep.mjs",
+    "test": "node test-local.mjs && node test-deep.mjs && node test-selfserve.mjs",
     "build:pages": "node build-pages-worker.mjs"
   },
   "devDependencies": {

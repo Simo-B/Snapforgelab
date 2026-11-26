@@ -13,7 +13,30 @@
 // addresses, so the DNS lookup is dropped; the hostname and IP-literal guards
 // are kept.
 
-import { deepScan, GuardError, DEEP_RATE_LIMIT } from "./deep-scan.js";
+import { GuardError, DEEP_RATE_LIMIT } from "./deep-scan.js";
+import { fullScan, buildPreviewReport } from "./full-scan.js";
+import {
+  saveScan,
+  getScan,
+  updateScanAfterRescan,
+  createOrder,
+  getOrderByProviderId,
+  getPaidOrderByTokenHash,
+  markOrderPaid,
+  claimOrderEmailSend,
+  recordWebhookEvent,
+} from "./storage.js";
+import {
+  getPricing,
+  randomHex,
+  sha256Hex,
+  deriveReportKey,
+  allowedSiteBase,
+  createPayPalOrder,
+  captureAndVerifyPayPalOrder,
+  verifyPayPalWebhook,
+  sendReportEmail,
+} from "./paypal.js";
 
 const UA = "SnapforgeShipReadyCheck/1.0 (+https://snapforgelab.com)";
 const FREE_AUDIT = "https://snapforgelab.com/free-audit";
@@ -309,15 +332,25 @@ const CORS = {
   "Access-Control-Expose-Headers": "Mcp-Session-Id",
 };
 
-// ---------- /scan-deep: ownership-gated deep scan (separate from the MCP tool check_app) ----------
-// Not an MCP tool: check_app's published contract (never scans JS bundles) is unchanged.
+// ---------- Self-Serve Scan, Checkout, Webhooks & Private Report API (separate from /mcp) ----------
+// Not an MCP tool: check_app's published contract (never scans JS bundles) is completely unchanged.
 const DEEP_PATH = "/scan-deep";
+const API_SCAN_PATH = "/api/scan";
 const DEEP_ORIGINS = ["https://snapforgelab.com", "https://www.snapforgelab.com"];
-function deepCors(request) {
+const MAX_RESCANS = 3;
+
+function apiCors(request) {
   const o = request.headers.get("origin") || "";
   const allow = DEEP_ORIGINS.includes(o) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o) ? o : DEEP_ORIGINS[0];
-  return { "Access-Control-Allow-Origin": allow, "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "content-type", Vary: "Origin", "Cache-Control": "no-store" };
+  return {
+    "Access-Control-Allow-Origin": allow,
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "content-type, authorization",
+    Vary: "Origin",
+    "Cache-Control": "no-store",
+  };
 }
+
 async function underDeepRateLimit(env, ip) {
   if (!env || !env.RATE_KV || !ip) return true;
   const key = `rld:${ip}:${new Date().toISOString().slice(0, 13)}`;
@@ -330,10 +363,47 @@ async function underDeepRateLimit(env, ip) {
     return true;
   }
 }
-async function handleDeepScan(request, env) {
-  const cors = deepCors(request);
+
+function bearerToken(request) {
+  const h = request.headers.get("authorization") || "";
+  const m = h.match(/^Bearer\s+([A-Za-z0-9._\-]+)$/i);
+  return m ? m[1] : "";
+}
+
+async function deliverReportEmailOnce(env, order, scan, reportKey) {
+  if (!order || !scan || !order.buyerEmail || !reportKey) return;
+  const claimed = await claimOrderEmailSend(env, order.providerOrderId);
+  if (!claimed) return;
+  const reportUrl = `https://snapforgelab.com/report/?id=${encodeURIComponent(scan.id)}#key=${encodeURIComponent(reportKey)}`;
+  try {
+    await sendReportEmail(
+      env,
+      {
+        to: order.buyerEmail,
+        targetUrl: scan.targetUrl,
+        score: scan.score,
+        grade: scan.grade,
+        findingsCount: scan.findingsCount,
+        reportUrl,
+      },
+      (env && env.__TEST_FETCH) || fetch
+    );
+  } catch {}
+}
+
+function scheduleBackground(ctx, promise) {
+  if (ctx && typeof ctx.waitUntil === "function") {
+    ctx.waitUntil(promise);
+    return null;
+  }
+  return promise;
+}
+
+async function handleApiScan(request, env) {
+  const cors = apiCors(request);
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-  if (request.method !== "POST") return Response.json({ error: "Use POST with {url, ownershipConfirmed: true}." }, { status: 405, headers: { ...cors, Allow: "POST, OPTIONS" } });
+  if (request.method !== "POST")
+    return Response.json({ error: "Use POST with {url, ownershipConfirmed: true}." }, { status: 405, headers: { ...cors, Allow: "POST, OPTIONS" } });
   let body;
   try {
     body = await request.json();
@@ -348,29 +418,326 @@ async function handleDeepScan(request, env) {
   if (!(await underDeepRateLimit(env, ip)))
     return Response.json({ error: `Rate limit reached (${DEEP_RATE_LIMIT} deep scans per hour). Please try again later.` }, { status: 429, headers: cors });
   try {
-    const report = await deepScan(body.url);
-    return Response.json(report, { headers: cors });
+    const fullReport = await fullScan(body.url, { fetchImpl: env && env.__TEST_FETCH });
+    const scanId = "scn_" + randomHex(12);
+    const preview = buildPreviewReport(scanId, fullReport, getPricing(env));
+    const ipHash = ip ? (await sha256Hex("ip:" + ip)).slice(0, 16) : null;
+    await saveScan(env, {
+      id: scanId,
+      targetUrl: fullReport.url,
+      stack: fullReport.stack,
+      reachable: fullReport.reachable,
+      httpStatus: fullReport.http_status,
+      score: fullReport.score,
+      grade: fullReport.grade,
+      findingsCount: fullReport.findings_count,
+      preview,
+      fullReport,
+      ipHash,
+      createdAt: Date.now(),
+    });
+    return Response.json(preview, { headers: cors });
   } catch (e) {
-    const msg = e instanceof GuardError ? e.message : "Could not run the deep scan on that URL.";
+    const msg = e instanceof GuardError ? e.message : "Could not run the scan on that URL.";
+    return Response.json({ error: msg }, { status: 400, headers: cors });
+  }
+}
+
+async function handleGetScanPreview(request, env, scanId) {
+  const cors = apiCors(request);
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "GET") return Response.json({ error: "Method not allowed." }, { status: 405, headers: cors });
+  const scan = await getScan(env, scanId);
+  if (!scan) return Response.json({ error: "Scan not found or expired." }, { status: 404, headers: cors });
+  return Response.json(scan.preview, { headers: cors });
+}
+
+async function handleCreateCheckout(request, env) {
+  const cors = apiCors(request);
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "POST") return Response.json({ error: "Method not allowed." }, { status: 405, headers: cors });
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid JSON body." }, { status: 400, headers: cors });
+  }
+  const scanId = typeof body?.scanId === "string" ? body.scanId.trim() : "";
+  const rawEmail = typeof body?.email === "string" ? body.email.trim() : "";
+  if (!/^scn_[a-f0-9]{16,32}$/.test(scanId)) {
+    return Response.json({ error: "Valid scanId required." }, { status: 400, headers: cors });
+  }
+  if (rawEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(rawEmail)) {
+    return Response.json({ error: "Enter a valid email address or leave it blank to use your PayPal email." }, { status: 400, headers: cors });
+  }
+  const scan = await getScan(env, scanId);
+  if (!scan) return Response.json({ error: "Scan not found or expired. Please run a fresh scan first." }, { status: 404, headers: cors });
+  if (!scan.findingsCount) {
+    return Response.json({ error: "No issues were found on this scan—nothing to unlock." }, { status: 400, headers: cors });
+  }
+  try {
+    const siteBase = allowedSiteBase(request.headers.get("origin") || "", env);
+    const pp = await createPayPalOrder(
+      env,
+      { scanId, targetUrl: scan.targetUrl, siteBase },
+      (env && env.__TEST_FETCH) || fetch
+    );
+    const tokenSalt = randomHex(16);
+    const reportKey = await deriveReportKey(env, scanId, pp.providerOrderId, tokenSalt);
+    const reportTokenHash = await sha256Hex(reportKey);
+    await createOrder(env, {
+      id: "ord_" + randomHex(10),
+      scanId,
+      provider: "paypal",
+      providerOrderId: pp.providerOrderId,
+      amountCents: pp.pricing.amountCents,
+      currency: pp.pricing.currency,
+      buyerEmail: rawEmail || null,
+      tokenSalt,
+      reportTokenHash,
+      createdAt: Date.now(),
+    });
+    return Response.json(
+      {
+        orderId: pp.providerOrderId,
+        approveUrl: pp.approveUrl,
+        displayPrice: pp.pricing.displayPrice,
+      },
+      { headers: cors }
+    );
+  } catch (e) {
+    return Response.json({ error: e.message || "Could not initialize PayPal checkout." }, { status: 502, headers: cors });
+  }
+}
+
+async function handleCaptureCheckout(request, env, ctx) {
+  const cors = apiCors(request);
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "POST") return Response.json({ error: "Method not allowed." }, { status: 405, headers: cors });
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid JSON body." }, { status: 400, headers: cors });
+  }
+  const orderId = typeof body?.orderId === "string" ? body.orderId.trim() : "";
+  const scanId = typeof body?.scanId === "string" ? body.scanId.trim() : "";
+  if (!orderId) return Response.json({ error: "PayPal orderId required." }, { status: 400, headers: cors });
+
+  const order = await getOrderByProviderId(env, orderId);
+  if (!order || (scanId && order.scanId !== scanId)) {
+    return Response.json({ error: "Order not found." }, { status: 404, headers: cors });
+  }
+  if (order.status === "paid" && order.browserClaimedAt) {
+    return Response.json(
+      {
+        error: "This report has already been unlocked. Open the private link sent to your email or saved in your browser.",
+        alreadyClaimed: true,
+        scanId: order.scanId,
+      },
+      { status: 409, headers: cors }
+    );
+  }
+  try {
+    const verified = await captureAndVerifyPayPalOrder(
+      env,
+      orderId,
+      { scanId: order.scanId, amountCents: order.amountCents, currency: order.currency },
+      (env && env.__TEST_FETCH) || fetch
+    );
+    const updatedOrder = await markOrderPaid(env, orderId, {
+      captureId: verified.captureId,
+      buyerEmail: verified.payerEmail,
+      paidAt: Date.now(),
+      claimBrowser: true,
+    });
+    const scan = await getScan(env, order.scanId);
+    if (!scan) return Response.json({ error: "Scan record missing." }, { status: 404, headers: cors });
+    const reportKey = await deriveReportKey(env, order.scanId, orderId, order.tokenSalt);
+    const bg = scheduleBackground(ctx, deliverReportEmailOnce(env, updatedOrder, scan, reportKey));
+    if (bg) await bg;
+    return Response.json(
+      {
+        status: "paid",
+        scanId: scan.id,
+        reportKey,
+        rescansUsed: scan.rescanCount,
+        rescansRemaining: Math.max(0, MAX_RESCANS - scan.rescanCount),
+        report: scan.fullReport,
+      },
+      { headers: cors }
+    );
+  } catch (e) {
+    return Response.json({ error: e.message || "Could not verify payment." }, { status: 400, headers: cors });
+  }
+}
+
+async function handlePayPalWebhook(request, env, ctx) {
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  const rawBody = await request.text();
+  let valid = false;
+  try {
+    valid = await verifyPayPalWebhook(request, rawBody, env, (env && env.__TEST_FETCH) || fetch);
+  } catch {
+    valid = false;
+  }
+  if (!valid) return Response.json({ error: "Invalid webhook signature." }, { status: 401 });
+
+  let event;
+  try {
+    event = JSON.parse(rawBody);
+  } catch {
+    return Response.json({ error: "Invalid JSON." }, { status: 400 });
+  }
+  const eventId = String(event?.id || "");
+  const eventType = String(event?.event_type || "");
+  if (!eventId) return Response.json({ error: "Missing event id." }, { status: 400 });
+
+  const isFirstSeen = await recordWebhookEvent(env, eventId, eventType);
+  if (!isFirstSeen) return Response.json({ ok: true, duplicate: true });
+
+  const fetchImpl = (env && env.__TEST_FETCH) || fetch;
+  try {
+    if (eventType === "CHECKOUT.ORDER.APPROVED") {
+      const providerOrderId = String(event?.resource?.id || "");
+      const order = await getOrderByProviderId(env, providerOrderId);
+      if (order) {
+        const verified = await captureAndVerifyPayPalOrder(
+          env,
+          providerOrderId,
+          { scanId: order.scanId, amountCents: order.amountCents, currency: order.currency },
+          fetchImpl
+        );
+        const updated = await markOrderPaid(env, providerOrderId, {
+          captureId: verified.captureId,
+          buyerEmail: verified.payerEmail,
+          paidAt: Date.now(),
+          claimBrowser: false,
+        });
+        const scan = await getScan(env, order.scanId);
+        if (scan) {
+          const reportKey = await deriveReportKey(env, order.scanId, providerOrderId, order.tokenSalt);
+          const bg = scheduleBackground(ctx, deliverReportEmailOnce(env, updated, scan, reportKey));
+          if (bg) await bg;
+        }
+      }
+    } else if (eventType === "PAYMENT.CAPTURE.COMPLETED") {
+      const resObj = event?.resource || {};
+      const providerOrderId = String(resObj?.supplementary_data?.related_ids?.order_id || "");
+      const order = await getOrderByProviderId(env, providerOrderId);
+      if (order && String(resObj.status || "") === "COMPLETED") {
+        const currency = String(resObj?.amount?.currency_code || "").toUpperCase();
+        const val = Number(resObj?.amount?.value || 0);
+        const cents = Math.round(val * 100);
+        if (currency === order.currency && cents === order.amountCents) {
+          const updated = await markOrderPaid(env, providerOrderId, {
+            captureId: resObj.id || null,
+            buyerEmail: null,
+            paidAt: Date.now(),
+            claimBrowser: false,
+          });
+          const scan = await getScan(env, order.scanId);
+          if (scan) {
+            const reportKey = await deriveReportKey(env, order.scanId, providerOrderId, order.tokenSalt);
+            const bg = scheduleBackground(ctx, deliverReportEmailOnce(env, updated, scan, reportKey));
+            if (bg) await bg;
+          }
+        }
+      }
+    }
+  } catch {
+    return Response.json({ ok: false }, { status: 500 });
+  }
+  return Response.json({ ok: true });
+}
+
+async function handleGetFullReport(request, env, scanId) {
+  const cors = apiCors(request);
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "GET") return Response.json({ error: "Method not allowed." }, { status: 405, headers: cors });
+  const key = bearerToken(request);
+  if (!key) return Response.json({ error: "Report access key required." }, { status: 401, headers: cors });
+  const tokenHash = await sha256Hex(key);
+  const paidOrder = await getPaidOrderByTokenHash(env, scanId, tokenHash);
+  if (!paidOrder) return Response.json({ error: "Invalid or unpaid report link." }, { status: 401, headers: cors });
+  const scan = await getScan(env, scanId);
+  if (!scan) return Response.json({ error: "Scan report not found or expired." }, { status: 404, headers: cors });
+  return Response.json(
+    {
+      scanId: scan.id,
+      paidAt: paidOrder.paidAt,
+      rescansUsed: scan.rescanCount,
+      rescansRemaining: Math.max(0, MAX_RESCANS - scan.rescanCount),
+      report: scan.fullReport,
+    },
+    { headers: cors }
+  );
+}
+
+async function handleRescanPaidReport(request, env, scanId) {
+  const cors = apiCors(request);
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "POST") return Response.json({ error: "Method not allowed." }, { status: 405, headers: cors });
+  const key = bearerToken(request);
+  if (!key) return Response.json({ error: "Report access key required." }, { status: 401, headers: cors });
+  const tokenHash = await sha256Hex(key);
+  const paidOrder = await getPaidOrderByTokenHash(env, scanId, tokenHash);
+  if (!paidOrder) return Response.json({ error: "Invalid or unpaid report link." }, { status: 401, headers: cors });
+  const scan = await getScan(env, scanId);
+  if (!scan) return Response.json({ error: "Scan report not found or expired." }, { status: 404, headers: cors });
+  if (scan.rescanCount >= MAX_RESCANS) {
+    return Response.json({ error: `All ${MAX_RESCANS} included verification re-scans have been used for this report.` }, { status: 429, headers: cors });
+  }
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  if (!(await underDeepRateLimit(env, ip))) {
+    return Response.json({ error: "Hourly scan limit reached. Please wait a few minutes before re-scanning." }, { status: 429, headers: cors });
+  }
+  try {
+    const freshReport = await fullScan(scan.targetUrl, { fetchImpl: env && env.__TEST_FETCH });
+    const freshPreview = buildPreviewReport(scan.id, freshReport, getPricing(env));
+    await updateScanAfterRescan(env, scan.id, freshReport, freshPreview);
+    const nextUsed = scan.rescanCount + 1;
+    return Response.json(
+      {
+        scanId: scan.id,
+        rescansUsed: nextUsed,
+        rescansRemaining: Math.max(0, MAX_RESCANS - nextUsed),
+        report: freshReport,
+      },
+      { headers: cors }
+    );
+  } catch (e) {
+    const msg = e instanceof GuardError ? e.message : "Could not re-scan that URL right now.";
     return Response.json({ error: msg }, { status: 400, headers: cors });
   }
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env = {}, ctx) {
     const url = new URL(request.url);
+    const path = url.pathname;
 
-    if (url.pathname === DEEP_PATH) return handleDeepScan(request, env);
+    // Self-serve scan, checkout, webhook & private report endpoints
+    if (path === DEEP_PATH || path === API_SCAN_PATH) return handleApiScan(request, env);
+    const scanMatch = path.match(/^\/api\/scan\/(scn_[a-f0-9]{16,32})$/);
+    if (scanMatch) return handleGetScanPreview(request, env, scanMatch[1]);
+    if (path === "/api/checkout/create") return handleCreateCheckout(request, env);
+    if (path === "/api/checkout/capture") return handleCaptureCheckout(request, env, ctx);
+    if (path === "/api/webhooks/paypal") return handlePayPalWebhook(request, env, ctx);
+    const rescanMatch = path.match(/^\/api\/report\/(scn_[a-f0-9]{16,32})\/rescan$/);
+    if (rescanMatch) return handleRescanPaidReport(request, env, rescanMatch[1]);
+    const reportMatch = path.match(/^\/api\/report\/(scn_[a-f0-9]{16,32})$/);
+    if (reportMatch) return handleGetFullReport(request, env, reportMatch[1]);
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
-    if (request.method === "GET" && url.pathname === "/")
+    if (request.method === "GET" && path === "/")
       return new Response("Snapforge Ship-Ready Check MCP server", { status: 200, headers: { "content-type": "text/plain; charset=utf-8", ...CORS } });
 
-    if (request.method === "GET" && url.pathname === "/.well-known/openai-apps-challenge")
+    if (request.method === "GET" && path === "/.well-known/openai-apps-challenge")
       return new Response(env.OPENAI_APPS_CHALLENGE || "", { status: 200, headers: { "content-type": "text/plain; charset=utf-8" } });
 
-    if (url.pathname === MCP_PATH) {
+    if (path === MCP_PATH) {
       if (request.method === "GET") {
         // No server-initiated streaming in this stateless build. Status stays 405 so MCP
         // clients behave; humans who open the URL in a browser get a short explanation.

@@ -20,6 +20,7 @@
 - [Hire a Replit developer](https://snapforgelab.com/hire-replit-developer/)
 
 ## Free tools
+- [App Security Scanner](https://snapforgelab.com/scan/) & [Deep Security Scan](https://snapforgelab.com/scan-deep/): free 1-click read-only scan of any live Replit, Lovable or Bolt app (secrets in JS bundles, open Supabase RLS tables, public Storage buckets, auth redirects, CORS, headers and SEO) with a score and 2 real findings free; full report, Master Fix Prompt, builder-specific prompts and 3 verification re-scans unlock instantly for $19 via PayPal.
 - [Replit Readiness Score](https://snapforgelab.com/tools/replit-readiness-score/): 2-minute self-assessment that scores whether a Replit app is ready for real users.
 
 ## Guides

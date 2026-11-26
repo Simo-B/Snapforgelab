@@ -1,22 +1,39 @@
-# Snapforge Ship-Ready Check — MCP Worker. FREE plan only, no paid features.
-# This folder is self-contained; it does not touch the static site build in /public.
+# Snapforge Ship-Ready Check & Self-Serve Scanner — Cloudflare Worker (FREE plan)
+# Serves both the public MCP server (/mcp) and the self-serve scan + PayPal checkout API (/api/*).
 name = "snapforgelab"
 main = "worker.js"
 compatibility_date = "2026-09-01"
 workers_dev = false
 
-# Per-IP rate limit store (KV free tier). Create the namespace, then paste its id:
-#   npx wrangler kv namespace create RATE_KV
-# and put the returned id below.
+# Per-IP rate limit store (KV free tier) + automatic fallback if D1 is not bound yet.
 [[kv_namespaces]]
 binding = "RATE_KV"
 id = "5628c3b6df13458399fd5eb23a2e7588"
 
-# OPENAI_APPS_CHALLENGE is set from the dashboard or the CLI, not committed here
-# (see README.md). The /.well-known/openai-apps-challenge route returns its value
-# as plain text.
+# Cloudflare D1 database (SQLite free tier) for scans, PayPal orders & webhook idempotency.
+# Setup once:
+#   npx wrangler d1 create snapforge-selfserve
+#   paste the returned database_id below and uncomment the [[d1_databases]] block, then run:
+#   npx wrangler d1 execute snapforge-selfserve --remote --file=./migrations/0001_selfserve.sql
+# (Tables are also auto-created idempotently on first query once DB is bound.)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "snapforge-selfserve"
+# database_id = "PASTE_YOUR_D1_DATABASE_ID_HERE"
 
-# The custom domain mcp.snapforgelab.com is attached from the dashboard
-# (Workers & Pages -> this Worker -> Settings -> Domains & Routes -> Add Custom Domain),
-# or by uncommenting the line below once the snapforgelab.com zone is on this account:
+[vars]
+PAYPAL_ENV = "live"
+REPORT_PRICE_CENTS = "1900"
+REPORT_CURRENCY = "USD"
+RESEND_FROM = "Simo — Snapforge Lab <hello@snapforgelab.com>"
+
+# Set secrets via `npx wrangler secret put <NAME>` (never commit secret values):
+#   OPENAI_APPS_CHALLENGE
+#   PAYPAL_CLIENT_ID
+#   PAYPAL_CLIENT_SECRET
+#   PAYPAL_WEBHOOK_ID
+#   REPORT_SECRET
+#   RESEND_API_KEY
+
+# Custom domain attached from Cloudflare Dashboard (Workers & Pages -> snapforgelab -> Domains & Routes):
 # routes = [ { pattern = "mcp.snapforgelab.com", custom_domain = true } ]

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Security Report &amp; Fix Prompts | Snapforge Lab</title>
+<meta name="description" content="Private security scan report and tailored builder fix prompts by Snapforge Lab.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/styles.css?v=22">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+    <nav class="nav-links" aria-label="Primary"><a href="/launch-fix-sprint/">Launch Fix Sprint</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/scan/">Free scan</a></nav>
+    <a href="/launch-fix-sprint/" class="btn p sm">Launch Fix Sprint</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap narrow">
+  <nav class="crumbs no-print" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/scan/">App Scanner</a> / Private Report</nav>
+
+  <section id="loading-state" class="article" style="padding-bottom:64px" aria-live="polite">
+    <div class="kicker" id="load-kicker">Unlocking your report</div>
+    <h1 id="load-title" style="font-size:clamp(28px,4vw,42px)">Confirming your payment…</h1>
+    <p class="lede" id="load-msg">This takes about 2 seconds. Please keep this tab open.</p>
+    <p id="load-actions" hidden><a href="/scan/" class="btn g">Back to scanner</a></p>
+  </section>
+
+  <article id="report-view" class="article" hidden style="padding-top:32px">
+    <div class="report-bar no-print">
+      <div>
+        <div style="font-size:12.5px;color:var(--ok);font-weight:600;text-transform:uppercase;letter-spacing:.05em">✓ Private unlocked report</div>
+        <div style="font-size:14px;color:var(--dim);margin-top:2px" id="report-host"></div>
+      </div>
+      <div class="report-bar-actions">
+        <button type="button" class="btn g sm" id="copy-link-btn">Copy private link</button>
+        <button type="button" class="btn g sm" id="print-btn">Print / Save PDF</button>
+        <button type="button" class="btn p sm" id="paid-rescan-btn">Re-scan app (<span id="rescans-left">3</span> left)</button>
+      </div>
+    </div>
+    <p class="form-msg no-print" id="rescan-msg" role="status" aria-live="polite" style="margin:0 0 14px"></p>
+
+    <h1 id="report-h1" style="font-size:clamp(30px,4.5vw,44px);margin-bottom:20px">Security &amp; Launch Report</h1>
+
+    <div class="score-card" style="margin-bottom:24px">
+      <div class="gauge" id="gauge"><span id="score">0</span><small>/100</small></div>
+      <div>
+        <p class="grade" id="grade"></p>
+        <p class="verdict" id="verdict"></p>
+        <div class="sev-pills" id="sev-pills" hidden></div>
+      </div>
+    </div>
+
+    <div id="clean-banner" class="contact-box" hidden style="margin-bottom:24px">
+      <h2 style="font-size:clamp(20px,3vw,26px)">Grade A — zero automated issues remaining!</h2>
+      <p>Your fixes worked. You can embed the Ship-Ready badge in your footer:</p>
+      <pre class="prompt-pre" id="badge-code"></pre>
+      <p style="margin:12px 0 0"><img src="/assets/ship-ready-badge.svg" alt="Ship-Ready checked by Snapforge Lab" width="190" height="40"></p>
+    </div>
+
+    <div class="builder-bar no-print" id="builder-bar">
+      <label for="builder-select" style="font-size:14.5px;color:var(--dim);font-weight:550">Tailor all fix prompts for:
+        <select id="builder-select" class="builder-select" style="margin-left:8px">
+          <option value="lovable">Lovable</option>
+          <option value="bolt">Bolt</option>
+          <option value="replit">Replit Agent</option>
+        </select>
+      </label>
+      <span style="font-size:13.5px;color:var(--mute)" id="progress-counter"></span>
+    </div>
+
+    <section id="master-section" class="master-box" style="margin:16px 0 32px">
+      <div class="prompt-head">
+        <div>
+          <div class="kicker" style="margin:0 0 4px">1-Click Fix Everything</div>
+          <h2 style="font-size:21px;margin:0" id="master-title">Master Fix Prompt</h2>
+        </div>
+        <button type="button" class="btn p sm no-print" id="copy-master-btn">Copy Master Prompt</button>
+      </div>
+      <p style="margin:0;font-size:14px;color:var(--dim)">Paste this single ordered prompt into your AI builder to fix every issue below in sequence without breaking existing features.</p>
+      <pre class="prompt-pre" id="master-prompt-text"></pre>
+    </section>
+
+    <section id="findings-section">
+      <h2 class="gaps-title" id="findings-title" style="margin-bottom:14px">Step-by-step findings &amp; prompts</h2>
+      <ol class="preview-list" id="findings-list"></ol>
+    </section>
+
+    <div style="margin-top:36px">
+      <h2 class="gaps-title" style="font-size:19px">What was checked</h2>
+      <ul class="gaps" id="checked-list" style="margin-top:10px"></ul>
+      <p style="font-size:13.5px;color:var(--mute);margin-top:12px" id="disclaimer-text"></p>
+    </div>
+
+    <aside class="cta-box no-print" style="margin-top:36px">
+      <div>
+        <p class="cta-kicker">Done-for-you · 5 business days · paid after verification</p>
+        <p class="cta-title">Want me to fix all of this + check your backend &amp; webhooks?</p>
+        <p class="cta-text">If you don't want to touch Row Level Security SQL, server secrets or payment webhooks yourself, book the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint ($990 flat)</a>. I fix everything in 5 business days, retest it in production, and you pay only once the fixes are verified working. Just one blocker? <a class="link" href="/deploy-fix/">$49 Deploy Fix</a>.</p>
+      </div>
+      <a href="/launch-fix-sprint/" class="btn p">See the Launch Fix Sprint</a>
+    </aside>
+  </article>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
+        <p style="margin:0;max-width:40ch">Independent Replit specialist. Security audits and fixes for AI-built apps, and fixed-price business apps.</p></div>
+      <div><p class="foot-h">Services</p><ul><li><a href="/free-audit">Free security audit</a></li><li><a href="/launch-fix-sprint/">Launch Fix Sprint</a></li><li><a href="/safe-to-launch/">Safe to Launch</a></li><li><a href="/lovable-bolt-audit">Lovable &amp; Bolt audit</a></li><li><a href="/replit-app-to-production/">Replit app security</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/scan/">Free app scanner</a></li><li><a href="/scan-deep/">Deep security scan</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
+    </div>
+    <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const API_BASE = window.__SF_API_BASE || 'https://mcp.snapforgelab.com';
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const builderNames = { lovable: 'Lovable', bolt: 'Bolt', replit: 'Replit Agent' };
+  const CHECK_LABELS = {
+    surface: { done: 'Surface & HTTP headers: checked HTTPS, security headers, cookies, CORS, robots.txt and sitemap.xml.' },
+    secrets: { done: 'JavaScript bundles: scanned same-origin scripts and chunks for secret keys and source maps.', no_scripts_found: 'JavaScript bundles: no external same-origin scripts were found.' },
+    supabase_rls: { done: 'Supabase Row Level Security: tested discovered tables read-only with your public key.', no_supabase_found: 'Supabase Row Level Security: no Supabase project detected.', no_public_key_found: 'Supabase Row Level Security: public key not in scanned bundles.', no_tables_found: 'Supabase Row Level Security: no public table list exposed.' },
+    auth_redirect: { done: 'Auth redirects: checked production code for preview and localhost callback URLs.' },
+    storage_buckets: { done: 'Storage buckets: checked discovered buckets for anonymous file listing.', no_supabase_found: 'Storage buckets: no Supabase project detected.', no_public_key_found: 'Storage buckets: public key not found.', no_buckets_found: 'Storage buckets: no buckets referenced in scanned bundles.' },
+  };
+
+  let scanId = '';
+  let reportKey = '';
+  let fullReport = null;
+  let rescansRemaining = 0;
+
+  function parseHashKey() {
+    const h = (location.hash || '').replace(/^#/, '');
+    if (!h) return '';
+    const hp = new URLSearchParams(h);
+    return hp.get('key') || '';
+  }
+
+  function loadCheckedSet() {
+    try { return new Set(JSON.parse(localStorage.getItem('sf_done_' + scanId) || '[]')); } catch (_) { return new Set(); }
+  }
+  function saveCheckedSet(set) {
+    try { localStorage.setItem('sf_done_' + scanId, JSON.stringify(Array.from(set))); } catch (_) {}
+  }
+
+  function sevBadge(sev) {
+    const s = String(sev || 'medium').toLowerCase();
+    const label = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low' }[s] || s;
+    return '<span class="sev ' + esc(s) + '">' + esc(label) + '</span>';
+  }
+
+  function flashCopied(btn, originalText) {
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.textContent = originalText; }, 1800);
+  }
+
+  async function copyText(text, btn, label) {
+    try {
+      await navigator.clipboard.writeText(text);
+      flashCopied(btn, label);
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); flashCopied(btn, label); } catch (e) {}
+      ta.remove();
+    }
+  }
+
+  function updateProgressCounter() {
+    const f = (fullReport && fullReport.findings) || [];
+    if (!f.length) { $('progress-counter').textContent = ''; return; }
+    const done = loadCheckedSet();
+    const count = f.filter((item, idx) => done.has(item.id + ':' + idx)).length;
+    $('progress-counter').textContent = count + ' of ' + f.length + ' marked fixed';
+  }
+
+  function renderPromptsForBuilder() {
+    if (!fullReport) return;
+    const b = $('builder-select').value;
+    const f = fullReport.findings || [];
+    const done = loadCheckedSet();
+
+    $('master-title').textContent = 'Master Fix Prompt for ' + (builderNames[b] || 'your builder');
+    const mp = (fullReport.master_prompts && fullReport.master_prompts[b]) || '';
+    $('master-prompt-text').textContent = mp;
+    $('master-section').hidden = !f.length;
+    $('builder-bar').hidden = !f.length;
+    $('findings-section').hidden = !f.length;
+
+    $('findings-list').innerHTML = f.map((item, idx) => {
+      const itemKey = item.id + ':' + idx;
+      const isDone = done.has(itemKey);
+      const promptText = (item.fix_prompts && item.fix_prompts[b]) || item.fix_prompt || '';
+      return (
+        '<li class="issue-card' + (isDone ? ' done-item' : '') + '" data-item-key="' + esc(itemKey) + '">' +
+          '<div class="issue-top">' +
+            '<div class="issue-badges">' + sevBadge(item.severity) +
+              (item.category ? '<span class="cat-tag">' + esc(item.category) + '</span>' : '') +
+            '</div>' +
+            '<label class="check-toggle no-print"><input type="checkbox" data-done-toggle="' + esc(itemKey) + '"' + (isDone ? ' checked' : '') + '> Mark fixed</label>' +
+          '</div>' +
+          '<h3>' + (idx + 1) + '. ' + esc(item.title) + '</h3>' +
+          '<p class="issue-detail">' + esc(item.detail) + '</p>' +
+          (item.why_it_matters ? '<p class="issue-why"><strong>Why it matters:</strong> ' + esc(item.why_it_matters) + '</p>' : '') +
+          '<div class="prompt-head" style="margin-top:4px"><strong style="font-size:13.5px;color:var(--fg)">Paste into ' + esc(builderNames[b]) + ':</strong>' +
+            '<button type="button" class="btn g sm no-print" data-copy-idx="' + idx + '">Copy prompt</button>' +
+          '</div>' +
+          '<pre class="prompt-pre">' + esc(promptText) + '</pre>' +
+          (item.verify_step ? '<p class="verify-line"><strong>Verify it worked:</strong> ' + esc(item.verify_step) + '</p>' : '') +
+        '</li>'
+      );
+    }).join('');
+
+    updateProgressCounter();
+  }
+
+  function renderFullReport(data) {
+    fullReport = data.report;
+    rescansRemaining = Number(data.rescansRemaining ?? 0);
+
+    let host = fullReport.url || '';
+    try { host = new URL(fullReport.url).hostname; } catch (_) {}
+
+    $('report-h1').textContent = 'Security & Launch Report: ' + host;
+    $('report-host').textContent = fullReport.url;
+    $('rescans-left').textContent = String(rescansRemaining);
+    $('paid-rescan-btn').disabled = rescansRemaining <= 0;
+
+    const score = fullReport.score == null ? 0 : fullReport.score;
+    const gauge = $('gauge');
+    gauge.style.setProperty('--p', score);
+    gauge.dataset.level = score >= 85 ? 'ok' : score >= 60 ? 'mid' : 'low';
+    $('score').textContent = fullReport.score == null ? '–' : score;
+
+    const stLabel = { lovable: 'Lovable', bolt: 'Bolt', replit: 'Replit' }[fullReport.stack] || null;
+    $('grade').textContent = (fullReport.grade ? 'Grade ' + fullReport.grade : 'No grade') + (stLabel ? ' · ' + stLabel + ' app' : '');
+    $('verdict').textContent = fullReport.summary || '';
+
+    const sc = fullReport.severity_counts || {};
+    const pills = [];
+    if (sc.critical) pills.push('<span class="sev-pill">' + sc.critical + ' critical</span>');
+    if (sc.high) pills.push('<span class="sev-pill">' + sc.high + ' high</span>');
+    if (sc.medium) pills.push('<span class="sev-pill">' + sc.medium + ' medium</span>');
+    if (sc.low) pills.push('<span class="sev-pill">' + sc.low + ' low</span>');
+    $('sev-pills').innerHTML = pills.join('');
+    $('sev-pills').hidden = !pills.length;
+
+    if (['lovable', 'bolt', 'replit'].includes(fullReport.stack) && !renderFullReport._initializedBuilder) {
+      $('builder-select').value = fullReport.stack;
+      renderFullReport._initializedBuilder = true;
+    }
+
+    const isClean = (fullReport.findings || []).length === 0 && fullReport.reachable !== false && !(fullReport.http_status >= 400);
+    $('clean-banner').hidden = !isClean;
+    if (isClean) {
+      $('badge-code').textContent = '<a href="https://snapforgelab.com/scan/"><img src="https://snapforgelab.com/assets/ship-ready-badge.svg" alt="Ship-Ready checked by Snapforge Lab" width="190" height="40"></a>';
+    }
+
+    renderPromptsForBuilder();
+
+    const c = fullReport.checks || {};
+    $('checked-list').innerHTML = Object.keys(CHECK_LABELS)
+      .map((k) => (c[k] && CHECK_LABELS[k][c[k]] ? '<li>' + esc(CHECK_LABELS[k][c[k]]) + '</li>' : ''))
+      .join('');
+    $('disclaimer-text').textContent = fullReport.disclaimer || '';
+
+    $('loading-state').hidden = true;
+    $('report-view').hidden = false;
+  }
+
+  function showError(title, message) {
+    $('load-kicker').textContent = 'Could not open report';
+    $('load-title').textContent = title;
+    $('load-msg').innerHTML = esc(message) + ' Need help? Email <a class="link" href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a>.';
+    $('load-actions').hidden = false;
+    $('loading-state').hidden = false;
+    $('report-view').hidden = true;
+  }
+
+  $('builder-select').addEventListener('change', renderPromptsForBuilder);
+
+  $('copy-master-btn').addEventListener('click', () => {
+    copyText($('master-prompt-text').textContent, $('copy-master-btn'), 'Copy Master Prompt');
+  });
+
+  $('findings-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-copy-idx]');
+    if (!btn || !fullReport) return;
+    const idx = Number(btn.dataset.copyIdx);
+    const b = $('builder-select').value;
+    const item = (fullReport.findings || [])[idx];
+    if (!item) return;
+    const txt = (item.fix_prompts && item.fix_prompts[b]) || item.fix_prompt || '';
+    copyText(txt, btn, 'Copy prompt');
+  });
+
+  $('findings-list').addEventListener('change', (e) => {
+    const cb = e.target.closest('[data-done-toggle]');
+    if (!cb) return;
+    const key = cb.dataset.doneToggle;
+    const set = loadCheckedSet();
+    if (cb.checked) set.add(key); else set.delete(key);
+    saveCheckedSet(set);
+    const card = cb.closest('.issue-card');
+    if (card) card.classList.toggle('done-item', cb.checked);
+    updateProgressCounter();
+  });
+
+  $('copy-link-btn').addEventListener('click', () => {
+    const privateUrl = location.origin + '/report/?id=' + encodeURIComponent(scanId) + '#key=' + encodeURIComponent(reportKey);
+    copyText(privateUrl, $('copy-link-btn'), 'Copy private link');
+  });
+
+  $('print-btn').addEventListener('click', () => window.print());
+
+  $('paid-rescan-btn').addEventListener('click', async () => {
+    if (!scanId || !reportKey || rescansRemaining <= 0) return;
+    const btn = $('paid-rescan-btn');
+    const msg = $('rescan-msg');
+    btn.disabled = true;
+    msg.className = 'form-msg';
+    msg.textContent = 'Re-scanning your live app to verify fixes (about 15–25 seconds)…';
+    try {
+      const res = await fetch(API_BASE + '/api/report/' + encodeURIComponent(scanId) + '/rescan', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + reportKey },
+        body: '{}',
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok || !j.report) throw new Error(j.error || 'Re-scan failed.');
+      renderFullReport(j);
+      msg.className = 'form-msg ok';
+      msg.textContent = 'Re-scan complete — ' + j.rescansRemaining + ' free verification re-scan' + (j.rescansRemaining === 1 ? '' : 's') + ' remaining.';
+    } catch (err) {
+      msg.className = 'form-msg err';
+      msg.textContent = err.message || 'Could not re-scan right now.';
+      btn.disabled = rescansRemaining <= 0;
+    }
+  });
+
+  // Boot: either capture PayPal redirect (?scan=...&token=PP_ORDER_ID) or load saved private link (?id=...#key=...)
+  (async () => {
+    const q = new URLSearchParams(location.search);
+    const ppScan = q.get('scan') || '';
+    const ppOrderId = q.get('token') || '';
+    const directId = q.get('id') || ppScan;
+    const hashKey = parseHashKey() || q.get('key') || '';
+
+    if (ppOrderId && ppScan) {
+      scanId = ppScan;
+      try {
+        const res = await fetch(API_BASE + '/api/checkout/capture', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ scanId: ppScan, orderId: ppOrderId }),
+        });
+        const j = await res.json().catch(() => ({}));
+        if (res.status === 409 && j.alreadyClaimed) {
+          let stored = '';
+          try { stored = localStorage.getItem('sf_rk_' + ppScan) || ''; } catch (_) {}
+          if (stored) {
+            reportKey = stored;
+            if (history.replaceState) history.replaceState(null, '', '/report/?id=' + encodeURIComponent(ppScan) + '#key=' + encodeURIComponent(stored));
+            const r2 = await fetch(API_BASE + '/api/report/' + encodeURIComponent(ppScan), { headers: { authorization: 'Bearer ' + stored } });
+            const j2 = await r2.json().catch(() => ({}));
+            if (r2.ok && j2.report) { renderFullReport(j2); return; }
+          }
+        }
+        if (!res.ok || !j.reportKey || !j.report) {
+          throw new Error(j.error || 'Payment could not be verified yet.');
+        }
+        reportKey = j.reportKey;
+        try { localStorage.setItem('sf_rk_' + scanId, reportKey); } catch (_) {}
+        if (history.replaceState) {
+          history.replaceState(null, '', '/report/?id=' + encodeURIComponent(scanId) + '#key=' + encodeURIComponent(reportKey));
+        }
+        if (window.posthog && typeof window.posthog.capture === 'function') {
+          try { window.posthog.capture('report_unlocked', { scan_id: scanId }); } catch (_) {}
+        }
+        renderFullReport(j);
+        return;
+      } catch (err) {
+        showError('Could not confirm payment', err.message || 'Please check the private report link emailed to you.');
+        return;
+      }
+    }
+
+    if (directId) {
+      scanId = directId;
+      reportKey = hashKey;
+      if (!reportKey) {
+        try { reportKey = localStorage.getItem('sf_rk_' + scanId) || ''; } catch (_) {}
+      }
+      if (!reportKey) {
+        showError('Private access key missing', 'Open the full link sent to your email after checkout (including the #key=… part at the end).');
+        return;
+      }
+      $('load-kicker').textContent = 'Loading report';
+      $('load-title').textContent = 'Opening your security report…';
+      try {
+        const res = await fetch(API_BASE + '/api/report/' + encodeURIComponent(scanId), {
+          headers: { authorization: 'Bearer ' + reportKey },
+        });
+        const j = await res.json().catch(() => ({}));
+        if (!res.ok || !j.report) throw new Error(j.error || 'Invalid or expired report link.');
+        try { localStorage.setItem('sf_rk_' + scanId, reportKey); } catch (_) {}
+        if (q.get('key') && history.replaceState) {
+          history.replaceState(null, '', '/report/?id=' + encodeURIComponent(scanId) + '#key=' + encodeURIComponent(reportKey));
+        }
+        renderFullReport(j);
+      } catch (err) {
+        showError('Could not load report', err.message || 'Invalid or expired report link.');
+      }
+      return;
+    }
+
+    showError('No report specified', 'Run a free scan first to check your live app.');
+  })();
+})();
+</script>
+<script src="/assets/main.js?v=22" defer></script>
+</body>
+</html>

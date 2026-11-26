@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Free AI App Security Scanner for Replit, Lovable and Bolt</title>
-<meta name="description" content="Paste your live app URL for a free 30-second security and launch grade: headers, open CORS, dev banners, SEO, robots and sitemap. For Replit, Lovable and Bolt.">
+<meta name="description" content="Paste your live app URL for a free 30-second security scan: leaked JS keys, open Supabase RLS tables, CORS, headers &amp; SEO. Instant fix prompts for $19.">
 <link rel="canonical" href="https://snapforgelab.com/scan/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#050506">
@@ -14,17 +14,17 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Snapforge Lab">
 <meta property="og:url" content="https://snapforgelab.com/scan/">
-<meta property="og:title" content="Is your AI-built app leaking? Free 30-second scan">
-<meta property="og:description" content="Paste your Replit, Lovable or Bolt app URL. Get a grade and the exact fixes. Free.">
+<meta property="og:title" content="Is your AI-built app leaking keys or data? Free 1-click scan">
+<meta property="og:description" content="Scan your live Replit, Lovable or Bolt app in 30 seconds. See real issues free, unlock the full report and paste-ready fix prompts for $19.">
 <meta property="og:image" content="https://snapforgelab.com/og.png?v=3">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Is your AI-built app leaking? Free 30-second scan">
-<meta name="twitter:description" content="Paste your Replit, Lovable or Bolt app URL. Get a grade and the exact fixes. Free.">
+<meta name="twitter:title" content="Is your AI-built app leaking keys or data? Free 1-click scan">
+<meta name="twitter:description" content="Scan your live Replit, Lovable or Bolt app in 30 seconds. See real issues free, unlock the full report and paste-ready fix prompts for $19.">
 <meta name="twitter:image" content="https://snapforgelab.com/og.png?v=3">
-<link rel="stylesheet" href="/assets/styles.css?v=21">
+<link rel="stylesheet" href="/assets/styles.css?v=22">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Snapforge App Scanner","url":"https://snapforgelab.com/scan/","applicationCategory":"SecurityApplication","operatingSystem":"Any (web browser)","description":"Free passive, read-only launch and security scan for live apps built with Replit, Lovable or Bolt.","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","@id":"https://snapforgelab.com/#org","name":"Snapforge Lab","url":"https://snapforgelab.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://snapforgelab.com/"},{"@type":"ListItem","position":2,"name":"App Scanner","item":"https://snapforgelab.com/scan/"}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Snapforge App Security Scanner","url":"https://snapforgelab.com/scan/","applicationCategory":"SecurityApplication","operatingSystem":"Any (web browser)","description":"Read-only security and launch scanner for live apps built with Replit, Lovable or Bolt: exposed secrets in JS bundles, open Supabase RLS tables, storage buckets, auth redirects, CORS and security headers.","isAccessibleForFree":true,"offers":[{"@type":"Offer","name":"Free Security Scan & 2-Issue Preview","price":"0","priceCurrency":"USD"},{"@type":"Offer","name":"Full Security Report, Master Fix Prompt & 3 Verification Re-Scans","price":"19.00","priceCurrency":"USD"}],"publisher":{"@type":"Organization","@id":"https://snapforgelab.com/#org","name":"Snapforge Lab","url":"https://snapforgelab.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://snapforgelab.com/"},{"@type":"ListItem","position":2,"name":"App Scanner","item":"https://snapforgelab.com/scan/"}]}]}
 </script>
 </head>
 <body>
@@ -41,83 +41,105 @@
 <div class="wrap narrow">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / App Scanner</nav>
   <div class="article" style="padding-bottom:24px">
-    <div class="kicker">Free tool · 30 seconds · read-only</div>
-    <h1>Is your AI-built app ready for paying customers?</h1>
-    <p class="lede">Paste the public URL of your live Replit, Lovable or Bolt app. Get a launch and security grade, and the exact fixes to paste into your builder.</p>
+    <div class="kicker">Free 1-click scan · about 20 seconds · read-only</div>
+    <h1>Is your AI-built app leaking keys or customer data?</h1>
+    <p class="lede">Paste the public URL of your live Replit, Lovable or Bolt app. We check your JS bundles, Supabase Row Level Security, storage buckets, auth redirects, CORS and headers—and show your grade plus 2 real findings free.</p>
   </div>
 
   <form id="scan" class="lead-form" novalidate style="margin-bottom:8px">
     <label for="scan-url">Your app's public URL
       <input id="scan-url" type="url" name="url" placeholder="https://yourapp.lovable.app" autocomplete="url" required>
     </label>
-    <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px"><input type="checkbox" id="scan-own" required style="width:auto;margin-top:3px"> I own this app or I'm allowed to test it.</label>
-    <button type="submit" class="btn p lg" id="scan-btn">Scan my app <span class="arrow" aria-hidden="true">→</span></button>
+    <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px"><input type="checkbox" id="scan-own" checked required style="width:auto;margin-top:3px"> I own this app or I'm allowed to test it.</label>
+    <button type="submit" class="btn p lg" id="scan-btn">Scan my app free <span class="arrow" aria-hidden="true">→</span></button>
     <p class="form-msg" id="scan-msg" role="status" aria-live="polite"></p>
   </form>
 
-  <section id="result" class="result" hidden aria-live="polite">
+  <div id="scan-progress" class="scan-progress" hidden aria-live="polite">
+    <div class="scan-step active"><span class="dot-s"></span>Checking live HTTPS, security headers, cookies &amp; CORS…</div>
+    <div class="scan-step"><span class="dot-s"></span>Scanning production JavaScript bundles for leaked keys &amp; source maps…</div>
+    <div class="scan-step"><span class="dot-s"></span>Testing Supabase Row Level Security &amp; public Storage buckets…</div>
+    <div class="scan-step"><span class="dot-s"></span>Scoring your app &amp; preparing tailored fix prompts…</div>
+  </div>
+
+  <section id="result" class="result" hidden aria-live="polite" style="margin-top:24px">
+    <div id="already-unlocked" class="paid-note" hidden style="margin:0"></div>
+
     <div class="score-card">
       <div class="gauge" id="gauge"><span id="score">0</span><small>/100</small></div>
       <div>
         <p class="grade" id="grade"></p>
         <p class="verdict" id="verdict"></p>
+        <div class="sev-pills" id="sev-pills" hidden></div>
       </div>
     </div>
-    <h2 class="gaps-title">What we found</h2>
-    <ol class="gaps" id="gaps"></ol>
 
-    <div class="contact-box center" id="gate" style="margin-top:24px">
-      <h2 style="font-size:clamp(22px,3vw,28px)">Unlock the exact fixes</h2>
-      <p>Get a copy-paste prompt for each issue, ready for Replit Agent, Lovable or Bolt, plus your results by email.</p>
-      <form id="gate-form" class="lead-form" style="margin-top:16px">
-        <label for="gate-email">Email
-          <input id="gate-email" type="email" name="email" placeholder="you@company.com" autocomplete="email" required>
-        </label>
-        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
-        <button type="submit" class="btn p lg">Show my fixes</button>
-        <p class="form-msg" id="gate-msg" role="status" aria-live="polite"></p>
-      </form>
+    <div id="preview-section" hidden>
+      <h2 class="gaps-title" id="preview-heading">What we found</h2>
+      <ol class="preview-list" id="preview-gaps"></ol>
     </div>
 
-    <div id="badge-box" class="contact-box" hidden style="margin-top:24px">
-      <h2 style="font-size:clamp(20px,3vw,26px)">Your app passed. Show it off.</h2>
-      <p>Add the Ship-Ready badge to your footer. It tells customers you checked.</p>
+    <div id="locked-section" hidden>
+      <h2 class="gaps-title" id="locked-heading" style="font-size:20px">+ more issues detected</h2>
+      <ul class="locked-list" id="locked-gaps"></ul>
+    </div>
+
+    <div class="unlock-box" id="unlock-box" hidden>
+      <div class="unlock-head">
+        <h2 id="unlock-title">Unlock all findings &amp; paste-ready fix prompts</h2>
+        <div class="unlock-price"><span id="unlock-price-val">$19</span><small>one-time</small></div>
+      </div>
+      <ul class="unlock-perks">
+        <li id="unlock-host-perk">Every detected issue with exact file paths, open Supabase tables &amp; headers</li>
+        <li><strong>1-click Master Fix Prompt</strong> + individual prompts tailored for <strong>Lovable, Bolt &amp; Replit Agent</strong></li>
+        <li><strong>3 free verification re-scans</strong> included so you can confirm your grade reaches <strong>A</strong></li>
+        <li>Instant unlock on screen right after checkout + permanent private link emailed · <strong>14-day refund guarantee</strong></li>
+      </ul>
+      <form id="unlock-form" class="unlock-form" novalidate>
+        <label for="unlock-email">Email for your permanent report link <span style="color:var(--mute)">(optional — defaults to your PayPal email)</span>
+          <input id="unlock-email" type="email" name="email" placeholder="you@company.com" autocomplete="email">
+        </label>
+        <button type="submit" class="btn p lg" id="unlock-btn"><span id="unlock-btn-label">Unlock full report &amp; prompts — $19</span> <span class="arrow" aria-hidden="true">→</span></button>
+        <p class="form-msg" id="unlock-msg" role="status" aria-live="polite"></p>
+      </form>
+      <p class="unlock-foot">Secure checkout via PayPal (pay with PayPal or any debit/credit card). Want me to fix everything for you in 5 business days instead? See the <a href="/launch-fix-sprint/">Launch Fix Sprint ($990)</a>.</p>
+    </div>
+
+    <div id="badge-box" class="contact-box" hidden style="margin-top:8px">
+      <h2 style="font-size:clamp(20px,3vw,26px)">Your app passed every automated check. Show it off.</h2>
+      <p>Add the Ship-Ready badge to your footer. It tells customers you checked before launch.</p>
       <pre style="white-space:pre-wrap;word-break:break-all;font-size:13px" id="badge-code"></pre>
       <p><img src="/assets/ship-ready-badge.svg" alt="Ship-Ready checked by Snapforge Lab" width="190" height="40"></p>
     </div>
 
-    <p class="center" style="margin:24px 0 0;font-size:16px"><strong>Go deeper:</strong> <a class="link" id="deep-link" href="/scan-deep/">check your JS bundles, Supabase RLS and storage buckets →</a></p>
-    <p class="center" style="margin:12px 0 0;font-size:15px"><a class="link" href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></p>
+    <div>
+      <h2 class="gaps-title" style="font-size:19px">What this scan checked</h2>
+      <ul class="gaps" id="checked" style="margin-top:10px"></ul>
+      <p style="font-size:13.5px;color:var(--mute);margin-top:12px" id="disclaimer"></p>
+    </div>
 
-    <aside class="cta-box" style="margin-top:24px">
+    <aside class="cta-box" style="margin-top:8px">
       <div>
-        <p class="cta-kicker">Free deep audit · 24h</p>
-        <p class="cta-title">This scan only sees the surface.</p>
-        <p class="cta-text">The leaks that cost customers hide deeper: Supabase tables readable by anyone, secret keys in your JavaScript, auth redirecting to a preview domain, unverified Stripe webhooks. Our free audit checks them, read-only, and sends you a private report.</p>
+        <p class="cta-kicker">Done-for-you option · 5 business days</p>
+        <p class="cta-title">Rather have me fix everything for you?</p>
+        <p class="cta-text">Automated scans catch external leaks; the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a> also checks server-side auth, broken access control and Stripe webhooks, and fixes every issue in 5 business days ($990 flat, paid only after verified working). Or request a <a class="link" href="/free-audit" id="deep-cta">24h human audit</a> first.</p>
       </div>
-      <a href="/free-audit" class="btn p" id="deep-cta">Get the free deep audit</a>
+      <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>
     </aside>
-    <p class="center" style="margin-top:20px"><button type="button" class="btn g" id="rescan">Scan another app</button></p>
+    <p class="center" style="margin-top:12px"><button type="button" class="btn g" id="rescan">Scan another app</button></p>
   </section>
 
   <div class="prose" style="margin-top:72px">
-    <h2>What the scanner checks</h2>
+    <h2>What the 1-click scanner checks</h2>
     <ul>
-      <li><strong>Uptime and speed:</strong> is the app reachable, and how fast does it answer?</li>
-      <li><strong>Security headers:</strong> HSTS, Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy.</li>
-      <li><strong>Open CORS:</strong> does your server let any website call it?</li>
-      <li><strong>Dev leftovers:</strong> a development banner still showing in production.</li>
-      <li><strong>Google basics:</strong> page title, meta description, robots.txt and sitemap.xml that return the right files.</li>
+      <li><strong>Secret keys in your JavaScript:</strong> Stripe live/test secret keys, OpenAI and Anthropic keys, AWS keys, GitHub tokens, Supabase <code>service_role</code> and secret keys, plus Stripe test mode left in production. Secrets are always masked to the last 4 characters.</li>
+      <li><strong>Supabase tables &amp; Storage buckets:</strong> uses only the public key your app already ships to ask each table once for 1 row and check if Storage buckets allow anonymous file listing. Zero row data or file names are ever read or stored.</li>
+      <li><strong>Auth redirects &amp; open CORS:</strong> password-reset or magic-link callbacks pointing to preview/localhost domains, and servers reflecting foreign Origins with credentials enabled.</li>
+      <li><strong>Headers, cookies, source maps &amp; SEO:</strong> HSTS, CSP, X-Frame-Options, nosniff, Referrer-Policy, cookie security flags, publicly exposed <code>.map</code> source files, dev banners, robots.txt and sitemap.xml.</li>
     </ul>
     <h2>Is it safe to run?</h2>
-    <p>Yes. The scan is passive and read-only: it loads what any visitor's browser already sees (your homepage, response headers, robots.txt, sitemap.xml). It never signs in, submits forms, writes data or reads your database. Private and internal addresses are refused.</p>
-    <h2>What your grade means</h2>
-    <ul>
-      <li><strong>A (90–100): Ship-ready on the surface.</strong> Run the free deep audit before you scale.</li>
-      <li><strong>B–C (60–89): Almost there.</strong> Fix the gaps before your next launch post.</li>
-      <li><strong>D–F (below 60): Fix before customers arrive.</strong> Or let us do it: <a href="/deploy-fix/">$49 Deploy Fix</a>, done in 48 hours or refunded.</li>
-    </ul>
-    <p>Go deeper with the <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a> and the <a href="/guides/supabase-october-30-grants-change/">Supabase October 30 grants change</a>.</p>
+    <p>Yes. Every check is passive and read-only: it never signs in, never creates accounts, never submits forms and never modifies data. Private and internal addresses are refused, and every scan is strictly capped in requests and duration.</p>
+    <p>Prefer a static reference guide? See the <a href="/prompt-pack/">Ship-Ready Prompt Pack ($19 PDF)</a>, the <a href="/guides/replit-agent-security-checklist/">Replit Agent security checklist</a>, and the <a href="/guides/supabase-october-30-grants-change/">Supabase grants guide</a>.</p>
   </div>
 </div>
 </main>
@@ -136,98 +158,7 @@
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
   </div>
 </footer>
-<script>
-(() => {
-  const API = 'https://mcp.snapforgelab.com/mcp';
-  const FS = 'https://formspree.io/f/xjybzkza';
-  const $ = id => document.getElementById(id);
-  const PEN = {critical: 40, high: 30, medium: 15, low: 5, info: 0};
-  let last = null;
-  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const stackName = s => ({replit:'Replit', lovable:'Lovable', bolt:'Bolt'}[s] || null);
-
-  function norm(u) {
-    u = (u || '').trim();
-    if (!u) return '';
-    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
-    return u;
-  }
-
-  function render(r) {
-    last = r;
-    const f = r.findings || [];
-    let score = r.reachable === false ? 10 : 100;
-    f.forEach(x => score -= (PEN[(x.severity || '').toLowerCase()] ?? 10));
-    score = Math.max(5, Math.min(100, score));
-    const g = score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 60 ? 'C' : score >= 40 ? 'D' : 'F';
-    const gauge = $('gauge');
-    gauge.style.setProperty('--p', score);
-    gauge.dataset.level = score >= 85 ? 'ok' : score >= 60 ? 'mid' : 'low';
-    $('score').textContent = score;
-    const st = stackName(r.stack);
-    $('grade').textContent = 'Grade ' + g + (st ? ' · ' + st + ' app' : '');
-    $('verdict').textContent = r.reachable === false
-      ? 'We could not reach this app. If it is live, it may be down for your visitors too.'
-      : f.length ? f.length + ' issue' + (f.length > 1 ? 's' : '') + ' found on the surface. The fixes are a few minutes each.'
-      : 'No surface issues found. Nice work.';
-    $('gaps').innerHTML = f.length ? f.map((x, i) =>
-      '<li><strong>' + esc(x.title) + '</strong> <small>(' + esc(x.severity) + ')</small><br>' + esc(x.detail) +
-      '<div class="fix" data-i="' + i + '" hidden><p style="margin:10px 0 4px"><em>Paste this into your builder:</em></p><pre style="white-space:pre-wrap;font-size:13px">' + esc(x.fix_prompt || '') + '</pre></div></li>').join('')
-      : '<li>Headers, CORS, robots, sitemap and SEO basics all look right.</li>';
-    $('gate').hidden = !f.length;
-    const clean = f.length === 0 && r.reachable !== false;
-    $('badge-box').hidden = !clean;
-    if (clean) $('badge-code').textContent = '<a href="https://snapforgelab.com/scan/"><img src="https://snapforgelab.com/assets/ship-ready-badge.svg" alt="Ship-Ready checked by Snapforge Lab" width="190" height="40"></a>';
-    $('deep-link').href = '/scan-deep/' + (r.url ? '?url=' + encodeURIComponent(r.url) : '');
-    $('deep-cta').href = (r.stack === 'lovable' || r.stack === 'bolt') ? '/lovable-bolt-audit' : '/free-audit';
-    $('result').hidden = false;
-    $('result').scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
-
-  $('scan').addEventListener('submit', async e => {
-    e.preventDefault();
-    const url = norm($('scan-url').value);
-    const msg = $('scan-msg');
-    if (!url) { msg.textContent = 'Paste your app URL first.'; return; }
-    if (!$('scan-own').checked) { msg.textContent = 'Please confirm you own this app or are allowed to test it.'; return; }
-    $('scan-btn').disabled = true; msg.textContent = 'Scanning… about 10 to 30 seconds.';
-    try {
-      const res = await fetch(API, {method: 'POST', headers: {'content-type': 'application/json', 'accept': 'application/json, text/event-stream'},
-        body: JSON.stringify({jsonrpc: '2.0', id: Date.now(), method: 'tools/call', params: {name: 'check_app', arguments: {url}}})});
-      const j = await res.json();
-      if (j.error) throw new Error(j.error.message || 'Scan failed');
-      const r = j.result && (j.result.structuredContent || null);
-      if (!r) throw new Error((j.result && j.result.content && j.result.content[0] && j.result.content[0].text) || 'Scan failed');
-      msg.textContent = '';
-      render(r);
-    } catch (err) {
-      msg.textContent = 'We could not scan that URL: ' + (err.message || 'try again in a minute') + '. Make sure it is a public https address.';
-    } finally { $('scan-btn').disabled = false; }
-  });
-
-  $('gate-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const email = $('gate-email').value.trim();
-    const m = $('gate-msg');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { m.textContent = 'Enter a valid email.'; return; }
-    m.textContent = 'One moment…';
-    const r = last || {};
-    const summary = (r.findings || []).map(x => '- ' + x.title + ' (' + x.severity + ')').join('\n');
-    try {
-      await fetch(FS, {method: 'POST', headers: {'content-type': 'application/json', 'accept': 'application/json'},
-        body: JSON.stringify({email, app_url: r.url, stack: r.stack, score: $('score').textContent, findings: summary,
-          offer: 'app-scanner', _subject: 'App Scanner lead — ' + (r.url || '') })});
-    } catch (_) {}
-    document.querySelectorAll('.fix').forEach(el => el.hidden = false);
-    $('gate').innerHTML = '<p class="center"><strong>Your fixes are unlocked.</strong> Want us to apply them? <a href="/deploy-fix/">$49 Deploy Fix</a>, done in 48 hours or refunded.</p>';
-  });
-
-  $('rescan').addEventListener('click', () => { $('result').hidden = true; $('scan-url').value = ''; $('scan-url').focus(); window.scrollTo({top: 0, behavior: 'smooth'}); });
-
-  const q = new URLSearchParams(location.search).get('url');
-  if (q) $('scan-url').value = q;
-})();
-</script>
-<script src="/assets/main.js?v=21" defer></script>
+<script src="/assets/scanner.js?v=22" defer></script>
+<script src="/assets/main.js?v=22" defer></script>
 </body>
 </html>
