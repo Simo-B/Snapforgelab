@@ -23,7 +23,7 @@
 <meta name="twitter:title" content="Replit Agent Costs: 12 Ways to Cut Your Bill (2026)">
 <meta name="twitter:description" content="Why Replit Agent bills climb under effort-based pricing, where the money goes (Agent, deployments, databases) and 12 habits to keep spend predictable.">
 <meta name="twitter:image" content="https://snapforgelab.com/og/replit-agent-costs.png?v=2">
-<link rel="stylesheet" href="/assets/styles.css?v=22">
+<link rel="stylesheet" href="/assets/styles.css?v=23">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
 {
@@ -144,7 +144,7 @@
 <header class="nav">
   <div class="inner">
     <a href="/" class="logo" aria-label="Snapforge Lab home"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-h)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
-    <nav class="nav-links" aria-label="Primary"><a href="/launch-fix-sprint/">Launch Fix Sprint</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <nav class="nav-links" aria-label="Primary"><a href="/scan/">Live scanner</a><a href="/launch-fix-sprint/">Launch Fix Sprint</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a></nav>
     <a href="/free-audit" class="btn p sm" data-cta="free-audit">Free security audit</a>
   </div>
 </header>
@@ -190,13 +190,13 @@
 
 <aside class="cta-box">
   <div>
-    <p class="cta-kicker">Free audit · then the Launch Fix Sprint</p>
-    <p class="cta-title">Want an expert to check and fix your app before real users do?</p>
-    <p class="cta-text">Start with a free, read-only security audit of your live app, report within 24 hours. Then the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a>: everything the audit found, fixed for you in 5 business days, $990 flat, paid only after the fixes are verified working. Just one quick fix? <a class="link" href="/safe-to-launch/">Safe to Launch</a>, $149 ($49 for my first 3 clients).</p>
+    <p class="cta-kicker">Free scan in 15s · or 24h manual audit</p>
+    <p class="cta-title">Want to see what your live app exposes before real users do?</p>
+    <p class="cta-text"><a class="link" href="/scan/">Run a 15-second read-only scan</a> right now, or request a free manual security audit within 24 hours. Then the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a>: everything the audit found, fixed for you in 5 business days, $990 flat, paid only after the fixes are verified working. Just one quick fix? <a class="link" href="/safe-to-launch/">Safe to Launch</a>, $149 ($49 for my first 3 clients).</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
-    <a href="/free-audit" class="btn p" data-cta="free-audit">Get my free audit</a>
-    <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>
+    <a href="/scan/" class="btn p" data-cta="instant-scan">Scan my app in 15s</a>
+    <a href="/free-audit" class="btn g" data-cta="free-audit">Get a 24h manual audit</a>
   </div>
 </aside>
 
@@ -238,13 +238,13 @@
 </aside>
     <aside class="cta-box">
   <div>
-    <p class="cta-kicker">Free audit · then the Launch Fix Sprint</p>
-    <p class="cta-title">Want an expert to check and fix your app before real users do?</p>
-    <p class="cta-text">Start with a free, read-only security audit of your live app, report within 24 hours. Then the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a>: everything the audit found, fixed for you in 5 business days, $990 flat, paid only after the fixes are verified working. Just one quick fix? <a class="link" href="/safe-to-launch/">Safe to Launch</a>, $149 ($49 for my first 3 clients).</p>
+    <p class="cta-kicker">Free scan in 15s · or 24h manual audit</p>
+    <p class="cta-title">Want to see what your live app exposes before real users do?</p>
+    <p class="cta-text"><a class="link" href="/scan/">Run a 15-second read-only scan</a> right now, or request a free manual security audit within 24 hours. Then the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a>: everything the audit found, fixed for you in 5 business days, $990 flat, paid only after the fixes are verified working. Just one quick fix? <a class="link" href="/safe-to-launch/">Safe to Launch</a>, $149 ($49 for my first 3 clients).</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
-    <a href="/free-audit" class="btn p" data-cta="free-audit">Get my free audit</a>
-    <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>
+    <a href="/scan/" class="btn p" data-cta="instant-scan">Scan my app in 15s</a>
+    <a href="/free-audit" class="btn g" data-cta="free-audit">Get a 24h manual audit</a>
   </div>
 </aside>
   </article>
@@ -259,12 +259,12 @@
       <div><a href="/" class="logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="sfl-logo-f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3884FF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#sfl-logo-f)"/><path d="M58 16 27 56h20l-6 28 32-41H53l7-27z" fill="#fff"/></svg>Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Independent Replit specialist. Security audits and fixes for AI-built apps, and fixed-price business apps.</p></div>
       <div><p class="foot-h">Services</p><ul><li><a href="/free-audit">Free security audit</a></li><li><a href="/launch-fix-sprint/">Launch Fix Sprint</a></li><li><a href="/safe-to-launch/">Safe to Launch</a></li><li><a href="/agent-ready/">Agent-Ready Sprint</a></li><li><a href="/lovable-bolt-audit">Lovable &amp; Bolt audit</a></li><li><a href="/replit-app-to-production/">Replit app security</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
-      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/scan/">Live App Scanner</a></li><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
   </div>
 </footer>
-<script src="/assets/main.js?v=22" defer></script>
+<script src="/assets/main.js?v=23" defer></script>
 </body>
 </html>

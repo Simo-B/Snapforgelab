@@ -26,7 +26,7 @@
 <meta name="twitter:description" content="Free, read-only security audit for Replit, Lovable and Bolt apps: exposed Supabase tables, secrets in the JS bundle, open CORS, unverified webhooks.">
 <meta name="twitter:image" content="https://snapforgelab.com/og.png?v=3">
 
-<link rel="stylesheet" href="/assets/styles.css?v=22">
+<link rel="stylesheet" href="/assets/styles.css?v=23">
 <style>
 .plan .price .price-badge{position:static;display:inline-block;vertical-align:middle;margin-left:12px;letter-spacing:0;line-height:1.4}
 </style>
@@ -112,7 +112,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#checks">What I check</a>
-      <a href="#how">How it works</a>
+      <a href="/scan/">Live scanner</a>
       <a href="/launch-fix-sprint/">Pricing</a>
       <a href="/case-studies/cors-credentials-hobby-app/">Case study</a><a href="#faq">FAQ</a><a href="/guides/">Guides</a><a href="#contact" data-interest="build">Fixed-price plan</a>
     </nav>
@@ -129,8 +129,8 @@
       <div class="pill"><span class="dot" aria-hidden="true"></span>Security audits for AI-built apps · Replit, Lovable, Bolt</div>
       <h1 id="hero-title">Your AI-built app, watched every week. <span class="grad">Fixed if it breaks.</span></h1>
       <p class="lede">AI agents ship fast and leave doors open: Supabase tables anyone can read because Row Level Security is off, secret keys in the JavaScript bundle, open CORS with credentials, unverified Stripe webhooks, and login redirects pointing to preview domains. I check your live app and send you exact fix steps. AI finds the issues. I verify each one by hand, fix it and ship it.</p>
-      <div class="cta"><a href="/free-audit" class="btn p lg" data-cta="free-audit">Get my free security audit <span class="arrow" aria-hidden="true">→</span></a><a href="mailto:hello@snapforgelab.com?subject=Book%20a%2015-min%20call%20(Launch%20Fix%20Sprint)" class="btn g lg" data-cta="book-call">Book a 15-min call</a></div>
-      <p class="sub" style="margin:16px 0 0">Built with Lovable or Bolt? <a class="link" href="/lovable-bolt-audit">Get the Lovable &amp; Bolt audit →</a></p>
+      <div class="cta"><a href="/scan/" class="btn p lg" data-cta="instant-scan">Scan my live app in 15s <span class="arrow" aria-hidden="true">→</span></a><a href="/free-audit" class="btn g lg" data-cta="free-audit">Get my free 24h audit</a></div>
+      <p class="sub" style="margin:16px 0 0">Ready to fix everything in 5 days? <a class="link" href="mailto:hello@snapforgelab.com?subject=Book%20a%2015-min%20call%20(Launch%20Fix%20Sprint)" data-cta="book-call">Book a 15-min call</a> · Built with Lovable or Bolt? <a class="link" href="/lovable-bolt-audit">Lovable &amp; Bolt audit →</a></p>
       <ul class="micro">
         <li>Read-only checks</li>
         <li>I never touch your data</li>
@@ -226,8 +226,8 @@
     <div class="track reveal">
       <div class="track-head"><h3>Built something with AI?</h3><p>Start with the free security audit. Then I fix everything it found in one 5-day sprint.</p></div>
       <div class="free-offer">
-        <div><span class="kicker" style="margin:0">Free · report in 24h</span><div class="name">Free security audit</div><p>Read-only check of your live Replit, Lovable or Bolt app: exposed data, leaked secrets, open CORS, auth redirects. Exact fix steps by email. No call, no card.</p></div>
-        <a href="/free-audit" class="btn p" data-cta="free-audit">Get my free security audit</a>
+        <div><span class="kicker" style="margin:0">Free · 15s instant scan or 24h manual audit</span><div class="name">Free security audit</div><p>Read-only check of your live Replit, Lovable or Bolt app: exposed data, leaked secrets, open CORS, auth redirects. Run an <a class="link" href="/scan/">instant 15-second scan</a> right now, or get a manual audit by email in 24h. No call, no card.</p></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;flex:none"><a href="/scan/" class="btn p" data-cta="instant-scan">Scan in 15s →</a><a href="/free-audit" class="btn g" data-cta="free-audit">24h manual audit</a></div>
       </div>
       <div class="plans">
         <div class="plan hl">
@@ -349,19 +349,19 @@
 <!-- RESOURCES -->
 <section id="resources" aria-labelledby="res-title">
   <div class="wrap">
-    <h2 id="res-title">Shipping a Replit app? Start here.</h2>
-    <p class="sub">Practical guides to take a Replit app to production. No sign-up needed.</p>
+    <h2 id="res-title">Shipping an AI-built app? Start here.</h2>
+    <p class="sub">Free tools and practical guides to take a Replit, Lovable or Bolt app to production. No sign-up needed.</p>
     <div class="resources">
-      <a class="res-tool reveal" href="/tools/replit-readiness-score/">
-        <span class="kicker" style="margin:0">Free tool · 2 minutes</span>
-        <h3>Replit Readiness Score</h3>
-        <p>Answer 12 questions and find out if your app is ready for real users, with the exact gaps to fix.</p>
-        <span class="btn p">Get my score <span class="arrow" aria-hidden="true">→</span></span>
+      <a class="res-tool reveal" href="/scan/">
+        <span class="kicker" style="margin:0">Free tool · 15 seconds</span>
+        <h3>Live App Security Scanner</h3>
+        <p>Paste your live URL to get a 0–100 score and see 2 real security or launch issues immediately—read-only, no login.</p>
+        <span class="btn p">Scan my live app <span class="arrow" aria-hidden="true">→</span></span>
       </a>
       <div class="res-list">
+        <a class="rel reveal" href="/tools/replit-readiness-score/"><span class="rel-k">2-min quiz</span><span class="rel-t">Replit Readiness Score: 12 questions before you launch</span></a>
         <a class="rel reveal" href="/guides/replit-agent-security-checklist/"><span class="rel-k">Security</span><span class="rel-t">Replit Agent security checklist: 15 checks before you launch</span></a>
         <a class="rel reveal" href="/guides/deploy-replit-app-to-production/"><span class="rel-k">Deployment</span><span class="rel-t">How to deploy a Replit app to production, step by step</span></a>
-        <a class="rel reveal" href="/guides/is-replit-production-ready/"><span class="rel-k">Is Replit ready?</span><span class="rel-t">Is Replit production-ready? An honest answer</span></a>
         <a class="rel reveal" href="/guides/" style="border-style:dashed"><span class="rel-t link">All guides →</span></a>
       </div>
     </div>
@@ -400,7 +400,7 @@
 
 </main>
 
-<div class="m-cta"><a href="/free-audit" class="btn p lg" data-cta="free-audit">Get my free security audit</a></div>
+<div class="m-cta"><a href="/scan/" class="btn p lg" data-cta="instant-scan">Scan my live app in 15s</a></div>
 
 <footer>
   <div class="wrap">
@@ -420,7 +420,7 @@
           <li><a href="/launch-fix-sprint/">Pricing</a></li>
         </ul>
       </div>
-      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/scan/">Live App Scanner</a></li><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><p class="foot-h">Contact</p>
         <ul>
           <li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li>
@@ -433,6 +433,6 @@
   </div>
 </footer>
 
-<script src="/assets/main.js?v=22" defer></script>
+<script src="/assets/main.js?v=23" defer></script>
 </body>
 </html>

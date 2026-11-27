@@ -19,18 +19,18 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
 CONTENT = ROOT / "content" / "guides"
 SITE = "https://snapforgelab.com"
-ASSET_V = "22"
+ASSET_V = "23"
 
 TOPIC_ORDER = ["Getting started", "Security", "Deployment", "Data", "Costs", "Troubleshooting"]
 
 # Hand-written pages that belong in the sitemap (path, priority).
 STATIC_PAGES = [
-    ("/", "1.0", "2026-10-29"),
+    ("/", "1.0", "2026-11-26"),
     ("/launch-fix-sprint/", "1.0", "2026-10-25"),
     ("/safe-to-launch/", "0.9", "2026-10-25"),
     ("/agent-ready/", "0.9", "2026-11-04"),
-    ("/scan/", "0.9", "2026-10-18"),
-    ("/scan-deep/", "0.8", "2026-10-18"),
+    ("/scan/", "0.9", "2026-11-26"),
+    ("/scan-deep/", "0.8", "2026-11-26"),
     ("/prompt-pack/", "0.8", "2026-10-18"),
     ("/vibe-stack/", "0.7", "2026-10-20"),
     ("/replit-app-to-production/", "0.9", "2026-10-29"),
@@ -39,11 +39,11 @@ STATIC_PAGES = [
     ("/hire-replit-developer/", "0.9", "2026-10-29"),
     ("/about/", "0.6", "2026-10-29"),
     ("/replit-app-to-production/example-report/", "0.7", "2026-10-29"),
-    ("/privacy/", "0.2", "2026-10-17"),
-    ("/terms/", "0.2", "2026-10-29"),
+    ("/privacy/", "0.2", "2026-11-26"),
+    ("/terms/", "0.2", "2026-11-26"),
     ("/tools/replit-readiness-score/", "0.8", "2026-10-29"),
-    ("/free-audit", "0.9", "2026-10-29"),
-    ("/lovable-bolt-audit", "0.9", "2026-10-17"),
+    ("/free-audit", "0.9", "2026-11-26"),
+    ("/lovable-bolt-audit", "0.9", "2026-11-26"),
     ("/case-studies/cors-credentials-hobby-app/", "0.7", "2026-10-17"),
     ("/support/", "0.4", "2026-10-17"),
     ("/chatgpt-demo/", "0.4", "2026-10-17"),
@@ -116,7 +116,7 @@ def head(title, description, canonical, og_type="article", extra="", image=None)
 <header class="nav">
   <div class="inner">
     <a href="/" class="logo" aria-label="Snapforge Lab home">{LOGO_HEAD}Snapforge Lab</a>
-    <nav class="nav-links" aria-label="Primary"><a href="/launch-fix-sprint/">Launch Fix Sprint</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a><a href="/tools/replit-readiness-score/">Readiness score</a></nav>
+    <nav class="nav-links" aria-label="Primary"><a href="/scan/">Live scanner</a><a href="/launch-fix-sprint/">Launch Fix Sprint</a><a href="/#pricing">Pricing</a><a href="/guides/">Guides</a></nav>
     <a href="/free-audit" class="btn p sm" data-cta="free-audit">Free security audit</a>
   </div>
 </header>
@@ -137,7 +137,7 @@ def footer(mobile_cta=True, cta_link=REVIEW_CTA):
       <div><a href="/" class="logo">{LOGO_FOOT}Snapforge Lab</a>
         <p style="margin:0;max-width:40ch">Independent Replit specialist. Security audits and fixes for AI-built apps, and fixed-price business apps.</p></div>
       <div><p class="foot-h">Services</p><ul><li><a href="/free-audit">Free security audit</a></li><li><a href="/launch-fix-sprint/">Launch Fix Sprint</a></li><li><a href="/safe-to-launch/">Safe to Launch</a></li><li><a href="/agent-ready/">Agent-Ready Sprint</a></li><li><a href="/lovable-bolt-audit">Lovable &amp; Bolt audit</a></li><li><a href="/replit-app-to-production/">Replit app security</a></li><li><a href="/hire-replit-developer/">Hire a Replit developer</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
-      <div><p class="foot-h">Resources</p><ul><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
+      <div><p class="foot-h">Resources</p><ul><li><a href="/scan/">Live App Scanner</a></li><li><a href="/guides/">Replit guides</a></li><li><a href="/tools/replit-readiness-score/">Replit Readiness Score</a></li><li><a href="/prompt-pack/">Fix it yourself: Prompt Pack ($19)</a></li><li><a href="/guides/replit-agent-security-checklist/">Security checklist</a></li><li><a href="/about/">About Simo</a></li></ul></div>
       <div><p class="foot-h">Contact</p><ul><li><a href="mailto:hello@snapforgelab.com">hello@snapforgelab.com</a></li><li><a href="/#contact">Get a fixed quote</a></li></ul></div>
     </div>
     <p class="copy">© <span data-year>2026</span> Snapforge Lab. Replit is a trademark of Replit, Inc. Snapforge Lab is an independent studio, not affiliated with Replit, Inc. · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
@@ -169,13 +169,13 @@ SPRINT_LINE = ("Then the <a class=\"link\" href=\"/launch-fix-sprint/\">Launch F
                "Just one quick fix? <a class=\"link\" href=\"/safe-to-launch/\">Safe to Launch</a>, $149 ($49 for my first 3 clients).")
 CTA_BOX = f"""<aside class="cta-box">
   <div>
-    <p class="cta-kicker">Free audit · then the Launch Fix Sprint</p>
-    <p class="cta-title">Want an expert to check and fix your app before real users do?</p>
-    <p class="cta-text">Start with a free, read-only security audit of your live app, report within 24 hours. {SPRINT_LINE}</p>
+    <p class="cta-kicker">Free scan in 15s · or 24h manual audit</p>
+    <p class="cta-title">Want to see what your live app exposes before real users do?</p>
+    <p class="cta-text"><a class="link" href="/scan/">Run a 15-second read-only scan</a> right now, or request a free manual security audit within 24 hours. {SPRINT_LINE}</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
-    <a href="/free-audit" class="btn p" data-cta="free-audit">Get my free audit</a>
-    <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>
+    <a href="/scan/" class="btn p" data-cta="instant-scan">Scan my app in 15s</a>
+    <a href="/free-audit" class="btn g" data-cta="free-audit">Get a 24h manual audit</a>
   </div>
 </aside>"""
 
@@ -186,7 +186,7 @@ DEPLOY_CTA_BOX = f"""<aside class="cta-box">
   <div>
     <p class="cta-kicker">Replit Deploy Fix · $49 · 48h</p>
     <p class="cta-title">Stuck on a deploy error right now?</p>
-    <p class="cta-text">Send me the error. I fix one deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) within 48 hours of access, or you get a full refund. Several issues to fix before launch? Start with a <a class="link" href="/free-audit">free audit</a>, then the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a> ($990, 5 business days, paid after the fixes are verified).</p>
+    <p class="cta-text">Send me the error. I fix one deployment or configuration blocker (failing build or publish, secrets, database connection, custom domain) within 48 hours of access, or you get a full refund. App already live? <a class="link" href="/scan/">Scan it in 15s</a> or request a <a class="link" href="/free-audit">free 24h audit</a> before the <a class="link" href="/launch-fix-sprint/">Launch Fix Sprint</a> ($990, 5 business days, paid after the fixes are verified).</p>
   </div>
   <a href="/deploy-fix/" class="btn p">Fix my deploy for $49</a>
 </aside>"""
@@ -206,15 +206,15 @@ def fix_cta_box(agent="Replit Agent", audit=FREE_AUDIT_CTA[1], deploy_fix=True, 
               "fixes everything the audit found in 5 business days, $990 flat, paid after the fixes are verified.")
     if security:
         offer = sprint + " Just one quick fix? <a class=\"link\" href=\"/safe-to-launch/\">Safe to Launch</a>, $149 ($49 for my first 3 clients)."
-        button = '\n    <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>'
+        button = '\n    <a href="/scan/" class="btn g" data-cta="instant-scan">Scan live URL in 15s</a>'
     else:
         offer = (" Need it fixed now? The $49 Deploy Fix solves one deployment blocker in 48 hours, or you get a full refund." if deploy_fix else "") + sprint
-        button = '\n    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>' if deploy_fix else '\n    <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>'
+        button = '\n    <a href="/deploy-fix/" class="btn g">Fix my deploy for $49</a>' if deploy_fix else '\n    <a href="/scan/" class="btn g" data-cta="instant-scan">Scan live URL in 15s</a>'
     return f"""<aside class="cta-box">
   <div>
-    <p class="cta-kicker">Free audit · 24h</p>
+    <p class="cta-kicker">Free audit · 24h (or <a class="link" href="/scan/">15s live scan</a>)</p>
     <p class="cta-title">Still stuck? Get a free audit in 24h</p>
-    <p class="cta-text">Send me your live app URL. Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into {agent}.{offer}</p>
+    <p class="cta-text">Send me your live app URL (or <a class="link" href="/scan/">run the 15-second live scan</a> right now). Within 24 hours you get a private audit page: what breaks in production and exact fix steps you can paste into {agent}.{offer}</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
     <a href="{audit}" class="btn p">Get my free audit</a>{button}
@@ -222,16 +222,16 @@ def fix_cta_box(agent="Replit Agent", audit=FREE_AUDIT_CTA[1], deploy_fix=True, 
 </aside>"""
 
 
-# Security guides for AI-built apps ("cta": "security"): free audit first, then the sprint ladder.
+# Security guides for AI-built apps ("cta": "security"): instant scan + free audit, then the sprint ladder.
 SECURITY_CTA_BOX = f"""<aside class="cta-box">
   <div>
-    <p class="cta-kicker">Free security audit · 24h</p>
-    <p class="cta-title">Not sure what your app exposes? Get a free read-only audit</p>
-    <p class="cta-text">Send me your live app URL (Lovable, Bolt, Replit or any Supabase app). Within 24 hours you get a private audit page: what is exposed and exact fix steps you can paste into your AI tool. {SPRINT_LINE}</p>
+    <p class="cta-kicker">15s live scan · or 24h manual audit</p>
+    <p class="cta-title">Not sure what your app exposes? Scan your live URL in 15s</p>
+    <p class="cta-text">Paste your live Lovable, Bolt, Replit or Supabase URL for an instant read-only check (score + 2 real findings free), or request a <a class="link" href="/free-audit">24h manual audit</a>. {SPRINT_LINE}</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;flex:0 0 auto">
-    <a href="/free-audit" class="btn p" data-cta="free-audit">Get my free audit</a>
-    <a href="/launch-fix-sprint/" class="btn g">See the Launch Fix Sprint</a>
+    <a href="/scan/" class="btn p" data-cta="instant-scan">Scan my live app in 15s</a>
+    <a href="/free-audit" class="btn g" data-cta="free-audit">Get a 24h manual audit</a>
   </div>
 </aside>"""
 
@@ -371,7 +371,7 @@ def build_hub(guides):
     <div class="kicker">Replit guides</div>
     <h1>Take your Replit app from prototype to production</h1>
     <p class="lede">Practical guides to shipping Replit Agent apps: what breaks after you publish, and how to fix it step by step, with a copy-paste prompt for Agent in every fix.</p>
-    <div class="cta"><a href="/free-audit" class="btn p lg">Get a free audit in 24h <span class="arrow" aria-hidden="true">→</span></a><a href="/tools/replit-readiness-score/" class="btn g lg">Get your readiness score</a></div>
+    <div class="cta"><a href="/scan/" class="btn p lg" data-cta="instant-scan">Scan my live app in 15s <span class="arrow" aria-hidden="true">→</span></a><a href="/free-audit" class="btn g lg" data-cta="free-audit">Get a free 24h audit</a></div>
   </div>
 </section>
 <section style="padding-top:40px">

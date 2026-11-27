@@ -35,7 +35,10 @@
     const buy = e.target.closest('[data-buy]');
     if (buy) track('buy_click', { product: buy.dataset.buy });
     const a = e.target.closest('a[href]');
-    if (a && a.origin === location.origin && /^\/free-audit\/?$/.test(a.pathname)) track('free_audit_click');
+    if (a && a.origin === location.origin) {
+      if (/^\/free-audit\/?$/.test(a.pathname)) track('free_audit_click');
+      else if (/^\/scan(?:-deep)?\/?$/.test(a.pathname)) track('scan_click', { from: location.pathname });
+    }
   });
   d.querySelectorAll('#contact form').forEach((f) => f.addEventListener('submit', () => {
     const picked = f.querySelector('input[name="interest"]:checked');
